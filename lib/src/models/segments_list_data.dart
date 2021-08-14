@@ -38,7 +38,7 @@ class SegmentListData {
       imagePath: 'assets/home/news.png',
       titleTxt: 'Noticias',
       kacl: 602,
-      meals: <String>['Enterate de', 'las novedades', 'de tu sector.'],
+      meals: <String>['Enterate de', 'las novedades', 'de tu sector'],
       startColor: 0xffa4c639,
       endColor: 0xffa4c639,
     ),
