@@ -1,7 +1,8 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/models/segments_list_data.dart';
+import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:flutter/material.dart';
-  
+
 class HomeSectionTwo extends StatefulWidget {
   const HomeSectionTwo(
       {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
@@ -57,7 +58,7 @@ class _HomeSectionTwoState extends State<HomeSectionTwo>
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
-                      segmentListData.length > 10  ? 10 : segmentListData.length;
+                      segmentListData.length > 10 ? 10 : segmentListData.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -67,7 +68,7 @@ class _HomeSectionTwoState extends State<HomeSectionTwo>
                   animationController.forward();
 
                   return ItemsView(
-                    mealsListData: segmentListData[index],
+                    homeListData: segmentListData[index],
                     animation: animation,
                     animationController: animationController,
                   );
@@ -83,10 +84,10 @@ class _HomeSectionTwoState extends State<HomeSectionTwo>
 
 class ItemsView extends StatelessWidget {
   const ItemsView(
-      {Key key, this.mealsListData, this.animationController, this.animation})
+      {Key key, this.homeListData, this.animationController, this.animation})
       : super(key: key);
 
-  final SegmentListData mealsListData;
+  final SegmentListData homeListData;
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -104,74 +105,87 @@ class ItemsView extends StatelessWidget {
               width: 130,
               child: Stack(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 32, left: 8, right: 8, bottom: 35),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color(0xFF3A5160)
-                                  .withOpacity(0.6),
-                              offset: const Offset(1.1, 4.0),
-                              blurRadius: 8.0),
-                        ],
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Color(mealsListData.startColor),
-                            Color(mealsListData.endColor),
+                  GestureDetector(
+                    onTap: () {
+                    if (homeListData.id == 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SectionsInvoiceScreen(animationController: animationController) ),
+                      );
+
+                    } else if (homeListData.id == 2) {
+                    } else if (homeListData.id == 3) {}
+                  },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 32, left: 8, right: 8, bottom: 35),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color(0xFF3A5160).withOpacity(0.6),
+                                offset: const Offset(1.1, 4.0),
+                                blurRadius: 8.0),
                           ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                          gradient: LinearGradient(
+                            colors: <Color>[
+                              Color(homeListData.startColor),
+                              Color(homeListData.endColor),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0),
+                            topLeft: Radius.circular(8.0),
+                            topRight: Radius.circular(54.0),
+                          ),
                         ),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(8.0),
-                          bottomLeft: Radius.circular(8.0),
-                          topLeft: Radius.circular(8.0),
-                          topRight: Radius.circular(54.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 54, left: 16, right: 16, bottom: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              mealsListData.titleTxt,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontName,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                letterSpacing: 0.2,
-                                color: AppTheme.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 8, bottom: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      mealsListData.meals.join('\n'),
-                                      style: TextStyle(
-                                        fontFamily: AppTheme.fontName,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        letterSpacing: 0.2,
-                                        color: AppTheme.white,
-                                      ),
-                                    ),
-                                  ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 54, left: 16, right: 16, bottom: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                homeListData.titleTxt,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: AppTheme.fontName,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  letterSpacing: 0.2,
+                                  color: AppTheme.white,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        homeListData.desc.join('\n'),
+                                        style: TextStyle(
+                                          fontFamily: AppTheme.fontName,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10,
+                                          letterSpacing: 0.2,
+                                          color: AppTheme.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -194,7 +208,7 @@ class ItemsView extends StatelessWidget {
                     child: SizedBox(
                       width: 80,
                       height: 80,
-                      child: Image.asset(mealsListData.imagePath),
+                      child: Image.asset(homeListData.imagePath),
                     ),
                   )
                 ],
