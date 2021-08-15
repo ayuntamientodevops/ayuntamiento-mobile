@@ -1,24 +1,22 @@
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
-import 'package:asdn/src/ui_view/home_section_one.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'home_section_two.dart';
+import 'invoice_list_section.dart';
 
-class SectionsHomeScreen extends StatefulWidget {
-  const SectionsHomeScreen({Key key, this.animationController})
-      : super(key: key);
+class SectionsInvoiceScreen extends StatefulWidget {
+  const SectionsInvoiceScreen({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
 
   @override
-  _SectionsHomeScreenState createState() => _SectionsHomeScreenState();
+  _SectionsInvoiceScreenState createState() => _SectionsInvoiceScreenState();
 }
 
-class _SectionsHomeScreenState extends State<SectionsHomeScreen>
+class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
 
@@ -62,28 +60,18 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
   void addAllListData() {
     const int count = 9;
     listViews.add(
-      HomeSectionOne(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController,
-            curve:
-                Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController,
-      ),
-    );
-
-    listViews.add(
       TitleView(
-        titleTxt: 'Segmentos',
+        titleTxt: 'Lista de Facturas',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
 
     listViews.add(
-      HomeSectionTwo(
+      InvoiceListSection(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
@@ -164,8 +152,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: AppTheme.nearlyDarkBlue
-                              .withOpacity(0.4 * topBarOpacity),
+                          color: AppTheme.nearlyDarkBlue.withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
                     ],
@@ -191,12 +178,11 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                     if (snapshot.hasData) {
                                       return Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: <Widget>[
                                           Container(
                                             child: Image(
-                                              image:
-                                                  AssetImage("assets/logo.png"),
+                                              image: AssetImage("assets/logo.png"),
                                               height: 30.0,
                                               width: 30.0,
                                             ),
@@ -208,7 +194,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                                 fontFamily: AppTheme.fontName,
                                                 fontWeight: FontWeight.w700,
                                                 fontSize:
-                                                    18 + 6 - 6 * topBarOpacity,
+                                                18 + 6 - 6 * topBarOpacity,
                                                 letterSpacing: 1.2,
                                                 color: AppTheme.white),
                                           ),
@@ -217,17 +203,18 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                     }
                                     return Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        MainAxisAlignment.start,
                                         children: <Widget>[
                                           SizedBox(
                                             child:
-                                                CircularProgressIndicatorWidget(),
+                                            CircularProgressIndicatorWidget(),
                                             height: 40.0,
                                             width: 40.0,
                                           )
                                         ]);
                                   }),
                             ),
+
                             Padding(
                               padding: const EdgeInsets.only(
                                 left: 8,
@@ -239,8 +226,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                     padding: const EdgeInsets.only(right: 8),
                                     child: Container(
                                       child: Image(
-                                        image:
-                                            AssetImage("assets/home/menu.png"),
+                                        image: AssetImage("assets/home/menu.png"),
                                         height: 30.0,
                                         width: 30.0,
                                       ),
@@ -249,6 +235,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                 ],
                               ),
                             ),
+
                           ],
                         ),
                       )

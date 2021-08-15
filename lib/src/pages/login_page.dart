@@ -52,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
-      print("authBloc.state.authenticated");
       if (state.authenticated) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushNamedAndRemoveUntil(
