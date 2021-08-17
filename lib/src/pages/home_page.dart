@@ -1,5 +1,7 @@
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
+import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
+import 'package:asdn/src/pages/section/sections_request_screen.dart';
 import 'package:asdn/src/services/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/config/bottom_bar_view.dart';
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    animationController?.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
@@ -82,8 +84,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            animationController.reverse().then<dynamic>((data) {
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                tabBody = SectionsRequestScreen(
+                    animationController: animationController);
+              });
+            });
+          },
           changeIndex: (int index) {
+            print(index);
             if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
@@ -111,7 +124,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 }
                 setState(() {
                   tabBody =
-                      TrainingScreen(animationController: animationController);
+                      SectionsRequestDetailSacreen(animationController: animationController);
                 });
               });
             }

@@ -1,33 +1,34 @@
-import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/models/user.dart';
-import 'package:asdn/src/pages/section/sections_screen.dart';
+import 'package:asdn/src/pages/section/request_list_section.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
 
-class SectionsInvoiceScreen extends StatefulWidget {
-  const SectionsInvoiceScreen({Key key, this.animationController}) : super(key: key);
+class SectionsRequestScreen extends StatefulWidget {
+  const SectionsRequestScreen({Key key, this.animationController}) : super(key: key);
 
   final AnimationController animationController;
   @override
-  _SectionsInvoiceScreenState createState() => _SectionsInvoiceScreenState();
+  _SectionsRequestScreenState createState() => _SectionsRequestScreenState();
 }
 
-class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
+class _SectionsRequestScreenState extends State<SectionsRequestScreen>
     with TickerProviderStateMixin {
   Animation<double> topBarAnimation;
-
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 1;
 
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   @override
   void initState() {
 
-    //tabBody = SectionsHomeScreen(animationController: widget.animationController);
+    tabIconsList.forEach((TabIconData tab) {
+      tab.isSelected = false;
+    });
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -35,37 +36,15 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
     addAllListData();
     AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    scrollController.addListener(() {
-/*      if (scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
-        }
-      } else if (scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }*/
-    });
+
     super.initState();
   }
-
 
   void addAllListData() {
     const int count = 9;
     listViews.add(
       TitleView(
-        titleTxt: 'Lista de Facturas',
+        titleTxt: 'Crear Incidente',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -74,8 +53,8 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
       ),
     );
 
- /*   listViews.add(
-      InvoiceListSection(
+     listViews.add(
+        RequestListSection(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController,
@@ -83,7 +62,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController,
       ),
-    );*/
+    );
   }
 
   Future<bool> getData() async {
@@ -119,12 +98,11 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
           return const SizedBox();
         } else {
           return ListView.builder(
-//            controller: scrollController,
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-            ),
+            top: AppBar().preferredSize.height +
+                MediaQuery.of(context).padding.top +
+                24,
+          ),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();
@@ -139,7 +117,6 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
   Widget getAppBarUI(AuthenticationService authenticationService) {
     return Column(
       children: <Widget>[
-       // tabBody,
         AnimatedBuilder(
           animation: widget.animationController,
           builder: (BuildContext context, Widget child) {
