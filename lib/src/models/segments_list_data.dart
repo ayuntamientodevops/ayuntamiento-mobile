@@ -20,7 +20,7 @@ class SegmentListData {
 
   static List<SegmentListData> tabIconsList = <SegmentListData>[
     SegmentListData(
-      id: 1,
+      id: 0,
       imagePath: 'assets/home/invoice.png',
       titleTxt: 'Facturas',
       kacl: 10,
@@ -29,7 +29,7 @@ class SegmentListData {
       endColor: 0xff4a70cb,
     ),
     SegmentListData(
-      id: 2,
+      id: 1,
       imagePath: 'assets/home/report.png',
       titleTxt: 'Reporte',
       kacl: 602,
@@ -38,7 +38,7 @@ class SegmentListData {
       endColor: 0xFF3A5160,
     ),
     SegmentListData(
-      id: 3,
+      id: 2,
       imagePath: 'assets/home/news.png',
       titleTxt: 'Noticias',
       kacl: 602,

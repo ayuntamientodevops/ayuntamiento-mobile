@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
-import 'package:asdn/main.dart';
 import 'package:flutter/material.dart';
 import '../models/tabIcon_data.dart';
 
@@ -13,6 +12,7 @@ class BottomBarView extends StatefulWidget {
   final Function(int index) changeIndex;
   final Function() addClick;
   final List<TabIconData> tabIconsList;
+
   @override
   _BottomBarViewState createState() => _BottomBarViewState();
 }
@@ -151,8 +151,7 @@ class _BottomBarViewState extends State<BottomBarView>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: AppTheme.nearlyDarkBlue
-                                  .withOpacity(0.4),
+                              color: AppTheme.nearlyDarkBlue.withOpacity(0.4),
                               offset: const Offset(8.0, 16.0),
                               blurRadius: 16.0),
                         ],
@@ -201,6 +200,7 @@ class TabIcons extends StatefulWidget {
 
   final TabIconData tabIconData;
   final Function() removeAllSelect;
+
   @override
   _TabIconsState createState() => _TabIconsState();
 }
@@ -208,21 +208,21 @@ class TabIcons extends StatefulWidget {
 class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   @override
   void initState() {
-    widget.tabIconData?.animationController = AnimationController(
+    widget.tabIconData.animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     )..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           if (!mounted) return;
           widget.removeAllSelect();
-          widget.tabIconData?.animationController?.reverse();
+          widget.tabIconData.animationController.reverse();
         }
       });
     super.initState();
   }
 
   void setAnimation() {
-    widget.tabIconData?.animationController?.forward();
+    widget.tabIconData.animationController?.forward();
   }
 
   @override

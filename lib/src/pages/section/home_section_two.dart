@@ -1,5 +1,8 @@
 import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/models/segments_list_data.dart';
+import 'package:asdn/src/models/tabIcon_data.dart';
+import 'package:asdn/src/pages/home_page.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -68,10 +71,9 @@ class _HomeSectionTwoState extends State<HomeSectionTwo>
                   animationController.forward();
 
                   return ItemsView(
-                    homeListData: segmentListData[index],
-                    animation: animation,
-                    animationController: animationController,
-                  );
+                      homeListData: segmentListData[index],
+                      animation: animation,
+                      animationController: animationController);
                 },
               ),
             ),
@@ -107,16 +109,24 @@ class ItemsView extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                    if (homeListData.id == 1) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SectionsInvoiceScreen(animationController: animationController) ),
-                      );
+                      String text;
 
-                    } else if (homeListData.id == 2) {
-                    } else if (homeListData.id == 3) {}
-                  },
+                      if (homeListData.id == 0) {
+                        text = "En este segmento estara consultado haciendo click en menu con el icono ... donde podras encontrar"
+                            "las facturas pagadas y pendiente." ;
+                      } else if (homeListData.id == 1) {
+                        text = "Este es para re[prte";
+                      } else if (homeListData.id == 2) {
+                        text = "Este es para noticias";
+                      }
+                      return showModalBottomSheet(
+                          enableDrag: false,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20))),
+                          context: context,
+                          builder: (context) => buildSheet(text,context));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(
                           top: 32, left: 8, right: 8, bottom: 35),
@@ -219,4 +229,13 @@ class ItemsView extends StatelessWidget {
       },
     );
   }
+
+  Widget buildSheet(String text, BuildContext context) => ListView(
+        padding: EdgeInsets.all(20),
+        children: <Widget>[
+             Text(text, style:  TextStyle(fontSize: 20),),
+            ElevatedButton(onPressed: ()=> Navigator.pop(context),
+              child: const Text('Cerrar')),
+        ]
+      );
 }
