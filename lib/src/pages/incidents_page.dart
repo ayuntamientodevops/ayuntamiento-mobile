@@ -102,17 +102,14 @@ class _IncidentsPageState extends State<IncidentsPage> {
     );
   }
 
-  /*  
+  /*
   * Envia la informacion del formalario
   */
   Widget btnCargarEvidencia() {
     return Container(
-      margin: EdgeInsets.all(20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2), color: Constants.orangeDark),
-      child: TextButton(
-        child: Text('CREAR INCIDENCIA', style: TextStyle(color: Colors.white)),
+      alignment: Alignment.centerRight,
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: RaisedButton(
         onPressed: canPressRegisterBtn
             ? () async {
                 FocusScope.of(context).unfocus();
@@ -184,6 +181,26 @@ class _IncidentsPageState extends State<IncidentsPage> {
                 }
               }
             : null,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+        textColor: Colors.white,
+        padding: const EdgeInsets.all(0),
+        child: Container(
+          alignment: Alignment.center,
+          height: 50.0,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.circular(80.0),
+              gradient: new LinearGradient(colors: [
+                Color.fromARGB(255, 255, 136, 34),
+                Color.fromARGB(255, 255, 177, 41)
+              ])),
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            "ENTRAR",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
     );
   }
@@ -361,7 +378,7 @@ class _IncidentsPageState extends State<IncidentsPage> {
   }
 
   /*
-    Crea el Widget donde se visualizan las imagenes cargadas 
+    Crea el Widget donde se visualizan las imagenes cargadas
    */
 
   Widget _boxPicture({BuildContext context}) {

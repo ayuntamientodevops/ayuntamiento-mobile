@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:asdn/src/bloc/request/request_bloc.dart';
+import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/models/Request.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
@@ -52,11 +53,12 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
     if (isLoading) {
       return Center(child: CircularProgressIndicatorWidget());
     }
+
     return RefreshIndicator(
       key: _refreshIndicatorKey,
       onRefresh: () => _loadItems(load: true),
       child: Container(
-        height: 480,
+        height: MediaQuery.of(context).size.height * 0.73,
         child: Column(
           children: <Widget>[
             _items.length == 0
@@ -68,6 +70,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                   )
                 : new Expanded(
                     child: ListView.builder(
+                      shrinkWrap: true,
                       physics: AlwaysScrollableScrollPhysics(),
                       itemCount: _items.length,
                       itemBuilder: (BuildContext ctxt, int index) {
@@ -196,7 +199,18 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                     left: 0,
                     child: Container(
                       height: 150,
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                        color: AppTheme.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0)),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: AppTheme.grey.withOpacity(0.2),
+                              offset: Offset(1.1, 1.1),
+                              blurRadius: 10.0),
+                        ],
+                      ),
                       child: ListTile(
                           title: Text(request.descripcion,
                               overflow: TextOverflow.ellipsis,

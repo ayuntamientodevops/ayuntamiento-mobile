@@ -6,12 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'src/bloc/auth/auth_bloc.dart';
-
 import 'src/bloc/map/map_bloc.dart';
 import 'src/bloc/register/register_bloc.dart';
 import 'src/bloc/search/search_bloc.dart';
 import 'src/helpers/helpers.dart';
-
 import 'src/pages/loading_page.dart';
 import 'src/services/auth_service.dart';
 import 'src/share_prefs/preferences_storage.dart';

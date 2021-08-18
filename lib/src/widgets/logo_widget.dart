@@ -1,3 +1,4 @@
+import 'package:asdn/src/config/background.dart';
 import 'package:flutter/material.dart';
 
 class LogoWidget extends StatelessWidget {
@@ -10,7 +11,7 @@ class LogoWidget extends StatelessWidget {
     //   style: FlutterLogoStyle.markOnly,
     // );
 
-    return Container(
+    return Background(
       child: Image(
         width: 200,
         image: AssetImage('assets/logo_paqueno.png'),
