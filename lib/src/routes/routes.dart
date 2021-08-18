@@ -1,6 +1,4 @@
-import 'package:asdn/src/pages/invoice_history.dart';
 import 'package:flutter/material.dart';
-
 import 'package:asdn/src/pages/mapa_page.dart';
 import 'package:asdn/src/pages/request_details.dart';
 import 'package:asdn/src/pages/acceso_gps_page.dart';
@@ -18,6 +16,5 @@ Map<String, WidgetBuilder> getApplicationsRoutes() {
     AccesoGpsPage.routeName: (BuildContext context) => AccesoGpsPage(),
     MapaPage.routeName: (BuildContext context) => MapaPage(),
     RequestDetails.routeName: (BuildContext context) => RequestDetails(),
-    InvoiceHistory.routeName: (BuildContext conext) => InvoiceHistory(),
   };
 }

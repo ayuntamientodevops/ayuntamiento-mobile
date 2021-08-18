@@ -83,17 +83,12 @@ flutter:
     - assets/Logo-300X300.png
     - assets/Logo-700X700.png
     - assets/logo_paqueno.png
-    - assets/perfil.png
     - assets/remove.png
     - assets/camera.png
     - assets/gallery.png
     - assets/location.png
-    - assets/i_password.png
-    - assets/i_eye_close.png
-    - assets/i_eye_open.png
     - assets/home/
     - assets/login/
-    - assets/i_user.png
     - .env.sample
   #   - images/a_dot_ham.jpeg
 

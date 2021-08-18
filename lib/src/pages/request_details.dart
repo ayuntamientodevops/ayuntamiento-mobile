@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 class RequestDetails extends StatefulWidget {
   static final routeName = '/requestdetail';
+
   const RequestDetails({Key key}) : super(key: key);
 
   @override
@@ -22,92 +23,50 @@ class _RequestDetailsState extends State<RequestDetails> {
     super.initState();
   }
 
-  Widget getFechas(Request r) {
-    String fecha;
-    String label;
+  Widget DrawerBox(Request r) {
+    DateTime fecha;
     Color color;
-    if (r.fechaResolucion != null) {
-      fecha = r.fechaResolucion;
-      label = "Fecha Resolucion";
+    if (r.estatusReclamacion == "Completada") {
       color = Colors.lightGreen;
-    } else if (r.fechaAsignacion != null) {
-      fecha = r.fechaAsignacion;
-      label = "Fecha Asignacion";
-      color = Colors.yellow;
-    } else if (r.fechaSolicitud != null) {
-      fecha = r.fechaSolicitud;
-      label = "Fecha Solicitud";
-      color = Colors.red;
+    } else if (r.estatusReclamacion == "Asignada") {
+      color = Colors.orangeAccent;
+    } else if (r.estatusReclamacion == "Solicitada") {
+      color = Colors.lightBlueAccent;
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("$label",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(DateFormat.yMMMMd('es_PR').format(DateTime.parse(fecha)),
-                textAlign: TextAlign.right,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        Divider(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Tipo: ",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  r.tipoReclamacion,
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
+    if (r.fechaResolucion != null) {
+      fecha = DateTime.parse(r.fechaResolucion);
+    } else if (r.fechaAsignacion != null) {
+      fecha = DateTime.parse(r.fechaAsignacion);
+    } else if (r.fechaSolicitud != null) {
+      fecha = DateTime.parse(r.fechaSolicitud);
+    }
+    return Center(
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.album),
+              title: Text('Tipo de solicitud'),
+              subtitle: Text(r.tipoReclamacion),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Text("Estado: ",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 12,
-                          color: color,
-                        ),
-                      ),
-                    ),
-                    TextSpan(
-                      style: TextStyle(color: Colors.black),
-                      text: r.estatusReclamacion,
-                    ),
-                  ],
-                ),
-              )
-            ]),
-            //
+            ListTile(
+              leading: Icon(Icons.admin_panel_settings, color: color),
+              title: Text('Estado'),
+              subtitle: Text(r.estatusReclamacion + " el " + DateFormat.yMMMMd('es_PR').format(fecha)),
+            ),
           ],
         ),
-      ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as Request;
+    final args = ModalRoute
+        .of(context)
+        .settings
+        .arguments as Request;
 
     return Scaffold(
       appBar: AppBar(
@@ -148,10 +107,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                       args.sector.toString(),
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 30),
-                    getFechas(args),
+                    DrawerBox(args),
                   ],
                 ),
               ),
@@ -219,7 +178,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         height: 150,
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
