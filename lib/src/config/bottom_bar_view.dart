@@ -140,10 +140,10 @@ class _BottomBarViewState extends State<BottomBarView>
                     child: Container(
                       // alignment: Alignment.center,s
                       decoration: BoxDecoration(
-                        color: AppTheme.nearlyDarkBlue,
+                        color: AppTheme.nearlyDarkOrange,
                         gradient: LinearGradient(
                             colors: [
-                              AppTheme.nearlyDarkBlue,
+                              AppTheme.nearlyDarkOrange,
                               Color(0xFFFFAB40),
                             ],
                             begin: Alignment.topLeft,
@@ -151,7 +151,7 @@ class _BottomBarViewState extends State<BottomBarView>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: AppTheme.nearlyDarkBlue.withOpacity(0.4),
+                              color: AppTheme.nearlyDarkOrange.withOpacity(0.4),
                               offset: const Offset(8.0, 16.0),
                               blurRadius: 16.0),
                         ],
@@ -270,7 +270,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: AppTheme.nearlyDarkBlue,
+                        color: AppTheme.nearlyDarkOrange,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -291,7 +291,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppTheme.nearlyDarkBlue,
+                        color: AppTheme.nearlyDarkOrange,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -312,7 +312,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: AppTheme.nearlyDarkBlue,
+                        color: AppTheme.nearlyDarkOrange,
                         shape: BoxShape.circle,
                       ),
                     ),

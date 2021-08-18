@@ -1,3 +1,4 @@
+import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/ui_view/home_section_one.dart';
@@ -5,6 +6,8 @@ import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import 'home_section_two.dart';
 
@@ -33,7 +36,6 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
             parent: widget.animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
     addAllListData();
-
     scrollController.addListener(() {
 /*      if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
@@ -61,6 +63,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
 
   void addAllListData() {
     const int count = 9;
+    listViews.add(WolecomeHomeSection());
     listViews.add(
       HomeSectionOne(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -119,6 +122,31 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
     );
   }
 
+  Widget WolecomeHomeSection() {
+    final AuthenticationService authenticationService = AuthenticationService();
+
+    return FutureBuilder<User>(
+      future: authenticationService.currentUser(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        } else {
+          return TitleView(
+            titleTxt:
+                'Hola! ' + toBeginningOfSentenceCase(snapshot.data.firstName),
+            subTxt: "Que quieres hacer hoy?",
+            animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                    parent: widget.animationController,
+                    curve: Interval((1 / 9) * 2, 1.0,
+                        curve: Curves.fastOutSlowIn))),
+            animationController: widget.animationController,
+          );
+        }
+      },
+    );
+  }
+
   Widget getMainListViewUI() {
     return FutureBuilder<bool>(
       future: getData(),
@@ -131,7 +159,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
             padding: EdgeInsets.only(
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
-                  24,
+                  34,
             ),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
@@ -157,14 +185,14 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                     0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppTheme.nearlyDarkBlue.withOpacity(topBarOpacity),
+                    color: AppTheme.nearlyDarkOrange.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(42.0),
                       bottomRight: Radius.circular(42.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: AppTheme.nearlyDarkBlue
+                          color: AppTheme.nearlyDarkOrange
                               .withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
@@ -238,11 +266,10 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8),
                                     child: Container(
-                                      child: Image(
-                                        image:
-                                            AssetImage("assets/home/menu.png"),
-                                        height: 30.0,
-                                        width: 30.0,
+                                      child: IconButton(
+                                        onPressed: () => _showDialog(context),
+                                        icon: Icon(Icons.more_vert),
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -260,6 +287,55 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
           },
         )
       ],
+    );
+  }
+
+  void _showDialog(BuildContext contexts) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Ajustes"),
+          content: new Container(
+            height: 150,
+            alignment: Alignment.centerRight,
+            child: RaisedButton(
+              onPressed: () =>  BlocProvider.of<AuthBloc>(contexts).add(LoggedOut()),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(80.0)),
+              textColor: Colors.white,
+              padding: const EdgeInsets.all(0),
+              child: Container(
+                alignment: Alignment.center,
+                height: 50.0,
+                decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.circular(80.0),
+                    gradient: new LinearGradient(colors: [
+                      Color.fromARGB(250, 255, 8, 36),
+                      Color.fromARGB(255, 255, 80, 100)
+                    ])),
+                padding: const EdgeInsets.all(0),
+                child: Text(
+                  "SALIR",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Cerrar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

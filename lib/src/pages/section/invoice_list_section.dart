@@ -63,7 +63,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
         Invoices invoices = snapshot.data ?? null;
 
         return Container(
-          height: 480,
+          height: MediaQuery.of(context).size.height * 0.73,
           child: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Column(

@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:asdn/src/bloc/request/request_bloc.dart';
+import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 import 'package:asdn/src/helpers/helpers.dart';
@@ -17,7 +17,6 @@ import 'package:asdn/src/services/request_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class RequestListSection extends StatefulWidget {
-
   const RequestListSection(
       {Key key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
@@ -50,8 +49,7 @@ class _RequestListSectionState extends State<RequestListSection>
   final AuthenticationService authenticationService = AuthenticationService();
 
   @override
-  void initState() { 
-
+  void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
@@ -67,122 +65,140 @@ class _RequestListSectionState extends State<RequestListSection>
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 480,
-        child: SingleChildScrollView(
-          child: Container(
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  typeService(),
-                  inputDetails(),
-                  inputLocation(),
-                  loadEvidencia(context),
-                  this.images.length > 0
-                      ? _boxPicture(context: context)
-                      : Container(),
-                  (isSubmit && this.images.length == 0)
-                      ? Container(
-                    child: Text(
-                      'Debe seleccionar al menos una foto',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  )
-                      : Container(),
-                  btnCargarEvidencia(),
-                  loading ? CircularProgressIndicatorWidget() : Container(),
-                  SizedBox(height: 20)
-                ],
-              ),
+      height: MediaQuery.of(context).size.height * 0.73,
+      child: SingleChildScrollView(
+        child: Container(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                typeService(),
+                inputDetails(),
+                inputLocation(),
+                loadEvidencia(context),
+                this.images.length > 0
+                    ? _boxPicture(context: context)
+                    : Container(),
+                (isSubmit && this.images.length == 0)
+                    ? Container(
+                        child: Text(
+                          'Debe seleccionar al menos una foto',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      )
+                    : Container(),
+                btnCargarEvidencia(),
+                loading ? CircularProgressIndicatorWidget() : Container(),
+                SizedBox(height: 20)
+              ],
             ),
           ),
         ),
-      );
-  }
-  Widget btnCargarEvidencia() {
-    return Container(
-      margin: EdgeInsets.all(20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2), color: Constants.orangeDark),
-      child: TextButton(
-        child: Text('CREAR INCIDENCIA', style: TextStyle(color: Colors.white)),
-        onPressed: canPressRegisterBtn
-            ? () async {
-          FocusScope.of(context).unfocus();
-          setState(() {
-            isSubmit = true;
-          });
-
-          if ((formKey.currentState.validate() == false) ||
-              (this.images.length == 0) ||
-              (location == null)) return;
-
-          formKey.currentState.save();
-
-          Map<String, dynamic> data = {
-            "Description": _detail.text,
-            "UserRequested": authenticationService.getUserLogged().id,
-            "Latitude": location.geometry.location.lat,
-            "Longitude": location.geometry.location.lng,
-            "RequestType": _valueTypeRequest,
-            "Sector": location.formattedAddress,
-            "ReferenceAddress": _direction.text
-          };
-
-          setState(() {
-            loading = true;
-            canPressRegisterBtn = false;
-          });
-
-          List<String> imageSt = [];
-          int i = 1;
-          for (File image in images) {
-            String imageName = authenticationService.getUserLogged().id.toString() +
-                '-$i' +
-                DateTime.now().toIso8601String();
-            TaskSnapshot addImg = await ref
-                .child("images/" +
-                authenticationService.getUserLogged().id.toString() +
-                "/$imageName")
-                .putFile(image);
-
-            if (addImg.state == TaskState.success) {
-              final String downloadUrl =
-              await addImg.ref.getDownloadURL();
-              imageSt.add(downloadUrl);
-            }
-            i++;
-          }
-
-          bool resp = await requestService.requestinsert(data, imageSt);
-
-          setState(() {
-            loading = false;
-          });
-
-          if (resp) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              requestBloc.add(RequestLoad(load: false));
-              this.resetForm();
-              this.mostrarSnackbar(context,
-                  "Solicitud creada correctamente", Colors.green);
-            });
-          } else {
-            setState(() {
-              loading = false;
-              canPressRegisterBtn = true;
-            });
-            this.mostrarSnackbar(
-                context, "Error al crear su solicitud", Colors.red);
-          }
-        }
-            : null,
       ),
     );
   }
 
+  Widget btnCargarEvidencia() {
+    return Container(
+      alignment: Alignment.centerRight,
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: RaisedButton(
+        onPressed: canPressRegisterBtn
+            ? () async {
+                FocusScope.of(context).unfocus();
+                setState(() {
+                  isSubmit = true;
+                });
+
+                if ((formKey.currentState.validate() == false) ||
+                    (this.images.length == 0) ||
+                    (location == null)) return;
+
+                formKey.currentState.save();
+
+                Map<String, dynamic> data = {
+                  "Description": _detail.text,
+                  "UserRequested": authenticationService.getUserLogged().id,
+                  "Latitude": location.geometry.location.lat,
+                  "Longitude": location.geometry.location.lng,
+                  "RequestType": _valueTypeRequest,
+                  "Sector": location.formattedAddress,
+                  "ReferenceAddress": _direction.text
+                };
+
+                setState(() {
+                  loading = true;
+                  canPressRegisterBtn = false;
+                });
+
+                List<String> imageSt = [];
+                int i = 1;
+                for (File image in images) {
+                  String imageName =
+                      authenticationService.getUserLogged().id.toString() +
+                          '-$i' +
+                          DateTime.now().toIso8601String();
+                  TaskSnapshot addImg = await ref
+                      .child("images/" +
+                          authenticationService.getUserLogged().id.toString() +
+                          "/$imageName")
+                      .putFile(image);
+
+                  if (addImg.state == TaskState.success) {
+                    final String downloadUrl =
+                        await addImg.ref.getDownloadURL();
+                    imageSt.add(downloadUrl);
+                  }
+                  i++;
+                }
+
+                bool resp = await requestService.requestinsert(data, imageSt);
+
+                setState(() {
+                  loading = false;
+                });
+
+                if (resp) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                    requestBloc.add(RequestLoad(load: false));
+                    this.resetForm();
+                    this.mostrarSnackbar(context,
+                        "Solicitud Creada correctamente", Colors.green);
+                  });
+                } else {
+                  setState(() {
+                    loading = false;
+                    canPressRegisterBtn = true;
+                  });
+                  this.mostrarSnackbar(
+                      context, "Error al crear su solicitud", Colors.red);
+                }
+              }
+            : null,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+        textColor: Colors.white,
+        padding: const EdgeInsets.all(0),
+        child: Container(
+          alignment: Alignment.center,
+          height: 50.0,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.circular(80.0),
+              gradient: new LinearGradient(colors: [
+                Color.fromARGB(255, 255, 136, 34),
+                Color.fromARGB(255, 255, 177, 41)
+              ])),
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            "CREAR INCIDENCIA",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget loadEvidencia(BuildContext context) {
     return Container(
@@ -287,7 +303,7 @@ class _RequestListSectionState extends State<RequestListSection>
             decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
                   borderSide:
-                  BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
+                      BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -334,14 +350,14 @@ class _RequestListSectionState extends State<RequestListSection>
           .asMap()
           .map(
             (key, value) => MapEntry(
-          key,
-          Container(
-            padding: EdgeInsets.only(left: 18),
-            child: _pictureUploaded(
-                context: context, image: value, index: key),
-          ),
-        ),
-      )
+              key,
+              Container(
+                padding: EdgeInsets.only(left: 18),
+                child: _pictureUploaded(
+                    context: context, image: value, index: key),
+              ),
+            ),
+          )
           .values
           .toList(),
     );
@@ -465,7 +481,7 @@ class _RequestListSectionState extends State<RequestListSection>
             decoration: InputDecoration(
               enabledBorder: UnderlineInputBorder(
                 borderSide:
-                BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
+                    BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
               ),
             ),
             isExpanded: true,
@@ -480,9 +496,9 @@ class _RequestListSectionState extends State<RequestListSection>
             items: data
                 .map<DropdownMenuItem<String>>(
                     (value) => new DropdownMenuItem<String>(
-                  value: value["TipoReclamacionId"],
-                  child: new Text(value["Descripcion"]),
-                ))
+                          value: value["TipoReclamacionId"],
+                          child: new Text(value["Descripcion"]),
+                        ))
                 .toList(),
           );
         });
@@ -526,22 +542,22 @@ class _RequestListSectionState extends State<RequestListSection>
           ),
           location != null
               ? ListTile(
-            leading: Icon(
-              Icons.location_on_rounded,
-              color: Constants.orangeDark,
-            ),
-            title: Text(location.formattedAddress),
-            subtitle: Text(
-                '${location.geometry.location.lat},${location.geometry.location.lng}'),
-          )
+                  leading: Icon(
+                    Icons.location_on_rounded,
+                    color: Constants.orangeDark,
+                  ),
+                  title: Text(location.formattedAddress),
+                  subtitle: Text(
+                      '${location.geometry.location.lat},${location.geometry.location.lng}'),
+                )
               : Container(),
           (isSubmit && location == null)
               ? Container(
-            child: Text(
-              'Debe seleccionar una ubicacion',
-              style: TextStyle(color: Colors.red),
-            ),
-          )
+                  child: Text(
+                    'Debe seleccionar una ubicacion',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                )
               : Container(),
           SizedBox(height: 20),
           Column(
@@ -556,7 +572,7 @@ class _RequestListSectionState extends State<RequestListSection>
                           fontWeight: FontWeight.bold)),
                   Text(' * ',
                       style:
-                      TextStyle(fontSize: 18, color: Constants.orangeDark))
+                          TextStyle(fontSize: 18, color: Constants.orangeDark))
                 ],
               ),
               TextFormField(
@@ -609,5 +625,4 @@ class _RequestListSectionState extends State<RequestListSection>
       canPressRegisterBtn = true;
     });
   }
-  
 }

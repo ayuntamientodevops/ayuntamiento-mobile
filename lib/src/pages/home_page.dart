@@ -2,7 +2,6 @@ import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_screen.dart';
-import 'package:asdn/src/services/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/config/app_theme.dart';
@@ -96,7 +95,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             });
           },
           changeIndex: (int index) {
-            print(index);
+
             if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {

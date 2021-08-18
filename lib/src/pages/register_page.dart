@@ -1,4 +1,7 @@
+import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
+import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:asdn/src/widgets/logo_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   static final routeName = '/register';
+
   const RegisterPage({Key key}) : super(key: key);
 
   @override
@@ -21,7 +25,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   bool isRequest = false;
   bool isNoVisiblePassword = true;
   bool isLoading = false;
@@ -47,420 +50,259 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BlocListener<RegisterBloc, RegisterState>(
-        listener: (context, state) {
-          if (state.registrado) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              mostrarSnackbar("Registrado Correctamente", Colors.green);
-              this.resetForm();
-            });
-            setState(() {
-              canPressRegisterBtn = false;
-            });
-          }
-        },
-    child:  Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              width: MediaQuery.of(context).size.width,
-              color: Color(0xFFFFAB40),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Column(
+      listener: (context, state) {
+        if (state.registrado) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            mostrarSnackbar("Registrado Correctamente", Colors.green);
+            this.resetForm();
+          });
+          setState(() {
+            canPressRegisterBtn = false;
+          });
+        }
+      },
+      child: Scaffold(
+        body: Background(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: size.height * 0.28),
+                Form(
+                  key: formKey,
+                  child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 3),
-                        child: Hero(
-                          tag: 'hero-login',
-                          child: Image.asset(
-                            "assets/logo_paqueno.png",
-                            width: 215,
-                            height: 215,
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _nameController,
+                          icon: Icon(AntDesign.adduser,
+                              color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          labelText: "Nombre",
+                          validator: (String name) {
+                            if (name.length <= 0) {
+                              return "Ingrese el nombre";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _lastnameController,
+                          icon:
+                              Icon(AntDesign.user, color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          labelText: "Apellidos",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.singleLineFormatter
+                          ],
+                          validator: (String lasname) {
+                            if (lasname.length <= 0) {
+                              return "Ingrese los apellidos";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _documentNumberController,
+                          icon: Icon(FontAwesome5.id_card,
+                              color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.number,
+                          labelText:
+                              "No. Documento (Ejemplo: Cedula, RNC, etc...)",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          validator: (String doc) {
+                            if (doc.length == 0) {
+                              return "Ingrese el numero de documento";
+                            }
+
+                            if (doc.length < 8 && doc.length > 11) {
+                              return "Ingrese un numero de documento correcto";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _phoneNumberController,
+                          icon: Icon(Icons.phone, color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.number,
+                          labelText: "Numero de telefono",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          validator: (String phone) {
+                            if (phone.length <= 0) {
+                              return "Ingrese el telefono";
+                            } else if (phone.length != 10) {
+                              return "Ingrese un telefono correcto";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _emailController,
+                          icon:
+                              Icon(AntDesign.mail, color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          labelText: "Correo Electronico",
+                          validator: (String email) {
+                            if (email.length <= 0) {
+                              return "Ingrese el correo electronico";
+                            } else if (!EmailValidator.validate(email)) {
+                              return "Correo electronico invalido";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _passwordController,
+                          icon:
+                              Icon(AntDesign.lock, color: Constants.orangeDark),
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          labelText: "Contraseña",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.singleLineFormatter
+                          ],
+                          validator: (String password) {
+                            if (password.length <= 0) {
+                              return "Ingrese la constraseña";
+                            } else if (password.length < 6) {
+                              return "La constraseña debe tener un minimo de 6 caracteres";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _password2Controller,
+                          icon: Icon(Icons.lock_sharp,
+                              color: Constants.orangeDark),
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          labelText: "Confirmar contraseña",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.singleLineFormatter
+                          ],
+                          validator: (String password) {
+                            if (password.length <= 0) {
+                              return "Ingrese la constraseña";
+                            }
+                            if (_passwordController.text != password) {
+                              return "Las constraseñas no coinciden";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 40),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child: RaisedButton(
+                          onPressed: canPressRegisterBtn ? _onSubmit : null,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(80.0)),
+                          textColor: Colors.white,
+                          padding: const EdgeInsets.all(0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50.0,
+                            width: size.width * 0.5,
+                            decoration: new BoxDecoration(
+                                borderRadius: BorderRadius.circular(80.0),
+                                gradient: new LinearGradient(colors: [
+                                  Color.fromARGB(255, 255, 136, 34),
+                                  Color.fromARGB(255, 255, 177, 41)
+                                ])),
+                            padding: const EdgeInsets.all(0),
+                            child: Text(
+                              "REGISTRAR",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
+                      BlocBuilder<RegisterBloc, RegisterState>(
+                          builder: (context, state) {
+                        if (state.loading) {
+                          return CircularProgressIndicator(
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Constants.orangeDark),
+                              backgroundColor: Colors.white);
+                        } else if (state.errorRegistro != "") {
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) async {
+                            mostrarSnackbar(state.errorRegistro, Colors.red);
+                          });
+                        }
+                        return Container();
+                      }),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: GestureDetector(
+                    onTap: () => {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()))
+                    },
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: "Ya tienes una cuenta? ",
+                            style: TextStyle(
+                                color: AppTheme.dark_grey,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 13)),
+                        TextSpan(
+                            text: "Inicia aqui",
+                            style: TextStyle(
+                                color: AppTheme.nearlyDarkOrange,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13)),
+                      ]),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.7,
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                  color: Color(0xFFF3F3F5),
-                  borderRadius: new BorderRadius.only(
-                    topLeft: const Radius.circular(50.0),
-                    topRight: const Radius.circular(50.0),
-                  )),
-              child: buildBody(context),
-            ),
-          ),
-        ],
+        ),
       ),
-    )
     );
-  }
-
-  Widget buildBody(context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 5, left: 20, right: 20, top: 20),
-                    child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.singleLineFormatter
-                        ],
-                        validator: (String name) {
-                          if (name.length <= 0) {
-                            return "Ingrese el nombre";
-                          } else {
-                            return null;
-                          }
-                        },
-                        controller: _nameController,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color:  Color(0xFFFFAB40))),
-                            hintText: "Nombre")),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: TextFormField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.singleLineFormatter
-                        ],
-                        validator: (String lasname) {
-                          if (lasname.length <= 0) {
-                            return "Ingrese los apellidos";
-                          } else {
-                            return null;
-                          }
-                        },
-                        controller: _lastnameController,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFFFAB40))),
-                            hintText: "Apellido")),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: TextFormField(
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        validator: (String doc) {
-                          if (doc.length == 0) {
-                            return "Ingrese el numero de documento";
-                          }
-
-                          if (doc.length < 8 && doc.length > 11) {
-                            return "Ingrese un numero de documento correcto";
-                          }
-                          return null;
-                        },
-                        controller: _documentNumberController,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFFFAB40))),
-                            hintText: "No. Documento")),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: TextFormField(
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        validator: (String phone) {
-                          if (phone.length <= 0) {
-                            return "Ingrese el teléfono";
-                          } else if (phone.length != 10) {
-                            return "Ingrese un teléfono correcto";
-                          }
-                          return null;
-                        },
-                        controller: _phoneNumberController,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFFFAB40))),
-                            hintText: "Teléfono")),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: TextFormField(
-                        validator: (String email) {
-                          if (email.length <= 0) {
-                            return "Ingrese el correo electrónico";
-                          } else if (!EmailValidator.validate(email)) {
-                            return "Correo electrónico invalido";
-                          }
-                          return null;
-                        },
-                        controller: _emailController,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFFFAB40))),
-                            hintText: "Correo electrónico")),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                    child: TextFormField(
-                      validator: (String password)  {
-                        if (password.length <= 0) {
-                          return "Ingrese la constraseña";
-                        } else if (password.length < 6) {
-                          return "La constraseña debe tener un minimo de 6 caracteres";
-                        }
-                        return null;
-                      },
-                        controller: _passwordController,
-                        obscureText: this.isNoVisiblePassword,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        decoration: InputDecoration(
-                            suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (this.isNoVisiblePassword)
-                                      this.isNoVisiblePassword = false;
-                                    else
-                                      this.isNoVisiblePassword = true;
-                                  });
-                                },
-                                child: (this.isNoVisiblePassword)
-                                    ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    "assets/i_eye_close.png",
-                                    width: 15,
-                                    height: 15,
-                                  ),
-                                )
-                                    : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    "assets/i_eye_open.png",
-                                    width: 15,
-                                    height: 15,
-                                  ),
-                                )),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color:  Color(0xFFFFAB40))),
-                            hintText: "Contraseña"),
-
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                    child: TextFormField(
-                        validator: (String password)   {
-                          if (password.length <= 0) {
-                            return "Ingrese la constraseña";
-                          }
-                          if (_passwordController.text != password) {
-                            return "Las constraseñas no coinciden";
-                          }
-                          return null;
-                        },
-                        controller: _password2Controller,
-                        obscureText: this.isNoVisiblePassword,
-                        style: TextStyle(
-                            color: Color(0xFF0F2E48),
-                            fontSize: 14),
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            filled: true,
-                            fillColor: Color(0xFFF3F3F5),
-                            focusColor: Color(0xFFF3F3F5),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                BorderSide(color: Color(0xFFAAB5C3))),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                    color: Color(0xFFFFAB40))),
-                            hintText: "Confirmar Contraseña")),
-                  )
-                ],
-               ),
-              ),
-            ),
-          ),
-          (this.isRequest)
-              ? Padding(
-            padding: const EdgeInsets.all(8.0),
-          )
-              : GestureDetector(
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.07,
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    color: Color(0xFFFFAB40),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(
-
-                          child: TextButton(
-                            child:
-                            Text('Registrar', style: TextStyle( color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
-                            onPressed: canPressRegisterBtn ? _onSubmit : null,
-                          )
-                         ),
-                    ))),
-          ), BlocBuilder<RegisterBloc, RegisterState>(
-              builder: (context, state) {
-                if (state.loading) {
-                  return CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(
-                          Constants.orangeDark),
-                      backgroundColor: Colors.white);
-                } else if (state.errorRegistro != "") {
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    mostrarSnackbar(state.errorRegistro, Colors.red);
-                  });
-                }
-                return Container();
-              }),
-          SizedBox()
-        ]);
-
   }
   void _onSubmit() async {
     if (!formKey.currentState.validate()) return;
@@ -507,6 +349,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     super.dispose();
   }
+
   void setIsRequest(bool isRequest) {
     setState(() {
       this.isRequest = isRequest;

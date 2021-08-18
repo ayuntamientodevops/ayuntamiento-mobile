@@ -42,6 +42,7 @@ class _SectionsRequestDetailSacreenState
     listViews.add(
       TitleView(
         titleTxt: 'Tus Solicitudes',
+        /*subTxt: "Lista de incidentes registrados.",*/
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -124,14 +125,14 @@ class _SectionsRequestDetailSacreenState
                     0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppTheme.nearlyDarkBlue.withOpacity(topBarOpacity),
+                    color: AppTheme.nearlyDarkOrange.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(42.0),
                       bottomRight: Radius.circular(42.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: AppTheme.nearlyDarkBlue
+                          color: AppTheme.nearlyDarkOrange
                               .withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
@@ -200,7 +201,7 @@ class _SectionsRequestDetailSacreenState
                                 left: 8,
                                 right: 8,
                               ),
-                              child: Row(
+                         /*     child: Row(
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8),
@@ -214,7 +215,7 @@ class _SectionsRequestDetailSacreenState
                                     ),
                                   ),
                                 ],
-                              ),
+                              ),*/
                             ),
                           ],
                         ),

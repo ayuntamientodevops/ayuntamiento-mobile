@@ -1,9 +1,5 @@
 import 'package:asdn/src/config/app_theme.dart';
-import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/models/segments_list_data.dart';
-import 'package:asdn/src/models/tabIcon_data.dart';
-import 'package:asdn/src/pages/home_page.dart';
-import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeSectionTwo extends StatefulWidget {
@@ -110,7 +106,6 @@ class ItemsView extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       String text;
-
                       if (homeListData.id == 0) {
                         text = "En este segmento estara consultado haciendo click en menu con el icono ... donde podras encontrar"
                             "las facturas pagadas y pendiente." ;
@@ -119,13 +114,13 @@ class ItemsView extends StatelessWidget {
                       } else if (homeListData.id == 2) {
                         text = "Este es para noticias";
                       }
-                      return showModalBottomSheet(
+                   /*   return showModalBottomSheet(
                           enableDrag: false,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20))),
                           context: context,
-                          builder: (context) => buildSheet(text,context));
+                          builder: (context) => buildSheet(text,context));*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
