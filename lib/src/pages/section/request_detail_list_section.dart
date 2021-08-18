@@ -117,22 +117,23 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
     }
   }
 
-  Widget getFechas(Request r) {
-    String fecha;
+  Widget DrawerBox(Request r) {
+    DateTime fecha;
     String label;
     Color color;
-    if (r.fechaResolucion != null) {
-      fecha = r.fechaResolucion;
-      label = "Fecha Resolucion";
+    if (r.estatusReclamacion == "Completada") {
       color = Colors.lightGreen;
+    } else if (r.estatusReclamacion == "Asignada") {
+      color = Colors.orangeAccent;
+    } else if (r.estatusReclamacion == "Solicitada") {
+      color = Colors.lightBlueAccent;
+    }
+    if (r.fechaResolucion != null) {
+      fecha = DateTime.parse(r.fechaResolucion);
     } else if (r.fechaAsignacion != null) {
-      fecha = r.fechaAsignacion;
-      label = "Fecha Asignacion";
-      color = Colors.orange;
+      fecha = DateTime.parse(r.fechaAsignacion);
     } else if (r.fechaSolicitud != null) {
-      fecha = r.fechaSolicitud;
-      label = "Fecha Solicitud";
-      color = Colors.blue;
+      fecha = DateTime.parse(r.fechaSolicitud);
     }
     return Column(
       children: [
@@ -144,8 +145,8 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Icon(
-                  Icons.circle,
-                  size: 12,
+                  Icons.admin_panel_settings,
+                  size: 22,
                   color: color,
                 ),
               ),
@@ -218,7 +219,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                           subtitle: Text(formattedDate),
-                          trailing: getFechas(request)),
+                          trailing: DrawerBox(request)),
                     ),
                   )
                 ],
