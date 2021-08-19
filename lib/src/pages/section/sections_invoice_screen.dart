@@ -85,6 +85,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
+            padding: const EdgeInsets.only(top: 13),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();

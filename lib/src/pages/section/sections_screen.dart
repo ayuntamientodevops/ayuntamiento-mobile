@@ -6,6 +6,7 @@ import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'home_section_three.dart';
 import 'home_section_two.dart';
 
 class SectionsHomeScreen extends StatefulWidget {
@@ -86,6 +87,27 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         mainScreenAnimationController: widget.animationController,
       ),
     );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Noticias',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController,
+            curve:
+            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController,
+      ),
+    );
+
+    listViews.add(
+      HomeSectionThree(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController,
+                curve: Interval((1 / count) * 3, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
+      ),
+    );
   }
 
   Future<bool> getData() async {
@@ -146,6 +168,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
+            padding: const EdgeInsets.only(top: 13),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();

@@ -70,6 +70,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                   )
                 : new Expanded(
                     child: ListView.builder(
+                      padding: const EdgeInsets.only(top: 13),
                       shrinkWrap: true,
                       physics: AlwaysScrollableScrollPhysics(),
                       itemCount: _items.length,

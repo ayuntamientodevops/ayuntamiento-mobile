@@ -42,29 +42,23 @@ class _MainFullViewerState extends State<MainFullViewer> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            drawer: SettingWidget(),
-            body: AnimatedBuilder(
-              animation: widget.animationController,
-              builder: (BuildContext context, Widget child) {
-                return Stack(
-                  children: [TopBarHeader(context, child), widget.contentBody],
-                );
-              },
-            ),
-          ),
-        ),
-      ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      drawer: SettingWidget(),
+      body: AnimatedBuilder(
+        animation: widget.animationController,
+        builder: (BuildContext context, Widget child) {
+          return Stack(
+            children: [TopBarHeader(context, child), widget.contentBody],
+          );
+        },
+      ),
     );
   }
 
   Widget TopBarHeader(BuildContext context, Widget child) {
     return Container(
-      height: 135,
+      height: 133,
       child: FadeTransition(
         opacity: topBarAnimation,
         child: Transform(
@@ -74,8 +68,8 @@ class _MainFullViewerState extends State<MainFullViewer> {
             decoration: BoxDecoration(
               color: AppTheme.nearlyDarkOrange.withOpacity(topBarOpacity),
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0),
+                bottomLeft: Radius.circular(65.0),
+                bottomRight: Radius.circular(65.0),
               ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
@@ -110,8 +104,8 @@ class _MainFullViewerState extends State<MainFullViewer> {
                                     Container(
                                       child: Image(
                                         image: AssetImage("assets/logo.png"),
-                                        height: 30.0,
-                                        width: 30.0,
+                                        height: 40.0,
+                                        width: 40.0,
                                       ),
                                     ),
                                     Text(
@@ -140,15 +134,16 @@ class _MainFullViewerState extends State<MainFullViewer> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                          left: 8,
-                          right: 8,
+                          left: 0,
+                          right: 0,
                         ),
                         child: Row(
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.only(right: 3),
                               child: Container(
                                 child: IconButton(
+                                  iconSize: 30,
                                   onPressed: () =>
                                       {Scaffold.of(context).openDrawer()},
                                   icon: Icon(Icons.more_vert),
