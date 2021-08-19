@@ -52,6 +52,8 @@ dependencies:
   card_swiper: ^1.0.2
   intl: ^0.17.0
   connectivity: ^3.0.6
+  flutter_image_slideshow: ^0.1.1
+  url_launcher: ^6.0.9
 
  
 dev_dependencies:
@@ -89,6 +91,7 @@ flutter:
     - assets/location.png
     - assets/home/
     - assets/login/
+    - assets/news/
     - .env.sample
   #   - images/a_dot_ham.jpeg
 

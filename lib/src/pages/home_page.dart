@@ -1,5 +1,4 @@
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
-import 'package:asdn/src/config/setting_widget.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
