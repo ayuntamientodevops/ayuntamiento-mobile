@@ -1,15 +1,11 @@
-import 'package:asdn/src/bloc/auth/auth_bloc.dart';
-import 'package:asdn/src/config/top_bar_view.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/ui_view/home_section_one.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
-import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
 import 'home_section_two.dart';
 
 class SectionsHomeScreen extends StatefulWidget {
@@ -105,10 +101,10 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            getMainListViewUI(),
             Container(
-              child: TopBarView(
+              child: MainFullViewer(
                 animationController: widget.animationController,
+                contentBody: getMainListViewUI(),
               ),
             ),
           ],
@@ -143,27 +139,21 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
   }
 
   Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.922,
+      padding: const EdgeInsets.only(top: 135),
+      child: FutureBuilder<bool>(
+        future: getData(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
-//            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  40,
-            ),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();
               return listViews[index];
             },
           );
-        }
-      },
+        },
+      ),
     );
   }
 }

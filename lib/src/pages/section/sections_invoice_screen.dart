@@ -1,4 +1,4 @@
-import 'package:asdn/src/config/top_bar_view.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
@@ -65,10 +65,10 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            getMainListViewUI(),
             Container(
-              child: TopBarView(
+              child: MainFullViewer(
                 animationController: widget.animationController,
+                contentBody: getMainListViewUI(context),
               ),
             ),
           ],
@@ -77,28 +77,22 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
     );
   }
 
-  Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
+  Widget getMainListViewUI(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.925,
+      padding: const EdgeInsets.only( top: 135),
+      child: FutureBuilder<bool>(
+        future: getData(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
-//            controller: scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  40,
-            ),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();
               return listViews[index];
             },
           );
-        }
-      },
+        },
+      ),
     );
   }
 }

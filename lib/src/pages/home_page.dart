@@ -1,3 +1,5 @@
+import 'package:asdn/src/bloc/auth/auth_bloc.dart';
+import 'package:asdn/src/config/setting_widget.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
@@ -6,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/pages/section/sections_screen.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
   static final routeName = '/home';
@@ -46,28 +52,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      color: AppTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                ],
-              );
-            }
-          },
+    return BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+      if (state.authenticated == false) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, LoginPage.routeName, (route) => false);
+        });
+      }
+    }, builder: (context, state) {
+      if (state.authenticated == false) {
+        return Container();
+      }
+      return Container(
+        color: AppTheme.background,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: FutureBuilder<bool>(
+            future: getData(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox();
+              } else {
+                return Stack(
+                  children: <Widget>[
+                    tabBody,
+                    bottomBar(),
+                  ],
+                );
+              }
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Future<bool> getData() async {
@@ -95,7 +112,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             });
           },
           changeIndex: (int index) {
-
             if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
@@ -122,8 +138,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      SectionsRequestDetailSacreen(animationController: animationController);
+                  tabBody = SectionsRequestDetailSacreen(
+                      animationController: animationController);
                 });
               });
             }

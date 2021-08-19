@@ -1,4 +1,4 @@
-import 'package:asdn/src/config/top_bar_view.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/request_list_section.dart';
 import 'package:asdn/src/config/app_theme.dart';
@@ -72,10 +72,10 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            getMainListViewUI(),
             Container(
-              child: TopBarView(
+              child: MainFullViewer(
                 animationController: widget.animationController,
+                contentBody: getMainListViewUI(),
               ),
             ),
           ],
@@ -85,26 +85,21 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
   }
 
   Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.922,
+      padding: const EdgeInsets.only( top: 135),
+      child: FutureBuilder<bool>(
+        future: getData(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  40,
-            ),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();
               return listViews[index];
             },
           );
-        }
-      },
+        },
+      ),
     );
   }
 }
