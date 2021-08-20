@@ -61,7 +61,7 @@ class _SectionsRequestDetailSacreenState
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.background,
+      color: Colors.white,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(

@@ -1,6 +1,7 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
+import 'package:asdn/src/pages/change_password_page.dart';
 import 'package:asdn/src/pages/register_page.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
@@ -122,10 +123,17 @@ class _LoginPageState extends State<LoginPage> {
                               alignment: Alignment.centerRight,
                               margin: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
-                              child: Text(
-                                "Olvidate la contraseña?",
-                                style: TextStyle(
-                                    fontSize: 12, color: AppTheme.dark_grey),
+                              child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChangePasswordPage())),
+
+                                child: Text(
+                                  "Olvidaste la contraseña?",
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppTheme.dark_grey),
+                                ),
                               ),
                             ),
                             SizedBox(height: size.height * 0.05),
@@ -133,12 +141,20 @@ class _LoginPageState extends State<LoginPage> {
                               alignment: Alignment.centerRight,
                               margin: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 10),
-                              child: RaisedButton(
+                              child: ElevatedButton(
                                 onPressed: () => _onSubmit(),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(80.0)),
-                                textColor: Colors.white,
-                                padding: const EdgeInsets.all(0),
+                                style: ButtonStyle(
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          EdgeInsets.all(0)),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(80.0),
+                                          side: BorderSide(
+                                              color: AppTheme.white))),
+                                ),
                                 child: Container(
                                   alignment: Alignment.center,
                                   height: 50.0,
@@ -166,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                       valueColor:
                                           new AlwaysStoppedAnimation<Color>(
                                               Constants.orangeDark),
-                                      backgroundColor: Colors.white);
+                                      backgroundColor: AppTheme.white);
                                 } else if (state.isErrorAuth && clickLogin) {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
