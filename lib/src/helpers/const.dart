@@ -2,7 +2,7 @@ part of 'helpers.dart';
 
 class Constants {
   // Name
-  static String appName = "Control de Solicitudes";
+  static String appName = "Ayuntamiento SDN";
 
   /* Colores propios de la app segun el logo**/
 
