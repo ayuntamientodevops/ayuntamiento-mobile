@@ -88,9 +88,7 @@ flutter:
     - assets/remove.png
     - assets/camera.png
     - assets/gallery.png
-    - assets/location.png
-    - assets/worldmap.jpg
-    - assets/barcode.png
+    - assets/location.png 
     - assets/home/
     - assets/login/
     - assets/news/

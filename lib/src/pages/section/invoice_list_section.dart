@@ -74,17 +74,15 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   height: 80,
                   child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    elevation: 2,
+                    shape:
+                        Border(right: BorderSide(color: Colors.grey, width: 5)),
+                    elevation: 5,
                     child: ListTile(
                       leading: Icon(
                         Icons.money_off,
@@ -102,7 +100,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                       ),
                     ),
                   ),
-                ), 
+                ),
                 invoices.invoices.length > 0
                     ? ListView.builder(
                         shrinkWrap: true,
@@ -137,11 +135,14 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
     return GestureDetector(
       child: Column(
         children: [
-          SizedBox(height: 20),
           SizedBox(
             width: 400,
             height: 280,
             child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -172,7 +173,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30.0),
                                       border: Border.all(
-                                          width: 1.0,
+                                          width: 2.0,
                                           color: AppTheme.nearlyDarkOrange),
                                     ),
                                     child: Center(
@@ -249,7 +250,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.only(top: 3.0),
+                                padding: const EdgeInsets.only(top: 18.0),
                                 width: MediaQuery.of(context).size.width,
                                 child: Text(
                                   "RD\$${invoice.total.toString()}",
