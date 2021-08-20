@@ -64,6 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
       child: Scaffold(
+        key: scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
             child: Column(
@@ -103,8 +104,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter
                           ],
-                          validator: (String lasname) {
-                            if (lasname.length <= 0) {
+                          validator: (String lastname) {
+                            if (lastname.length <= 0) {
                               return "Ingrese los apellidos";
                             } else {
                               return null;
@@ -121,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           obscureText: false,
                           keyboardType: TextInputType.number,
                           labelText:
-                              "No. Documento (Ejemplo: Cedula, RNC, etc...)",
+                              "No. documento (Ejemplo: Cedula, RNC, etc...)",
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly
                           ],
@@ -144,15 +145,15 @@ class _RegisterPageState extends State<RegisterPage> {
                           icon: Icon(Icons.phone, color: Constants.orangeDark),
                           obscureText: false,
                           keyboardType: TextInputType.number,
-                          labelText: "Numero de telefono",
+                          labelText: "No. teléfono ",
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           validator: (String phone) {
                             if (phone.length <= 0) {
-                              return "Ingrese el telefono";
+                              return "Ingrese el teléfono ";
                             } else if (phone.length != 10) {
-                              return "Ingrese un telefono correcto";
+                              return "Ingrese un teléfono  correcto";
                             }
                             return null;
                           },
@@ -166,12 +167,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               Icon(AntDesign.mail, color: Constants.orangeDark),
                           obscureText: false,
                           keyboardType: TextInputType.text,
-                          labelText: "Correo Electronico",
+                          labelText: "Correo electrónico",
                           validator: (String email) {
                             if (email.length <= 0) {
-                              return "Ingrese el correo electronico";
+                              return "Ingrese el correo electrónico";
                             } else if (!EmailValidator.validate(email)) {
-                              return "Correo electronico invalido";
+                              return "Correo electrónico invalido";
                             }
                             return null;
                           },
@@ -227,12 +228,20 @@ class _RegisterPageState extends State<RegisterPage> {
                         alignment: Alignment.centerRight,
                         margin:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: canPressRegisterBtn ? _onSubmit : null,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80.0)),
-                          textColor: Colors.white,
-                          padding: const EdgeInsets.all(0),
+                          style: ButtonStyle(
+                            padding:
+                            MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(0)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(80.0),
+                                    side: BorderSide(
+                                        color: AppTheme.white))),
+                          ),
                           child: Container(
                             alignment: Alignment.center,
                             height: 50.0,

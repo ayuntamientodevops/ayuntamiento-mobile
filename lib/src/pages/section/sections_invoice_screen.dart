@@ -31,7 +31,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Facturas',
-        subTxt: "Consulta las últimas 10 facturas.",
+        subTxt: "Consulta las últimas 10 facturas",
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
@@ -60,7 +60,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.background,
+      color: Colors.white,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(

@@ -53,7 +53,9 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
         }
 
         if (snapshot.data == null) {
-          return Center(
+          return Container(
+            margin: EdgeInsets.only(top: 200),
+            alignment: Alignment.center,
             child: Text(
               'No existe ninguna factura',
               style: TextStyle(fontSize: 15),

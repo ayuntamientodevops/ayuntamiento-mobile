@@ -100,8 +100,10 @@ class _RequestListSectionState extends State<RequestListSection>
 
   Widget btnCargarEvidencia() {
     return Container(
+      margin: EdgeInsets.only(top: 30),
+      width: 270,
       alignment: Alignment.centerRight,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: canPressRegisterBtn
             ? () async {
                 FocusScope.of(context).unfocus();
@@ -174,10 +176,18 @@ class _RequestListSectionState extends State<RequestListSection>
                 }
               }
             : null,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-        textColor: Colors.white,
-        padding: const EdgeInsets.all(0),
+        style: ButtonStyle(
+          padding:
+          MaterialStateProperty.all<EdgeInsets>(
+              EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all<
+              RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(80.0),
+                  side: BorderSide(
+                      color: AppTheme.white))),
+        ),
         child: Container(
           alignment: Alignment.center,
           height: 50.0,
@@ -208,11 +218,11 @@ class _RequestListSectionState extends State<RequestListSection>
             children: [
               Text('Cargar Evidencia',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       color: Constants.orangeDark,
                       fontWeight: FontWeight.bold)),
               Text(' * ',
-                  style: TextStyle(fontSize: 18, color: Constants.orangeDark))
+                  style: TextStyle(fontSize: 15, color: Constants.orangeDark))
             ],
           ),
           Row(
@@ -279,11 +289,11 @@ class _RequestListSectionState extends State<RequestListSection>
             children: [
               Text('Detalle',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       color: Constants.orangeDark,
                       fontWeight: FontWeight.bold)),
               Text(' * ',
-                  style: TextStyle(fontSize: 18, color: Constants.orangeDark))
+                  style: TextStyle(fontSize: 15, color: Constants.orangeDark))
             ],
           ),
           TextFormField(
@@ -329,11 +339,11 @@ class _RequestListSectionState extends State<RequestListSection>
             children: [
               Text('Tipo de servicio',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       color: Constants.orangeDark,
                       fontWeight: FontWeight.bold)),
               Text(' * ',
-                  style: TextStyle(fontSize: 18, color: Constants.orangeDark))
+                  style: TextStyle(fontSize: 15, color: Constants.orangeDark))
             ],
           ),
           _dropdownSolicitud(),
@@ -511,12 +521,12 @@ class _RequestListSectionState extends State<RequestListSection>
             children: [
               Text('Ubicacion',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       color: Constants.orangeDark,
                       fontWeight: FontWeight.bold)),
               Text(
                 ' * ',
-                style: TextStyle(fontSize: 18, color: Constants.orangeDark),
+                style: TextStyle(fontSize: 15, color: Constants.orangeDark),
               )
             ],
           ),
@@ -565,12 +575,12 @@ class _RequestListSectionState extends State<RequestListSection>
                 children: [
                   Text('Direccion de Referencia',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           color: Constants.orangeDark,
                           fontWeight: FontWeight.bold)),
                   Text(' * ',
                       style:
-                          TextStyle(fontSize: 18, color: Constants.orangeDark))
+                          TextStyle(fontSize: 15, color: Constants.orangeDark))
                 ],
               ),
               TextFormField(

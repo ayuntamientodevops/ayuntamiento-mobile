@@ -32,7 +32,7 @@ class Background extends StatelessWidget {
           ),
           Positioned(
             top: 60,
-            left: 5,
+            left: 28,
             child: Image.asset(
                 "assets/logo_paqueno.png",
                 width: size.width * 0.45

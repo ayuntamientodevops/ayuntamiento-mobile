@@ -118,7 +118,6 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(

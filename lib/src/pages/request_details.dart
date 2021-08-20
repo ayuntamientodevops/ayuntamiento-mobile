@@ -1,3 +1,4 @@
+import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/Request.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -70,10 +71,11 @@ class _RequestDetailsState extends State<RequestDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: AppTheme.nearlyDarkOrange,
+        iconTheme: IconThemeData(color: AppTheme.white),
         title: Text(
-          "Detalle de Solicitud",
-          style: TextStyle(color: Colors.white),
+          "Detalle de solicitud ID: #" +args.reclamacionId,
+          style: TextStyle(color: AppTheme.white),
         ),
       ),
       // drawer: SettingWidget(),
@@ -122,16 +124,16 @@ class _RequestDetailsState extends State<RequestDetails> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Constants.orangeDark,
+                        color: AppTheme.nearlyDarkOrange,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
                             child: Text(
-                              "Descripcion",
+                              "Descripción",
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -158,7 +160,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Constants.orangeDark,
+                        color: AppTheme.nearlyDarkOrange,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +169,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                             child: Text(
                               "Localización",
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold),
                             ),

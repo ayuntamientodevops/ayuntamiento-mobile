@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:asdn/src/bloc/request/request_bloc.dart';
 import 'package:asdn/src/config/app_theme.dart';
@@ -63,6 +62,8 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
           children: <Widget>[
             _items.length == 0
                 ? Container(
+                    margin: EdgeInsets.only(top: 200),
+                    alignment: Alignment.center,
                     child: Text(
                       'No existe ninguna solicitud pendiente',
                       style: TextStyle(fontSize: 15),
@@ -136,6 +137,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
     } else if (r.fechaSolicitud != null) {
       fecha = DateTime.parse(r.fechaSolicitud);
     }
+
     return Column(
       children: [
         Text('Estado'),
@@ -222,7 +224,28 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                           subtitle: Text(formattedDate),
                           trailing: DrawerBox(request)),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 20.0,
+                      decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.circular(0.0),
+                          gradient: new LinearGradient(colors: [
+                            Color.fromARGB(255, 255, 136, 34),
+                            Color.fromARGB(255, 255, 177, 41)
+                          ])),
+                      padding: const EdgeInsets.all(0),
+                      child: Text(
+                        "ID: #" + request.reclamacionId,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.white,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
