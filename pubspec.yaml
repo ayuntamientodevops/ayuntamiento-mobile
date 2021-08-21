@@ -90,6 +90,7 @@ flutter:
     - assets/gallery.png
     - assets/location.png
     - assets/home/
+    - assets/ic_launcher.png
     - assets/login/
     - assets/news/
     - .env.sample

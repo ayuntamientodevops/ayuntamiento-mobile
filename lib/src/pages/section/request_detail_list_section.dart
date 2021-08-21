@@ -57,7 +57,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
       key: _refreshIndicatorKey,
       onRefresh: () => _loadItems(load: true),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.73,
+        height: MediaQuery.of(context).size.height * 0.65,
         child: Column(
           children: <Widget>[
             _items.length == 0

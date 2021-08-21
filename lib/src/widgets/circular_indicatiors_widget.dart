@@ -1,4 +1,4 @@
-import 'package:asdn/src/helpers/helpers.dart';
+import 'package:asdn/src/config/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CircularProgressIndicatorWidget extends StatelessWidget {
@@ -7,7 +7,7 @@ class CircularProgressIndicatorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
-        valueColor: new AlwaysStoppedAnimation<Color>(Constants.orangeDark),
-        backgroundColor: Colors.white);
+        valueColor: new AlwaysStoppedAnimation<Color>(AppTheme.nearlyDarkOrange),
+        backgroundColor: AppTheme.white);
   }
 }

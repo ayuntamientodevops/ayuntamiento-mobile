@@ -58,7 +58,7 @@ class _MainFullViewerState extends State<MainFullViewer> {
 
   Widget TopBarHeader(BuildContext context, Widget child) {
     return Container(
-      height: 133,
+      height: 150,
       child: FadeTransition(
         opacity: topBarAnimation,
         child: Transform(
@@ -68,13 +68,13 @@ class _MainFullViewerState extends State<MainFullViewer> {
             decoration: BoxDecoration(
               color: AppTheme.nearlyDarkOrange.withOpacity(topBarOpacity),
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(65.0),
-                bottomRight: Radius.circular(65.0),
+                bottomLeft: Radius.circular(50.0),
+                bottomRight: Radius.circular(50.0),
               ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                    color: AppTheme.nearlyDarkOrange
-                        .withOpacity(0.4 * topBarOpacity),
+                    color: AppTheme.grey
+                        .withOpacity(0.2 * topBarOpacity),
                     offset: const Offset(1.1, 1.1),
                     blurRadius: 10.0),
               ],
@@ -82,12 +82,12 @@ class _MainFullViewerState extends State<MainFullViewer> {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: MediaQuery.of(context).padding.top,
+                  height: MediaQuery.of(context).padding.top ,
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      left: 26,
-                      right: 16,
+                      left: 6,
+                      right: 6,
                       top: 26 - 8.0 * topBarOpacity,
                       bottom: 23 - 8.0 * topBarOpacity),
                   child: Row(
@@ -147,7 +147,7 @@ class _MainFullViewerState extends State<MainFullViewer> {
                                   onPressed: () =>
                                       {Scaffold.of(context).openDrawer()},
                                   icon: Icon(Icons.more_vert),
-                                  color: Colors.white,
+                                  color: AppTheme.white,
                                 ),
                               ),
                             ),

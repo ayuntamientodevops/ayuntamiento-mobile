@@ -34,6 +34,7 @@ class _BottomBarViewState extends State<BottomBarView>
   @override
   Widget build(BuildContext context) {
     return Stack(
+
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
         AnimatedBuilder(
