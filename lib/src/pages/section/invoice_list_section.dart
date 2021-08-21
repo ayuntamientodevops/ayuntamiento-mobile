@@ -67,7 +67,6 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
         Invoices invoices = snapshot.data ?? null;
 
         return Container(
-          height: MediaQuery.of(context).size.height * 0.73,
           child: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Column(
@@ -157,7 +156,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                       child: Container(
                         width: 200.0,
                         height: 450.0,
-                        color: Colors.white,
+                        color: AppTheme.white,
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
@@ -243,14 +242,14 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 25.0),
+                                padding: const EdgeInsets.only(top: 15.0),
                                 child: Container(
                                   height: 1.0,
                                   color: Colors.grey,
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.only(top: 18.0),
+                                padding: const EdgeInsets.only(top: 12.0),
                                 width: MediaQuery.of(context).size.width,
                                 child: Text(
                                   "RD\$${invoice.total.toString()}",

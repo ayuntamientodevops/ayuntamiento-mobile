@@ -14,7 +14,7 @@ class LogoWidget extends StatelessWidget {
     return Background(
       child: Image(
         width: 200,
-        image: AssetImage('assets/logo_paqueno.png'),
+        image: AssetImage('assets/ic_launcher.png'),
       ),
     );
   }
