@@ -60,25 +60,6 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppTheme.white,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Container(
-              child: MainFullViewer(
-                animationController: widget.animationController,
-                contentBody: getMainListViewUI(context),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget getMainListViewUI(BuildContext context) {
-    return Container(
       height: MediaQuery.of(context).size.height * 0.922,
       padding: const EdgeInsets.only( top: 160),
       child: FutureBuilder<bool>(
@@ -96,4 +77,5 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
       ),
     );
   }
+
 }

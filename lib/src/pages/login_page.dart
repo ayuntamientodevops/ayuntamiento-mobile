@@ -1,5 +1,6 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/config/background.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/pages/change_password_page.dart';
 import 'package:asdn/src/pages/register_page.dart';
@@ -12,13 +13,9 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:asdn/src/widgets/input_widget.dart';
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 
-import 'home_page.dart';
-
 class LoginPage extends StatefulWidget {
   static final routeName = '/login';
-
   //model of key words used in login
-
   LoginPage({Key key}) : super(key: key);
 
   @override
@@ -47,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     if (authBloc.state.authenticated) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
-            context, HomePage.routeName, (route) => false);
+            context, MainFullViewer.routeName, (route) => false);
       });
     }
   }
@@ -58,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       if (state.authenticated) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushNamedAndRemoveUntil(
-              context, HomePage.routeName, (route) => false);
+              context, MainFullViewer.routeName, (route) => false);
         });
       }
     }, builder: (context, state) {
