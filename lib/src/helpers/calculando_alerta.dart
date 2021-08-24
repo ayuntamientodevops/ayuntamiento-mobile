@@ -9,7 +9,7 @@ void calculandoAlerta(BuildContext context) {
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text('Cargando localizacion'),
+            Text('Cargando localizacion', style: TextStyle(fontSize: 12)),
             CircularProgressIndicatorWidget()
           ],
         ),

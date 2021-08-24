@@ -57,47 +57,59 @@ class _MapaPageState extends State<MapaPage> {
       floatingActionButton: BlocBuilder<SearchBloc, SearchState>(
           builder: (BuildContext context, state) {
         return !state.seleccionManual
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FloatingActionButton(
-                    heroTag: 'location',
-                    backgroundColor: Colors.green,
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.white,
+            ? Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        FloatingActionButton(
+                          heroTag: 'location',
+                          backgroundColor: Colors.green,
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            context
+                                .read<SearchBloc>()
+                                .add(OnActivarMarcadorManual());
+                            _mapBloc.moveCamera(_mapBloc.state.ubicacion);
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        FloatingActionButton(
+                          child: Icon(
+                            FontAwesome.location_arrow,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            context
+                                .read<SearchBloc>()
+                                .add(OnActivarMarcadorManual());
+                            _mapBloc.moveCamera(_mapBloc.state.ubicacion);
+                            _mapBloc.add(OnStopMap());
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        FloatingActionButton(
+                          elevation: 1,
+                          heroTag: 'exit',
+                          backgroundColor: Colors.black54,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
                     ),
-                    onPressed: () {
-                      context.read<SearchBloc>().add(OnActivarMarcadorManual());
-                      _mapBloc.moveCamera(_mapBloc.state.ubicacion);
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  FloatingActionButton(
-                    child: Icon(
-                      FontAwesome.location_arrow,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      context.read<SearchBloc>().add(OnActivarMarcadorManual());
-                      _mapBloc.moveCamera(_mapBloc.state.ubicacion);
-                      _mapBloc.add(OnStopMap());
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  FloatingActionButton(
-                    elevation: 1,
-                    heroTag: 'exit',
-                    backgroundColor: Colors.black54,
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
+                  ],
+                ),
               )
             : Container();
       }),
@@ -109,17 +121,32 @@ class _MapaPageState extends State<MapaPage> {
 
     _mapBloc.add(OnLocationUpdate(state.ubicacion));
 
-    final cameraPosition =
-        new CameraPosition(target: state.ubicacion, zoom: state.mapaSize);
+    final cameraPosition = new CameraPosition(
+        target: state.ubicacion, zoom: state.mapaSize, tilt: 0.0);
 
     return GoogleMap(
       scrollGesturesEnabled: state.scrollGesturesEnabled,
       initialCameraPosition: cameraPosition,
       myLocationEnabled: true,
       myLocationButtonEnabled: false,
-      zoomControlsEnabled: false,
+      zoomControlsEnabled: true,
+      zoomGesturesEnabled: true,
       onMapCreated: _mapBloc.initMap,
-      onCameraMove: (CameraPosition cameraPosition) {
+      onCameraMove: (CameraPosition cameraPosition) async {
+        double northeastLat = 18.7148127;
+        double northeastLng = -69.78639129999999;
+        double southwestLat = 18.5095789;
+        double southwestLng = -70.0411441;
+
+        if ((cameraPosition.target.longitude <= northeastLng &&
+                cameraPosition.target.latitude <= northeastLat) &&
+            (cameraPosition.target.longitude >= southwestLng &&
+                cameraPosition.target.latitude >= southwestLat)) {
+          _mapBloc.add(OutOfRange(false));
+        } else {
+          _mapBloc.add(OutOfRange(true));
+        }
+
         _mapBloc.add(OnMoveMap(cameraPosition.target));
       },
     );
