@@ -1,3 +1,4 @@
+import 'package:asdn/src/pages/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/pages/mapa_page.dart';
 import 'package:asdn/src/pages/request_details.dart';
@@ -16,5 +17,6 @@ Map<String, WidgetBuilder> getApplicationsRoutes() {
     AccesoGpsPage.routeName: (BuildContext context) => AccesoGpsPage(),
     MapaPage.routeName: (BuildContext context) => MapaPage(),
     RequestDetails.routeName: (BuildContext context) => RequestDetails(),
+    ResetPassword.routeName: (BuildContext context) => ResetPassword(),
   };
 }

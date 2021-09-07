@@ -1,31 +1,33 @@
+import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
+import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
-import 'package:email_validator/email_validator.dart';
+import 'package:asdn/src/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:asdn/src/widgets/input_widget.dart';
 
 import 'login_page.dart';
 
-class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({Key key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  static final routeName = '/restpass';
+  ResetPassword({Key key}) : super(key: key);
 
   @override
-  _ChangePasswordPageState createState() => _ChangePasswordPageState();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  bool isRequest = false;
-  bool isNoVisiblePassword = true;
-  bool isLoading = false;
-  final _emailController = TextEditingController();
-  final _nroDocumento = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+class _ResetPasswordState extends State<ResetPassword> {
+  final _newPassword = TextEditingController();
+  final _newPasswordConfirm = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  bool isRequest = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "La instrucciones de recuperación de contraseña se enviarán al correo electrónico.",
+                          "Por favor cambie su contrasena temporal",
                           style: TextStyle(fontSize: 13),
                         ),
                       ),
@@ -58,16 +60,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     Container(
                       alignment: Alignment.center,
                       child: InputWidget(
-                        controller: _emailController,
-                        icon: Icon(AntDesign.mail, color: Constants.orangeDark),
-                        obscureText: false,
+                        controller: _newPassword,
+                        icon: Icon(AntDesign.lock, color: Constants.orangeDark),
+                        obscureText: true,
                         keyboardType: TextInputType.text,
-                        labelText: "Correo electrónico",
-                        validator: (String email) {
-                          if (email.length <= 0) {
-                            return "Ingrese el correo electrónico";
-                          } else if (!EmailValidator.validate(email)) {
-                            return "Correo electrónico invalido";
+                        labelText: "Nueva Contraseña",
+                        validator: (String password) {
+                          if (password.length <= 0) {
+                            return "Ingrese la nueva constraseña";
+                          } else if (password.length < 6) {
+                            return "La constraseña debe tener un minimo de 6 caracteres";
                           }
                           return null;
                         },
@@ -76,19 +78,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     Container(
                       alignment: Alignment.center,
                       child: InputWidget(
-                        controller: _nroDocumento,
-                        icon: Icon(FontAwesome5.id_card,
-                            color: Constants.orangeDark),
-                        obscureText: false,
+                        controller: _newPasswordConfirm,
+                        icon:
+                            Icon(Icons.lock_sharp, color: Constants.orangeDark),
+                        obscureText: true,
                         keyboardType: TextInputType.number,
-                        labelText:
-                            "No. documento (Ejemplo: Cedula, RNC, etc...)",
+                        labelText: "Confirmar nueva contraseña",
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        validator: (String doc) {
-                          if (doc.length == 0) {
-                            return "Ingrese el numero de documento";
+                        validator: (String password) {
+                          if (password.length <= 0) {
+                            return "Ingrese la constraseña";
+                          }
+                          if (_newPassword.text != password) {
+                            return "Las constraseñas no coinciden";
                           }
                           return null;
                         },
@@ -100,7 +104,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       margin:
                           EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       child: ElevatedButton(
-                        onPressed: isRequest ? null : resetForm,
+                        onPressed: isRequest ? null : resetPassword,
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.all(0)),
@@ -131,37 +135,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         ),
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()))
-                        },
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: "Ya recuerdas la contraseña? ",
-                                style: TextStyle(
-                                    color: AppTheme.dark_grey,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13)),
-                            TextSpan(
-                                text: "Inicia aqui",
-                                style: TextStyle(
-                                    color: AppTheme.nearlyDarkOrange,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13)),
-                          ]),
-                        ),
-                      ),
-                    ),
-                    isLoading ? CircularProgressIndicatorWidget() : Container(),
+                    isLoading ? CircularProgressIndicatorWidget() : Container()
                   ],
                 ),
               ),
@@ -172,17 +146,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  void resetForm() async {
+  void resetPassword() async {
     if (!_formKey.currentState.validate()) return;
     setState(() {
       isRequest = true;
       isLoading = true;
     });
     AuthenticationService authenticationService = AuthenticationService();
-    final resp = await authenticationService.passreset(
-        email: _emailController.text, identificationCard: _nroDocumento.text);
+    User current = authenticationService.getUserLogged();
+    final resp = await authenticationService.changepass(
+        id: current.id, password: _newPassword.text);
 
     if (resp['OK']) {
+      BlocProvider.of<AuthBloc>(context).add(LoggedOut());
       setState(() {
         isLoading = false;
       });
@@ -195,8 +171,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         isRequest = false;
       });
     }
-    _emailController.clear();
-    _nroDocumento.clear();
+    _newPassword.clear();
+    _newPasswordConfirm.clear();
   }
 
   void mostrarSnackbar(String mensaje) {
@@ -208,17 +184,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
-  /* void resetForm() {
-    _nameController.clear();
-  }*/
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
   }
 
   @override

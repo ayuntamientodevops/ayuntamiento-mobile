@@ -41,6 +41,11 @@ class _MainFullViewerState extends State<MainFullViewer> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,

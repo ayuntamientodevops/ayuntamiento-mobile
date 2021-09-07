@@ -336,6 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
           }
 
           return DropdownButtonFormField<String>(
+            style: TextStyle(color: Colors.black54, fontSize: 17),
             decoration: InputDecoration(
               icon:
                   Icon(FontAwesome5.address_card, color: Constants.orangeDark),

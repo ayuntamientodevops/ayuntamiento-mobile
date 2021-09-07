@@ -57,7 +57,8 @@ class AuthenticationService {
         if (resp.data['status']) {
           var user = json.encode(resp.data['data']);
           await preferenceStorage.setValue(key: "currentUser", value: user);
-          return {"OK": true, "mensaje": ''};
+
+          return {"OK": true, "user": User.fromJson(json.decode(user))};
         } else {
           return {"OK": false, "mensaje": resp.data['message']};
         }
@@ -158,6 +159,7 @@ class AuthenticationService {
       data = json.decode(jwt);
       user = User.fromJson(data);
     }
+
     return user;
   }
 
@@ -173,5 +175,73 @@ class AuthenticationService {
 
   Future<bool> logout() async {
     return await preferenceStorage.deleteValue(key: "currentUser");
+  }
+
+  Future<Map<String, dynamic>> passreset(
+      {String email, String identificationCard}) async {
+    try {
+      Map<String, String> params = {
+        "email": "$email",
+        "IdentificationCard": "$identificationCard"
+      };
+
+      final resp = await this._dio.post(
+          // https://webapi.asdn.gob.do/RequestUsersWebServer/passreset
+          _baseUrl + "/RequestUsersWebServer/passreset",
+          options: Options(
+            headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+              HttpHeaders.authorizationHeader: basicAuth,
+              "X-API-KEY": dotenv.env['X-API-KEY']
+            },
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 600;
+            },
+          ),
+          data: jsonEncode(params));
+
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if (resp.data['status']) {
+          return {"OK": true, "mensaje": resp.data['message']};
+        }
+      }
+      return null;
+    } on DioError catch (e) {
+      print(e.error);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> changepass({String id, String password}) async {
+    try {
+      Map<String, String> params = {"id": "$id", "password": "$password"};
+
+      final resp = await this._dio.put(
+          // https://webapi.asdn.gob.do/RequestUsersWebServer/passreset
+          _baseUrl + "/RequestUsersWebServer/changepass",
+          options: Options(
+            headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+              HttpHeaders.authorizationHeader: basicAuth,
+              "X-API-KEY": dotenv.env['X-API-KEY']
+            },
+            followRedirects: false,
+            validateStatus: (status) {
+              return status < 600;
+            },
+          ),
+          data: jsonEncode(params));
+
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if (resp.data['status']) {
+          return {"OK": true, "mensaje": resp.data['message']};
+        }
+      }
+      return null;
+    } on DioError catch (e) {
+      print(e.error);
+      return null;
+    }
   }
 }
