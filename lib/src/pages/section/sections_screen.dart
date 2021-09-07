@@ -1,4 +1,3 @@
-import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/ui_view/home_section_one.dart';
@@ -28,7 +27,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
   void initState() {
     addAllListData();
     scrollController.addListener(() {
-/*      if (scrollController.offset >= 24) {
+    /*      if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
           setState(() {
             topBarOpacity = 1.0;

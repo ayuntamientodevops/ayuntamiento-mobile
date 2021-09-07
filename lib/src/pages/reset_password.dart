@@ -79,14 +79,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                       alignment: Alignment.center,
                       child: InputWidget(
                         controller: _newPasswordConfirm,
-                        icon:
-                            Icon(Icons.lock_sharp, color: Constants.orangeDark),
+                        icon: Icon(Icons.lock_sharp, color: Constants.orangeDark),
                         obscureText: true,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         labelText: "Confirmar nueva contraseña",
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
                         validator: (String password) {
                           if (password.length <= 0) {
                             return "Ingrese la constraseña";

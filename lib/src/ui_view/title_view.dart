@@ -33,7 +33,7 @@ class TitleView extends StatelessWidget {
                     Expanded(
                       child: Text(
                         titleTxt,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           fontFamily: AppTheme.fontName,
                           fontWeight: FontWeight.w500,
