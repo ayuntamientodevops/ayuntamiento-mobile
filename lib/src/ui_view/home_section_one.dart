@@ -1,6 +1,5 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class HomeSectionOne extends StatelessWidget {
   final AnimationController animationController;

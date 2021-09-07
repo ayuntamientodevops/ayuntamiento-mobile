@@ -1,6 +1,7 @@
 import 'dart:convert' show base64Encode, json, jsonEncode, utf8;
 import 'dart:io';
 
+import 'package:asdn/src/models/documentstypes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -74,6 +75,7 @@ class AuthenticationService {
       String email,
       String password,
       String phone,
+      String documentType,
       String identificationCard}) async {
     try {
       Map<String, String> params = {
@@ -82,6 +84,7 @@ class AuthenticationService {
         "email": "$email",
         "password": "$password",
         "phone": "$phone",
+        "DocumentType": "$documentType",
         "IdentificationCard": "$identificationCard"
       };
 
@@ -109,7 +112,37 @@ class AuthenticationService {
         return {"OK": false, "mensaje": resp.data};
       }
     } on DioError catch (e) {
+      print(e.error);
       return {"OK": false, "mensaje": "Error al ingresar a la aplicacion"};
+    }
+  }
+
+  Future<DocumentsTypes> documenttype() async {
+    try {
+      final resp = await this._dio.get(
+            _baseUrl + "/RequestUsersWebServer/documenttype",
+            options: Options(
+              headers: {
+                HttpHeaders.contentTypeHeader: "application/json",
+                HttpHeaders.authorizationHeader: basicAuth,
+                "X-API-KEY": dotenv.env['X-API-KEY']
+              },
+              followRedirects: false,
+              validateStatus: (status) {
+                return status < 600;
+              },
+            ),
+          );
+
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if (resp.data['status']) {
+          return DocumentsTypes.fromJson(resp.data);
+        }
+      }
+      return null;
+    } on DioError catch (e) {
+      print(e.error);
+      return null;
     }
   }
 

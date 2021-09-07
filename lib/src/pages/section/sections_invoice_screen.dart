@@ -1,5 +1,4 @@
 import 'package:asdn/src/config/main_full_view.dart';
-import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
@@ -67,6 +66,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
           children: [
             Container(
               child: MainFullViewer(
+                child: Container(),
                 animationController: widget.animationController,
                 contentBody: getMainListViewUI(context),
               ),
@@ -80,7 +80,7 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
   Widget getMainListViewUI(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.925,
-      padding: const EdgeInsets.only( top: 135),
+      padding: const EdgeInsets.only(top: 135),
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {

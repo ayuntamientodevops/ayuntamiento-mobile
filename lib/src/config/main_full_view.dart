@@ -49,14 +49,14 @@ class _MainFullViewerState extends State<MainFullViewer> {
         animation: widget.animationController,
         builder: (BuildContext context, Widget child) {
           return Stack(
-            children: [TopBarHeader(context, child), widget.contentBody],
+            children: [topBarHeader(context, child), widget.contentBody],
           );
         },
       ),
     );
   }
 
-  Widget TopBarHeader(BuildContext context, Widget child) {
+  Widget topBarHeader(BuildContext context, Widget child) {
     return Container(
       height: 133,
       child: FadeTransition(

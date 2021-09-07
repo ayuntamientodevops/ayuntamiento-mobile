@@ -1,11 +1,11 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
+import 'package:asdn/src/models/documentstypes.dart';
+import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
-import 'package:asdn/src/widgets/logo_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isRequest = false;
   bool isNoVisiblePassword = true;
   bool isLoading = false;
-
+  String _value = "0";
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _nameController = TextEditingController();
@@ -113,6 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                       ),
+                      documenttype(),
                       Container(
                         alignment: Alignment.center,
                         child: InputWidget(
@@ -129,10 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (String doc) {
                             if (doc.length == 0) {
                               return "Ingrese el numero de documento";
-                            }
-
-                            if (doc.length < 8 && doc.length > 11) {
-                              return "Ingrese un numero de documento correcto";
                             }
                             return null;
                           },
@@ -231,16 +228,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: ElevatedButton(
                           onPressed: canPressRegisterBtn ? _onSubmit : null,
                           style: ButtonStyle(
-                            padding:
-                            MaterialStateProperty.all<EdgeInsets>(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(0)),
                             shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
+                                    RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(80.0),
-                                    side: BorderSide(
-                                        color: AppTheme.white))),
+                                    borderRadius: BorderRadius.circular(80.0),
+                                    side: BorderSide(color: AppTheme.white))),
                           ),
                           child: Container(
                             alignment: Alignment.center,
@@ -313,6 +307,68 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
+  Widget documenttype() {
+    return Container(
+      padding: EdgeInsets.all(15),
+      child: _dropdownSolicitud(),
+    );
+  }
+
+  Widget _dropdownSolicitud() {
+    AuthenticationService requestService = AuthenticationService();
+    return FutureBuilder<DocumentsTypes>(
+        future: requestService.documenttype(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicatorWidget();
+          }
+          List<DocumentType> data = [];
+
+          data.add(
+            DocumentType(
+                idTipoDocumento: "0",
+                descripcionDocumento: "Seleccione un tipo de documento"),
+          );
+
+          if (snapshot.hasData) {
+            data.addAll(snapshot.data.data.toList());
+          }
+
+          return DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              icon:
+                  Icon(FontAwesome5.address_card, color: Constants.orangeDark),
+              enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Constants.orangeDark,
+                ),
+              ),
+            ),
+            isExpanded: true,
+            value: _value,
+            validator: (value) {
+              if (value == "0") {
+                return "Debe seleccionar el tipo de documento";
+              }
+              return null;
+            },
+            onChanged: (type) => setState(() => _value = type),
+            items: data
+                .map<DropdownMenuItem<String>>(
+                    (value) => new DropdownMenuItem<String>(
+                          value: value.idTipoDocumento,
+                          child: new Text(value.descripcionDocumento),
+                        ))
+                .toList(),
+          );
+        });
+  }
+
   void _onSubmit() async {
     if (!formKey.currentState.validate()) return;
     registerBloc.add(
@@ -322,6 +378,7 @@ class _RegisterPageState extends State<RegisterPage> {
           documentNumber: _documentNumberController.text,
           phone: _phoneNumberController.text,
           email: _emailController.text,
+          tipoDoc: _value,
           password: _passwordController.text),
     );
   }
@@ -345,6 +402,10 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.clear();
     _passwordController.clear();
     _password2Controller.clear();
+    setState(() {
+      _value = "0";
+      canPressRegisterBtn = true;
+    });
   }
 
   @override

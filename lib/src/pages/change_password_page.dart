@@ -21,6 +21,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isNoVisiblePassword = true;
   bool isLoading = false;
   final _emailController = TextEditingController();
+  final _nroDocumento = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -65,6 +66,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             return "Ingrese el correo electrónico";
                           } else if (!EmailValidator.validate(email)) {
                             return "Correo electrónico invalido";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: InputWidget(
+                        controller: _nroDocumento,
+                        icon: Icon(FontAwesome5.id_card,
+                            color: Constants.orangeDark),
+                        obscureText: false,
+                        keyboardType: TextInputType.number,
+                        labelText:
+                            "No. documento (Ejemplo: Cedula, RNC, etc...)",
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (String doc) {
+                          if (doc.length == 0) {
+                            return "Ingrese el numero de documento";
                           }
                           return null;
                         },
@@ -147,22 +169,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-/*  void _onSubmit() async {
-    if (!formKey.currentState.validate()) return;
-    registerBloc.add(
-      RegisterButtonPressed(
-          name: _nameController.text,
-          lastname: _lastnameController.text,
-          documentNumber: _documentNumberController.text,
-          phone: _phoneNumberController.text,
-          email: _emailController.text,
-          password: _passwordController.text),
-    );
-  }*/
+  // void _onSubmit() async {
+  //   if (!formKey.currentState.validate()) return;
+  //   registerBloc.add(
+  //     RegisterButtonPressed(
+  //         name: _nameController.text,
+  //         lastname: _lastnameController.text,
+  //         documentNumber: _documentNumberController.text,
+  //         phone: _phoneNumberController.text,
+  //         email: _emailController.text,
+  //         password: _passwordController.text),
+  //   );
+  // }
 
   void resetForm() {
+    if (!_formKey.currentState.validate()) return;
     _emailController.clear();
   }
+
   void mostrarSnackbar(String mensaje, Color color) {
     final snackbar = SnackBar(
       content: Text(mensaje),

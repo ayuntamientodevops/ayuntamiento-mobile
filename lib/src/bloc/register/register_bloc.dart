@@ -26,6 +26,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           email: event.email,
           password: event.password,
           phone: event.phone,
+          documentType: event.tipoDoc,
           identificationCard: event.documentNumber);
 
       if (resp['OK']) {

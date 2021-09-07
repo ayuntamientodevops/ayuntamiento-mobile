@@ -49,6 +49,7 @@ class RequestService {
       }
       return null;
     } on DioError catch (e) {
+      print(e.error);
       return null;
     }
   }
@@ -87,6 +88,7 @@ class RequestService {
       }
       return false;
     } on Exception catch (e) {
+      print(e);
       return null;
     }
   }
@@ -128,6 +130,7 @@ class RequestService {
       }
       return {"OK": false, "mensaje": "No existe ninguna solicitud pendiente"};
     } on DioError catch (e) {
+      print(e.error);
       return {"OK": false, "mensaje": "Error obtener las solictudes"};
     }
   }
@@ -161,6 +164,7 @@ class RequestService {
       }
       return images;
     } on DioError catch (e) {
+      print(e.error);
       return null;
     }
   }
@@ -193,6 +197,7 @@ class RequestService {
       }
       return images;
     } on DioError catch (e) {
+      print(e.error);
       return [];
     }
   }

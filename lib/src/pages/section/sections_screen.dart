@@ -2,7 +2,6 @@ import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/ui_view/home_section_one.dart';
-import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -55,7 +54,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
 
   void addAllListData() {
     const int count = 9;
-    listViews.add(WolecomeHomeSection());
+    listViews.add(wolecomeHomeSection());
     listViews.add(
       HomeSectionOne(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -93,7 +92,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,
             curve:
-            Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+                Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
     );
@@ -124,6 +123,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
           children: [
             Container(
               child: MainFullViewer(
+                child: Container(),
                 animationController: widget.animationController,
                 contentBody: getMainListViewUI(),
               ),
@@ -134,7 +134,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
     );
   }
 
-  Widget WolecomeHomeSection() {
+  Widget wolecomeHomeSection() {
     final AuthenticationService authenticationService = AuthenticationService();
 
     return FutureBuilder<User>(
