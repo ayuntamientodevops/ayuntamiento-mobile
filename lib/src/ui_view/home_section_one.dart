@@ -1,13 +1,11 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class HomeSectionOne extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
-  const HomeSectionOne(
-      {Key key, this.animationController, this.animation})
+  const HomeSectionOne({Key key, this.animationController, this.animation})
       : super(key: key);
 
   @override
@@ -41,9 +39,9 @@ class HomeSectionOne extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 16, left: 16, right: 16,bottom: 16),
-                      child:  Container(
+                      padding: const EdgeInsets.only(
+                          top: 16, left: 16, right: 16, bottom: 16),
+                      child: Container(
                         width: 510.0,
                         height: 210.0,
                         decoration: BoxDecoration(
@@ -64,4 +62,3 @@ class HomeSectionOne extends StatelessWidget {
     );
   }
 }
-

@@ -105,25 +105,25 @@ class ItemsView extends StatelessWidget {
               width: 130,
               child: Stack(
                 children: <Widget>[
-
                   GestureDetector(
                     onTap: () {
                       String text;
                       if (homeListData.id == 0) {
-                        text = "En este segmento estara consultado haciendo click en menu con el icono ... donde podras encontrar"
-                            "las facturas pagadas y pendiente." ;
+                        text =
+                            "En este segmento estara consultado haciendo click en menu con el icono ... donde podras encontrar"
+                            "las facturas pagadas y pendiente.";
 
                         animationController.reverse().then<dynamic>((data) {
-
-                           SectionsInvoiceScreen(
-                                animationController: animationController);
-                        }); 
+                          SectionsInvoiceScreen(
+                              animationController: animationController);
+                        });
                       } else if (homeListData.id == 1) {
                         text = "Este es para re[prte";
                       } else if (homeListData.id == 2) {
                         text = "Este es para noticias";
                       }
-                   /*   return showModalBottomSheet(
+                      /*   return showModalBottomSheet(
+
                           enableDrag: false,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
@@ -234,12 +234,14 @@ class ItemsView extends StatelessWidget {
     );
   }
 
-  Widget buildSheet(String text, BuildContext context) => ListView(
-        padding: EdgeInsets.all(20),
-        children: <Widget>[
-             Text(text, style:  TextStyle(fontSize: 20),),
-            ElevatedButton(onPressed: ()=> Navigator.pop(context),
-              child: const Text('Cerrar')),
-        ]
-      );
+  Widget buildSheet(String text, BuildContext context) =>
+      ListView(padding: EdgeInsets.all(20), children: <Widget>[
+        Text(
+          text,
+          style: TextStyle(fontSize: 20),
+        ),
+        ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cerrar')),
+      ]);
 }

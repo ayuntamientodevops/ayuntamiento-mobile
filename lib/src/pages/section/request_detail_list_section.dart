@@ -119,9 +119,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
     }
   }
 
-  Widget DrawerBox(Request r) {
-    DateTime fecha;
-    String label;
+  Widget drawerBox(Request r) {
     Color color;
     if (r.estatusReclamacion == "Completada") {
       color = Colors.lightGreen;
@@ -129,13 +127,6 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
       color = Colors.orangeAccent;
     } else if (r.estatusReclamacion == "Solicitada") {
       color = Colors.lightBlueAccent;
-    }
-    if (r.fechaResolucion != null) {
-      fecha = DateTime.parse(r.fechaResolucion);
-    } else if (r.fechaAsignacion != null) {
-      fecha = DateTime.parse(r.fechaAsignacion);
-    } else if (r.fechaSolicitud != null) {
-      fecha = DateTime.parse(r.fechaSolicitud);
     }
 
     return Column(
@@ -222,7 +213,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                           subtitle: Text(formattedDate),
-                          trailing: DrawerBox(request)),
+                          trailing: drawerBox(request)),
                     ),
                   ),
                   Positioned(

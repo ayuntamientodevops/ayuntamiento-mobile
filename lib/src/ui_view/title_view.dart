@@ -27,17 +27,17 @@ class TitleView extends StatelessWidget {
                 0.0, 30 * (1.0 - animation.value), 0.0),
             child: Container(
               child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 24),
+                padding: const EdgeInsets.only(left: 15, right: 24, bottom: 30),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       child: Text(
                         titleTxt,
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: AppTheme.fontName,
                           fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 20,
                           letterSpacing: 0.5,
                           color: AppTheme.lightText,
                         ),
@@ -62,7 +62,7 @@ class TitleView extends StatelessWidget {
                                 color: AppTheme.dark_grey,
                               ),
                             ),
-                           /* SizedBox(
+                            /* SizedBox(
                               height: 38,
                               width: 26,
                               child: Icon(

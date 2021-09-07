@@ -59,7 +59,6 @@ class _MainFullViewerState extends State<MainFullViewer>
   @override
   void dispose() {
     animationController.dispose();
-    super.dispose();
   }
 
   @override

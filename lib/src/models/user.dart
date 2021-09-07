@@ -20,6 +20,7 @@ class User {
     this.created,
     this.modified,
     this.status,
+    this.needResetPass,
   });
 
   String id;
@@ -32,6 +33,7 @@ class User {
   DateTime created;
   DateTime modified;
   String status;
+  String needResetPass;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -44,6 +46,7 @@ class User {
         created: DateTime.parse(json["created"]),
         modified: DateTime.parse(json["modified"]),
         status: json["status"],
+        needResetPass: json["NeedResetPass"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +60,6 @@ class User {
         "created": created.toIso8601String(),
         "modified": modified.toIso8601String(),
         "status": status,
+        "needResetPass": needResetPass,
       };
 }

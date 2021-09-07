@@ -16,5 +16,6 @@ Map<String, WidgetBuilder> getApplicationsRoutes() {
     AccesoGpsPage.routeName: (BuildContext context) => AccesoGpsPage(),
     MapaPage.routeName: (BuildContext context) => MapaPage(),
     RequestDetails.routeName: (BuildContext context) => RequestDetails(),
+    ResetPassword.routeName: (BuildContext context) => ResetPassword(),
   };
 }

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class SegmentListData {
   SegmentListData({
     this.id = 0,

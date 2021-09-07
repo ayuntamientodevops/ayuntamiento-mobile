@@ -6,6 +6,7 @@ abstract class RegisterEvent {}
 class RegisterButtonPressed extends RegisterEvent {
   final String name;
   final String lastname;
+  final String tipoDoc;
   final String documentNumber;
   final String phone;
   final String email;
@@ -15,6 +16,7 @@ class RegisterButtonPressed extends RegisterEvent {
       {this.name,
       this.lastname,
       this.documentNumber,
+      this.tipoDoc,
       this.phone,
       this.email,
       this.password});
