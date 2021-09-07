@@ -66,23 +66,23 @@ class _HomeSectionThreeState extends State<HomeSectionThree>
                     isLoop: true,
                     children: [
                       GestureDetector(
-                        onTap: () => _launchURL("http://alcaldiasdn.gob.do/category/noticias/"), // handle your image tap here
-                        child:  Image.asset(
+                        onTap: () => _launchURL(
+                            "http://alcaldiasdn.gob.do/category/noticias/"), // handle your image tap here
+                        child: Image.asset(
                           'assets/news/1.jpg',
                           fit: BoxFit.cover,
                         ),
                       ),
-
                       GestureDetector(
-                        onTap: () => _launchURL("http://alcaldiasdn.gob.do/category/noticias/"), // handle your image tap here
-                        child:  Image.asset(
+                        onTap: () => _launchURL(
+                            "http://alcaldiasdn.gob.do/category/noticias/"), // handle your image tap here
+                        child: Image.asset(
                           'assets/news/2.jpg',
                           fit: BoxFit.cover,
                         ),
                       )
                     ],
-                    onPageChanged: (value) {
-                    },
+                    onPageChanged: (value) {},
                     autoPlayInterval: 3000,
                   ),
                 ),

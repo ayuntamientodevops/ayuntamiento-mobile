@@ -58,23 +58,37 @@ class _BuildMardadorManual extends StatelessWidget {
 
   Positioned _confirmarDestino(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     return Positioned(
       child: FadeInUp(
-        duration: Duration(milliseconds: 300),
-        child: MaterialButton(
-          child: Text('Confirmar ubicacion',
-              style: TextStyle(color: Colors.white)),
-          color: Constants.orangeDark,
-          shape: StadiumBorder(),
-          elevation: 0,
-          splashColor: Colors.transparent,
-          minWidth: width - 120,
-          onPressed: () {
-            calculandoAlerta(context);
-            this.calcularDestino(context);
-          },
-        ),
-      ),
+          duration: Duration(milliseconds: 300),
+          child: BlocBuilder<MapBloc, MapState>(
+            builder: (context, state) {
+              if (state.isOutOfRange) {
+                return MaterialButton(
+                    child: Text('Fuera de Rango',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.red,
+                    shape: StadiumBorder(),
+                    elevation: 5,
+                    splashColor: Colors.transparent,
+                    minWidth: width - 120,
+                    onPressed: () {});
+              }
+              return MaterialButton(
+                  child: Text('Confirmar ubicacion',
+                      style: TextStyle(color: Colors.white)),
+                  color: Constants.orangeDark,
+                  shape: StadiumBorder(),
+                  elevation: 5,
+                  splashColor: Colors.transparent,
+                  minWidth: width - 120,
+                  onPressed: () {
+                    calculandoAlerta(context);
+                    this.calcularDestino(context);
+                  });
+            },
+          )),
       bottom: 70,
       left: 40,
     );

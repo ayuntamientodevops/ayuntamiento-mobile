@@ -1,6 +1,5 @@
 import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/pages/section/request_detail_list_section.dart';
-import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,6 @@ class SectionsRequestDetailSacreen extends StatefulWidget {
 
 class _SectionsRequestDetailSacreenState
     extends State<SectionsRequestDetailSacreen> with TickerProviderStateMixin {
-
   List<Widget> listViews = <Widget>[];
   double topBarOpacity = 1;
 
@@ -68,6 +66,7 @@ class _SectionsRequestDetailSacreenState
           children: [
             Container(
               child: MainFullViewer(
+                child: Container(),
                 animationController: widget.animationController,
                 contentBody: getMainListViewUI(context),
               ),
@@ -80,8 +79,8 @@ class _SectionsRequestDetailSacreenState
 
   Widget getMainListViewUI(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only( top: 150),
+      height: MediaQuery.of(context).size.height * 0.922, 
+      padding: const EdgeInsets.only(top: 135), 
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {

@@ -7,6 +7,7 @@ class MapState {
   final LatLng ubicacion;
   final bool scrollGesturesEnabled;
   final double mapaSize;
+  final bool isOutOfRange;
 
   MapState({
     this.mapaReady = false,
@@ -15,6 +16,7 @@ class MapState {
     this.ubicacion,
     this.scrollGesturesEnabled = true,
     this.mapaSize = 15.0,
+    this.isOutOfRange = false,
   });
 
   MapState copyWith(
@@ -24,7 +26,8 @@ class MapState {
           bool existeUbicacion,
           LatLng ubicacion,
           bool scrollGesturesEnabled,
-          double mapaSize}) =>
+          double mapaSize,
+          bool isOutOfRange}) =>
       new MapState(
           mapaReady: mapaReady ?? this.mapaReady,
           ubicacionCentral: ubicacionCentral ?? this.ubicacionCentral,
@@ -32,5 +35,6 @@ class MapState {
           scrollGesturesEnabled:
               scrollGesturesEnabled ?? this.scrollGesturesEnabled,
           ubicacion: ubicacion ?? this.ubicacion,
-          mapaSize: mapaSize ?? this.mapaSize);
+          mapaSize: mapaSize ?? this.mapaSize,
+          isOutOfRange: isOutOfRange ?? this.isOutOfRange);
 }

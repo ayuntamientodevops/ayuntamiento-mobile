@@ -1,8 +1,11 @@
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
+import 'package:asdn/src/models/user.dart';
+import 'package:asdn/src/pages/reset_password.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_screen.dart';
+import 'package:asdn/src/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/config/bottom_bar_view.dart';
 import 'package:asdn/src/config/app_theme.dart';
@@ -23,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController animationController;
-
+  AuthenticationService authService = AuthenticationService();
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
   Widget tabBody = Container(
@@ -40,12 +43,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     tabBody = SectionsHomeScreen(animationController: animationController);
+
     super.initState();
+    User current = authService.getUserLogged();
+    if (current.needResetPass.toLowerCase() == '1') {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, ResetPassword.routeName, (route) => false);
+      });
+    }
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    animationController?.dispose();
     super.dispose();
   }
 

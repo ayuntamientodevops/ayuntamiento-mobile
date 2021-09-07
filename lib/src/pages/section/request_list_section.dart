@@ -174,16 +174,11 @@ class _RequestListSectionState extends State<RequestListSection>
               }
             : null,
         style: ButtonStyle(
-          padding:
-          MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.all(0)),
-          shape: MaterialStateProperty.all<
-              RoundedRectangleBorder>(
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(80.0),
-                  side: BorderSide(
-                      color: AppTheme.white))),
+                  borderRadius: BorderRadius.circular(80.0),
+                  side: BorderSide(color: AppTheme.white))),
         ),
         child: Container(
           alignment: Alignment.center,

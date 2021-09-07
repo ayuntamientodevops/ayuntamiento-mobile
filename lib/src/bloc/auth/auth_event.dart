@@ -14,6 +14,8 @@ class LoginButtonPressed extends AuthEvent {
   LoginButtonPressed({this.user, this.password});
 }
 
+class ValidateSession extends AuthEvent {}
+
 class LoggedOut extends AuthEvent {
   @override
   String toString() => 'LoggedOut';

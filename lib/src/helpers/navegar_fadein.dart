@@ -3,7 +3,7 @@ part of 'helpers.dart';
 Route navegarFadeIn(BuildContext context, Widget page) {
   return PageRouteBuilder(
     pageBuilder: (_, __, ___) => page,
-    transitionDuration: Duration(milliseconds: 300),
+    transitionDuration: Duration(milliseconds: 1000),
     transitionsBuilder: (context, animation, _, child) {
       return FadeTransition(
         child: child,

@@ -4,7 +4,6 @@ import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/request_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class InvoiceListSection extends StatefulWidget {
   static final routeName = '/invoce';
@@ -216,7 +215,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         'Tipo Factura:',
                                         "${invoice.taxReceiptType.description}",
                                         'Fecha',
-                                        "${dateFormat}"),
+                                        "$dateFormat"),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 25.0),
                                       child: Container(

@@ -15,6 +15,11 @@ class OnMoveMap extends MapEvent {
   OnMoveMap(this.centroMapa);
 }
 
+class OutOfRange extends MapEvent {
+  final bool fueraRango;
+  OutOfRange(this.fueraRango);
+}
+
 class OnChangeLocation extends MapEvent {
   final LatLng ubicacion;
   OnChangeLocation(this.ubicacion);

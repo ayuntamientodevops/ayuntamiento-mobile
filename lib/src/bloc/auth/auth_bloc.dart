@@ -1,4 +1,5 @@
 import 'package:asdn/src/bloc/request/request_bloc.dart';
+import 'package:asdn/src/models/user.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:asdn/src/services/auth_service.dart';
@@ -29,7 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (resp['OK']) {
         yield state.copyWith(
-            loading: false, authenticated: true, isErrorAuth: false);
+            loading: false,
+            authenticated: true,
+            isErrorAuth: false,
+            needResetPass: (resp["user"].needResetPass.toLowerCase() == '1'));
       } else {
         yield state.copyWith(
             loading: false,

@@ -23,7 +23,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     super.initState();
   }
 
-  Widget DrawerBox(Request r) {
+  Widget drawerBox(Request r) {
     DateTime fecha;
     Color color;
     if (r.estatusReclamacion == "Completada") {
@@ -53,7 +53,9 @@ class _RequestDetailsState extends State<RequestDetails> {
             ListTile(
               leading: Icon(Icons.admin_panel_settings, color: color),
               title: Text('Estado'),
-              subtitle: Text(r.estatusReclamacion + " el " + DateFormat.yMMMMd('es_PR').format(fecha)),
+              subtitle: Text(r.estatusReclamacion +
+                  " el " +
+                  DateFormat.yMMMMd('es_PR').format(fecha)),
             ),
           ],
         ),
@@ -63,17 +65,14 @@ class _RequestDetailsState extends State<RequestDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute
-        .of(context)
-        .settings
-        .arguments as Request;
+    final args = ModalRoute.of(context).settings.arguments as Request;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.nearlyDarkOrange,
         iconTheme: IconThemeData(color: AppTheme.white),
         title: Text(
-          "Detalle de solicitud ID: #" +args.reclamacionId,
+          "Detalle de solicitud ID: #" + args.reclamacionId,
           style: TextStyle(color: AppTheme.white),
         ),
       ),
@@ -108,10 +107,10 @@ class _RequestDetailsState extends State<RequestDetails> {
                       args.sector.toString(),
                       textAlign: TextAlign.center,
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 30),
-                    DrawerBox(args),
+                    drawerBox(args),
                   ],
                 ),
               ),
@@ -179,10 +178,7 @@ class _RequestDetailsState extends State<RequestDetails> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 150,
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(

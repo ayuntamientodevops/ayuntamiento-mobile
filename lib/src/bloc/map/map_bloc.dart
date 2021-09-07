@@ -22,10 +22,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             desiredAccuracy: LocationAccuracy.high, distanceFilter: 10)
         .listen((Position position) {
       final newLocation = new LatLng(position.latitude, position.longitude);
-
       add(OnChangeLocation(newLocation));
     });
   }
+
+  get mapController => _mapController;
 
   void cancelarSeguimiento() {
     _positionSubcription?.cancel();
@@ -36,6 +37,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       this._mapController = controller;
       // Cambiar estilo del mapa
       _mapController.setMapStyle(jsonEncode(uberMapTheme));
+
       add(OnMapReady());
     }
   }
@@ -67,6 +69,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       yield state.copyWith(mapaReady: false);
     } else if (event is OnPlusMap) {
       yield state.copyWith(mapaSize: state.mapaSize + 1.0);
+    } else if (event is OutOfRange) {
+      yield state.copyWith(isOutOfRange: event.fueraRango);
     }
+  }
+
+  Future<bool> checkIfWithinBounds(LatLng yourLocation) async {
+    var mapBounds = await mapController.getVisibleRegion();
+    return mapBounds.contains(
+      LatLng(yourLocation.latitude, yourLocation.longitude),
+    );
   }
 }

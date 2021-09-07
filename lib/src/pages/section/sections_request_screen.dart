@@ -1,7 +1,6 @@
 import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/pages/section/request_list_section.dart';
-import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 
@@ -74,8 +73,9 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
           children: [
             Container(
               child: MainFullViewer(
-                animationController: widget.animationController,
-                contentBody: getMainListViewUI(context),
+                animationController: widget.animationController, 
+                contentBody: getMainListViewUI(),
+                child: Container(), 
               ),
             ),
           ],
@@ -86,8 +86,8 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
 
   Widget getMainListViewUI(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only(top: 160),
+      height: MediaQuery.of(context).size.height * 0.922, 
+      padding: const EdgeInsets.only(top: 135), 
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
