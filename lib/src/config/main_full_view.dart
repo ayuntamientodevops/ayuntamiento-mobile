@@ -5,6 +5,7 @@ import 'package:asdn/src/config/setting_widget.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/pages/login_page.dart';
+import 'package:asdn/src/pages/reset_password.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_screen.dart';
@@ -48,18 +49,23 @@ class _MainFullViewerState extends State<MainFullViewer>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = SectionsHomeScreen(animationController: animationController);
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
+
+    tabBody = SectionsHomeScreen(animationController: animationController);
     super.initState();
+
+    User current = authenticationService.getUserLogged();
+    if (current.needResetPass.toLowerCase() == '1') {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, ResetPassword.routeName, (route) => false);
+      });
+    }
   }
 
-  @override
-  void dispose() {
-    animationController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -271,4 +277,11 @@ class _MainFullViewerState extends State<MainFullViewer>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
+  }
+
 }

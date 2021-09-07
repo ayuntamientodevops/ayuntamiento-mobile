@@ -1,4 +1,5 @@
 import 'package:asdn/src/config/main_full_view.dart';
+import 'package:asdn/src/pages/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/pages/mapa_page.dart';
 import 'package:asdn/src/pages/request_details.dart';
