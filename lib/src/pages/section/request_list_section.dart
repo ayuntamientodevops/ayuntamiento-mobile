@@ -65,9 +65,7 @@ class _RequestListSectionState extends State<RequestListSection>
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.74,
-      child: SingleChildScrollView(
-        child: Container(
+        child: SingleChildScrollView(
           child: Form(
             key: formKey,
             child: Column(
@@ -94,14 +92,13 @@ class _RequestListSectionState extends State<RequestListSection>
             ),
           ),
         ),
-      ),
     );
   }
 
   Widget btnCargarEvidencia() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
-      width: 270,
+      margin: EdgeInsets.only(bottom: 50),
+      width: 290,
       alignment: Alignment.centerRight,
       child: ElevatedButton(
         onPressed: canPressRegisterBtn

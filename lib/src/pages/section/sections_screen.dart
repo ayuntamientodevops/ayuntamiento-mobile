@@ -125,7 +125,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
               child: MainFullViewer(
                 child: Container(),
                 animationController: widget.animationController,
-                contentBody: getMainListViewUI(),
+                contentBody: getMainListViewUI(context),
               ),
             ),
           ],
@@ -159,10 +159,10 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
     );
   }
 
-  Widget getMainListViewUI() {
+  Widget getMainListViewUI(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only(top: 135),
+      padding: const EdgeInsets.only( top: 160),
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {

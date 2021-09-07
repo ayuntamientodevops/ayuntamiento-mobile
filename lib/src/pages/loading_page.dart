@@ -57,7 +57,7 @@ class _LoadingPageState extends State<LoadingPage> with WidgetsBindingObserver {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[LogoWidget()],
+                 // children: <Widget>[LogoWidget()],
                 ),
               );
             }

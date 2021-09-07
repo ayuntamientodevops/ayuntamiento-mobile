@@ -13,7 +13,7 @@ class ValidateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          LogoWidget(),
+          //LogoWidget(),
           ElevatedButton.icon(
               style: ElevatedButton.styleFrom(primary: Constants.orangeDark),
               onPressed: this.reload,

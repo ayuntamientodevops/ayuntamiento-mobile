@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return CircularProgressIndicator(
                                       valueColor:
                                           new AlwaysStoppedAnimation<Color>(
-                                              Constants.orangeDark),
+                                              AppTheme.nearlyDarkOrange),
                                       backgroundColor: AppTheme.white);
                                 } else if (state.isErrorAuth && clickLogin) {
                                   WidgetsBinding.instance

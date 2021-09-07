@@ -66,16 +66,16 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: AppTheme.white,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
             Container(
               child: MainFullViewer(
-                animationController: widget.animationController,
+                animationController: widget.animationController, 
                 contentBody: getMainListViewUI(),
-                child: Container(),
+                child: Container(), 
               ),
             ),
           ],
@@ -84,10 +84,10 @@ class _SectionsRequestScreenState extends State<SectionsRequestScreen>
     );
   }
 
-  Widget getMainListViewUI() {
+  Widget getMainListViewUI(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only(top: 135),
+      height: MediaQuery.of(context).size.height * 0.922, 
+      padding: const EdgeInsets.only(top: 135), 
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
