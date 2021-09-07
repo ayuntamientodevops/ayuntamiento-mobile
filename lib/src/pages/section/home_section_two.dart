@@ -1,5 +1,7 @@
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/models/segments_list_data.dart';
+import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
+import 'package:asdn/src/pages/section/sections_request_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeSectionTwo extends StatefulWidget {
@@ -105,7 +107,23 @@ class ItemsView extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
+                      String text;
+                      if (homeListData.id == 0) {
+                        text =
+                            "En este segmento estara consultado haciendo click en menu con el icono ... donde podras encontrar"
+                            "las facturas pagadas y pendiente.";
+
+                        animationController.reverse().then<dynamic>((data) {
+                          SectionsInvoiceScreen(
+                              animationController: animationController);
+                        });
+                      } else if (homeListData.id == 1) {
+                        text = "Este es para re[prte";
+                      } else if (homeListData.id == 2) {
+                        text = "Este es para noticias";
+                      }
                       /*   return showModalBottomSheet(
+
                           enableDrag: false,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(

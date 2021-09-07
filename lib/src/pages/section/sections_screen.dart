@@ -117,19 +117,20 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Container(
-              child: MainFullViewer(
-                child: Container(),
-                animationController: widget.animationController,
-                contentBody: getMainListViewUI(context),
-              ),
-            ),
-          ],
-        ),
+      height: MediaQuery.of(context).size.height * 0.922,
+      padding: const EdgeInsets.only(top: 160),
+      child: FutureBuilder<bool>(
+        future: getData(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          return ListView.builder(
+            padding: const EdgeInsets.only(top: 13),
+            itemCount: listViews.length,
+            itemBuilder: (BuildContext context, int index) {
+              widget.animationController.forward();
+              return listViews[index];
+            },
+          );
+        },
       ),
     );
   }
@@ -156,26 +157,6 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
           );
         }
       },
-    );
-  }
-
-  Widget getMainListViewUI(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only( top: 160),
-      child: FutureBuilder<bool>(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          return ListView.builder(
-            padding: const EdgeInsets.only(top: 13),
-            itemCount: listViews.length,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController.forward();
-              return listViews[index];
-            },
-          );
-        },
-      ),
     );
   }
 }
