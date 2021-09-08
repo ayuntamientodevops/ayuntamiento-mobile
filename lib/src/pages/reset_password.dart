@@ -79,7 +79,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                       alignment: Alignment.center,
                       child: InputWidget(
                         controller: _newPasswordConfirm,
-                        icon: Icon(Icons.lock_sharp, color: Constants.orangeDark),
+                        icon:
+                            Icon(Icons.lock_sharp, color: Constants.orangeDark),
                         obscureText: true,
                         keyboardType: TextInputType.text,
                         labelText: "Confirmar nueva contraseña",
@@ -143,6 +144,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   void resetPassword() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState.validate()) return;
     setState(() {
       isRequest = true;

@@ -121,12 +121,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           icon: Icon(FontAwesome5.id_card,
                               color: Constants.orangeDark),
                           obscureText: false,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           labelText:
                               "No. documento (Ejemplo: Cedula, RNC, etc...)",
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
                           validator: (String doc) {
                             if (doc.length == 0) {
                               return "Ingrese el numero de documento";

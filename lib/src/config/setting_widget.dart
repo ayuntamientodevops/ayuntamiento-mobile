@@ -1,5 +1,7 @@
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
+import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/user.dart';
+import 'package:asdn/src/pages/reset_password.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +34,14 @@ class SettingWidget extends StatelessWidget {
                         children: <Widget>[
                           CircleAvatar(
                             radius: 40.0,
-                            backgroundImage: AssetImage("assets/home/profile.png"),
+                            backgroundImage:
+                                AssetImage("assets/home/profile.png"),
                           ),
                           Text(
                             toBeginningOfSentenceCase(snapshot.data.firstName) +
                                 ' ' +
-                                toBeginningOfSentenceCase(snapshot.data.lastName),
+                                toBeginningOfSentenceCase(
+                                    snapshot.data.lastName),
                             style: TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.white,
@@ -67,7 +71,13 @@ class SettingWidget extends StatelessWidget {
                         ]);
                   }),
             ),
-
+            _createDrawerItem(
+                icon: Icons.password,
+                text: 'Cambiar Contraseña',
+                color: Constants.orangeDark,
+                onTap: () {
+                  Navigator.pushNamed(context, ResetPassword.routeName);
+                }),
             _createDrawerItem(
                 icon: Icons.logout,
                 text: 'Cerrar Sesion',
