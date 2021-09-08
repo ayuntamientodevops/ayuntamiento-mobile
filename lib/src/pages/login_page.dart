@@ -4,7 +4,6 @@ import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/pages/change_password_page.dart';
 import 'package:asdn/src/pages/register_page.dart';
-import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
-    super.initState();
 
     if (authBloc.state.authenticated) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -47,6 +45,8 @@ class _LoginPageState extends State<LoginPage> {
             context, MainFullViewer.routeName, (route) => false);
       });
     }
+
+    super.initState();
   }
 
   @override
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ],
                                 validator: (String password) {
                                   if (password.length <= 0) {
-                                    return "Ingrese la contrasena";
+                                    return "Ingrese la contraseña";
                                   } else {
                                     return null;
                                   }
@@ -227,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   )
-                : Center(child: CircularProgressIndicatorWidget()),
+                : Container(),
           ),
         ),
       );

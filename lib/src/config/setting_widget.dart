@@ -1,7 +1,5 @@
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
-import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/user.dart';
-import 'package:asdn/src/pages/reset_password.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
@@ -71,16 +69,16 @@ class SettingWidget extends StatelessWidget {
                         ]);
                   }),
             ),
-            _createDrawerItem(
+           /* _createDrawerItem(
                 icon: Icons.password,
                 text: 'Cambiar Contraseña',
                 color: Constants.orangeDark,
                 onTap: () {
                   Navigator.pushNamed(context, ResetPassword.routeName);
-                }),
+                }),*/
             _createDrawerItem(
                 icon: Icons.logout,
-                text: 'Cerrar Sesion',
+                text: 'Cerrar Sesión',
                 color: Colors.red,
                 onTap: () {
                   BlocProvider.of<AuthBloc>(context).add(LoggedOut());

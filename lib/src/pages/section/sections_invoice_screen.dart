@@ -1,7 +1,5 @@
-import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
-
 import 'invoice_list_section.dart';
 
 class SectionsInvoiceScreen extends StatefulWidget {
