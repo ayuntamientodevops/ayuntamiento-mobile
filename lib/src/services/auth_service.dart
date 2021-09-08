@@ -206,10 +206,10 @@ class AuthenticationService {
           return {"OK": true, "mensaje": resp.data['message']};
         }
       }
-      return null;
+      return {"OK": false, "mensaje": resp.data['message']};
     } on DioError catch (e) {
       print(e.error);
-      return null;
+      return {"OK": false, "mensaje": e.message};
     }
   }
 

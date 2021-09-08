@@ -129,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   "Olvidaste la contraseña?",
                                   style: TextStyle(
-                                      fontSize: 12, color: AppTheme.dark_grey),
+                                      fontSize: 12,
+                                      color: Constants.orangeDark),
                                 ),
                               ),
                             ),
@@ -175,11 +176,13 @@ class _LoginPageState extends State<LoginPage> {
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 if (state.loading) {
-                                  return CircularProgressIndicator(
-                                      valueColor:
-                                          new AlwaysStoppedAnimation<Color>(
-                                              AppTheme.nearlyDarkOrange),
-                                      backgroundColor: AppTheme.white);
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                        valueColor:
+                                            new AlwaysStoppedAnimation<Color>(
+                                                AppTheme.nearlyDarkOrange),
+                                        backgroundColor: AppTheme.white),
+                                  );
                                 } else if (state.isErrorAuth && clickLogin) {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
@@ -224,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   )
-                : CircularProgressIndicatorWidget(),
+                : Center(child: CircularProgressIndicatorWidget()),
           ),
         ),
       );
@@ -239,7 +242,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onSubmit() async {
     FocusScope.of(context).unfocus();
-    print(context);
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
     setState(() {

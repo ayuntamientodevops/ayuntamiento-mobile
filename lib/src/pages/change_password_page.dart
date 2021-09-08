@@ -3,6 +3,7 @@ import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
+import 'package:asdn/src/widgets/hide_keyboard.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,137 +36,139 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Background(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: size.height * 0.38),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "La instrucciones de recuperación de contraseña se enviarán al correo electrónico.",
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: InputWidget(
-                        controller: _emailController,
-                        icon: Icon(AntDesign.mail, color: Constants.orangeDark),
-                        obscureText: false,
-                        keyboardType: TextInputType.text,
-                        labelText: "Correo electrónico",
-                        validator: (String email) {
-                          if (email.length <= 0) {
-                            return "Ingrese el correo electrónico";
-                          } else if (!EmailValidator.validate(email)) {
-                            return "Correo electrónico invalido";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: InputWidget(
-                        controller: _nroDocumento,
-                        icon: Icon(FontAwesome5.id_card,
-                            color: Constants.orangeDark),
-                        obscureText: false,
-                        keyboardType: TextInputType.number,
-                        labelText:
-                            "No. documento (Ejemplo: Cedula, RNC, etc...)",
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (String doc) {
-                          if (doc.length == 0) {
-                            return "Ingrese el numero de documento";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: ElevatedButton(
-                        onPressed: isRequest ? null : resetForm,
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.all(0)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(80.0),
-                                      side: BorderSide(color: AppTheme.white))),
-                        ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 50.0,
-                          width: size.width * 0.5,
-                          decoration: new BoxDecoration(
-                              borderRadius: BorderRadius.circular(80.0),
-                              gradient: new LinearGradient(colors: [
-                                Color.fromARGB(255, 255, 136, 34),
-                                Color.fromARGB(255, 255, 177, 41)
-                              ])),
-                          padding: const EdgeInsets.all(0),
+    return HideKeyboard(
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: Background(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: size.height * 0.38),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
                           child: Text(
-                            "ENVIAR",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.white),
+                            "La instrucciones de recuperación de contraseña se enviarán al correo electrónico.",
+                            style: TextStyle(fontSize: 13),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      child: GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()))
-                        },
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: "Ya recuerdas la contraseña? ",
-                                style: TextStyle(
-                                    color: AppTheme.dark_grey,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 13)),
-                            TextSpan(
-                                text: "Inicia aqui",
-                                style: TextStyle(
-                                    color: AppTheme.nearlyDarkOrange,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13)),
-                          ]),
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _emailController,
+                          icon:
+                              Icon(AntDesign.mail, color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          labelText: "Correo electrónico",
+                          validator: (String email) {
+                            if (email.length <= 0) {
+                              return "Ingrese el correo electrónico";
+                            } else if (!EmailValidator.validate(email)) {
+                              return "Correo electrónico invalido";
+                            }
+                            return null;
+                          },
                         ),
                       ),
-                    ),
-                    isLoading ? CircularProgressIndicatorWidget() : Container(),
-                  ],
+                      Container(
+                        alignment: Alignment.center,
+                        child: InputWidget(
+                          controller: _nroDocumento,
+                          icon: Icon(FontAwesome5.id_card,
+                              color: Constants.orangeDark),
+                          obscureText: false,
+                          keyboardType: TextInputType.text,
+                          labelText:
+                              "No. documento (Ejemplo: Cedula, RNC, etc...)",
+                          validator: (String doc) {
+                            if (doc.length == 0) {
+                              return "Ingrese el numero de documento";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.05),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child: ElevatedButton(
+                          onPressed: isRequest ? null : resetForm,
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(0)),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(80.0),
+                                    side: BorderSide(color: AppTheme.white))),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50.0,
+                            width: size.width * 0.5,
+                            decoration: new BoxDecoration(
+                                borderRadius: BorderRadius.circular(80.0),
+                                gradient: new LinearGradient(colors: [
+                                  Color.fromARGB(255, 255, 136, 34),
+                                  Color.fromARGB(255, 255, 177, 41)
+                                ])),
+                            padding: const EdgeInsets.all(0),
+                            child: Text(
+                              "ENVIAR",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: GestureDetector(
+                          onTap: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()))
+                          },
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: "Ya recuerdas la contraseña? ",
+                                  style: TextStyle(
+                                      color: AppTheme.dark_grey,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 13)),
+                              TextSpan(
+                                  text: "Inicia aqui",
+                                  style: TextStyle(
+                                      color: AppTheme.nearlyDarkOrange,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13)),
+                            ]),
+                          ),
+                        ),
+                      ),
+                      isLoading
+                          ? CircularProgressIndicatorWidget()
+                          : Container(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -173,7 +176,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void resetForm() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
     setState(() {
       isRequest = true;
       isLoading = true;
@@ -181,16 +186,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     AuthenticationService authenticationService = AuthenticationService();
     final resp = await authenticationService.passreset(
         email: _emailController.text, identificationCard: _nroDocumento.text);
-
+    setState(() {
+      isLoading = false;
+    });
     if (resp['OK']) {
-      setState(() {
-        isLoading = false;
-      });
-      mostrarSnackbar(resp['mensaje']);
+      mostrarSnackbar(resp['mensaje'], Colors.green);
       Future.delayed(const Duration(milliseconds: 3000), () {
         Navigator.pushReplacement(context, navegarFadeIn(context, LoginPage()));
       });
     } else {
+      mostrarSnackbar(resp['mensaje'], Colors.red);
       setState(() {
         isRequest = false;
       });
@@ -199,11 +204,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     _nroDocumento.clear();
   }
 
-  void mostrarSnackbar(String mensaje) {
+  void mostrarSnackbar(String mensaje, Color colors) {
     final snackbar = SnackBar(
       content: Text(mensaje),
       duration: Duration(milliseconds: 3000),
-      backgroundColor: Colors.green,
+      backgroundColor: colors,
     );
 
     ScaffoldMessenger.of(context).removeCurrentSnackBar();

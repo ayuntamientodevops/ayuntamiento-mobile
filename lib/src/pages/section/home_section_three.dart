@@ -54,12 +54,12 @@ class _HomeSectionThreeState extends State<HomeSectionThree>
               transform: Matrix4.translationValues(
                   0.0, 30 * (1.0 - widget.mainScreenAnimation.value), 0.0),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 19.0),
+                padding: EdgeInsets.only(left: 19.0, right: 19.0, bottom: 35),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: ImageSlideshow(
                     width: double.infinity,
-                    height: 200,
+                    height: MediaQuery.of(context).size.height * .25,
                     initialPage: 0,
                     indicatorColor: AppTheme.nearlyDarkOrange,
                     indicatorBackgroundColor: AppTheme.white,
