@@ -1,5 +1,4 @@
 import 'package:asdn/src/bloc/request/request_bloc.dart';
-import 'package:asdn/src/models/user.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:asdn/src/services/auth_service.dart';

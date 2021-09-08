@@ -39,7 +39,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      body: Background(
+        body: Background(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -52,7 +52,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "Por favor cambie su contrasena temporal",
+                          "Por favor cambie su contraseña temporal",
                           style: TextStyle(fontSize: 13),
                         ),
                       ),

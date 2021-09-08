@@ -2,7 +2,6 @@ import 'package:asdn/src/helpers/gps.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/utils/functions.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
-import 'package:asdn/src/widgets/logo_widget.dart';
 import 'package:asdn/src/widgets/validate_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

@@ -49,7 +49,8 @@ class _MainFullViewerState extends State<MainFullViewer>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    //chequear login page para resolver el load animation del header
+    topBarAnimation = Tween<double>(begin: 1.0, end: 1.0).animate(
         CurvedAnimation(
             parent: animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
@@ -65,7 +66,6 @@ class _MainFullViewerState extends State<MainFullViewer>
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +170,7 @@ class _MainFullViewerState extends State<MainFullViewer>
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget TopBarHeader(BuildContext context) {
     return Container(
       height: 150,

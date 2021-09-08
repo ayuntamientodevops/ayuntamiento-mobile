@@ -72,7 +72,7 @@ class _RequestDetailsState extends State<RequestDetails> {
         backgroundColor: AppTheme.nearlyDarkOrange,
         iconTheme: IconThemeData(color: AppTheme.white),
         title: Text(
-          "Detalle de solicitud ID: #" + args.reclamacionId,
+          "Detalle de solicitud",
           style: TextStyle(color: AppTheme.white),
         ),
       ),

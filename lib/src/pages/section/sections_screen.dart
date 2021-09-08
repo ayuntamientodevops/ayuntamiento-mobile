@@ -20,14 +20,14 @@ class SectionsHomeScreen extends StatefulWidget {
 class _SectionsHomeScreenState extends State<SectionsHomeScreen>
     with TickerProviderStateMixin {
   List<Widget> listViews = <Widget>[];
-  final ScrollController scrollController = ScrollController();
-  double topBarOpacity = 1;
+  //final ScrollController scrollController = ScrollController();
+  //double topBarOpacity = 1;
 
   @override
   void initState() {
     addAllListData();
-    scrollController.addListener(() {
-    /*      if (scrollController.offset >= 24) {
+    /* scrollController.addListener(() {
+         if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
           setState(() {
             topBarOpacity = 1.0;
@@ -46,8 +46,8 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
             topBarOpacity = 0.0;
           });
         }
-      }*/
-    });
+
+    });}*/
     super.initState();
   }
 

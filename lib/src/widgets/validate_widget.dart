@@ -1,5 +1,4 @@
 import 'package:asdn/src/helpers/helpers.dart';
-import 'package:asdn/src/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class ValidateWidget extends StatelessWidget {
