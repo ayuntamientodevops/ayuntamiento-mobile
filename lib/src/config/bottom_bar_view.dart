@@ -151,7 +151,7 @@ class _BottomBarViewState extends State<BottomBarView>
                         gradient: LinearGradient(
                             colors: [
                               AppTheme.nearlyDarkOrange,
-                              Color(0xFFFFAB40),
+                              AppTheme.nearlyOrgane,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight),

@@ -225,13 +225,13 @@ class _MainFullViewerState extends State<MainFullViewer>
                                   children: <Widget>[
                                     Container(
                                       child: Image(
-                                        image: AssetImage("assets/logo.png"),
-                                        height: 40.0,
-                                        width: 40.0,
+                                        image: AssetImage("assets/logo2.png"),
+                                        height: 50.0,
+                                        width: 50.0,
                                       ),
-                                    ),
+                                    ),/*
                                     Text(
-                                      "ASDN " /* snapshot.data.firstName*/,
+                                      "ASDN " *//* snapshot.data.firstName*//*,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                           fontFamily: AppTheme.fontName,
@@ -239,7 +239,7 @@ class _MainFullViewerState extends State<MainFullViewer>
                                           fontSize: 18 + 6 - 6 * topBarOpacity,
                                           letterSpacing: 1.2,
                                           color: AppTheme.white),
-                                    ),
+                                    ),*/
                                   ],
                                 );
                               }

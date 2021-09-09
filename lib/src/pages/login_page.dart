@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                                   "¿Olvidaste la contraseña?",
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: Constants.orangeDark),
+                                      color: AppTheme.nearlyDarkOrange),
                                 ),
                               ),
                             ),
