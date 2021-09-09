@@ -23,7 +23,8 @@ import 'bottom_bar_view.dart';
 class MainFullViewer extends StatefulWidget {
   static final routeName = '/main';
 
-  const MainFullViewer({Key key}) : super(key: key);
+  const MainFullViewer({Key key, this.identificationPage}) : super(key: key);
+  final identificationPage;
 
   _MainFullViewerState createState() => _MainFullViewerState();
 }
@@ -45,8 +46,7 @@ class _MainFullViewerState extends State<MainFullViewer>
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
-    tabIconsList[0].isSelected = true;
-
+    print(widget.identificationPage);
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     //chequear login page para resolver el load animation del header
@@ -54,8 +54,16 @@ class _MainFullViewerState extends State<MainFullViewer>
         CurvedAnimation(
             parent: animationController,
             curve: Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
-
-    tabBody = SectionsHomeScreen(animationController: animationController);
+    if (widget.identificationPage == "home") {
+      tabIconsList[0].isSelected = true;
+      tabBody = SectionsHomeScreen(animationController: animationController);
+    } else if (widget.identificationPage == "invoice") {
+      tabIconsList[2].isSelected = true;
+      tabBody = SectionsInvoiceScreen(animationController: animationController);
+    } else if (widget.identificationPage == "report") {
+      tabIconsList[0].isSelected = false;
+      tabBody = SectionsRequestScreen(animationController: animationController);
+    }
     super.initState();
 
     User current = authenticationService.getUserLogged();
@@ -284,5 +292,4 @@ class _MainFullViewerState extends State<MainFullViewer>
     animationController?.dispose();
     super.dispose();
   }
-
 }

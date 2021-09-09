@@ -127,9 +127,9 @@ class _LoginPageState extends State<LoginPage> {
                                         builder: (context) =>
                                             ChangePasswordPage())),
                                 child: Text(
-                                  "Olvidaste la contraseña?",
+                                  "¿Olvidaste la contraseña?",
                                   style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 15,
                                       color: Constants.orangeDark),
                                 ),
                               ),
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                       color: AppTheme.nearlyDarkOrange,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 13)),
+                                      fontSize: 17)),
                             ]),
                           ),
                         ),
