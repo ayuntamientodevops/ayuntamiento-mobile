@@ -146,7 +146,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
           return TitleView(
             titleTxt:
                 'Hola! ' + toBeginningOfSentenceCase(snapshot.data.firstName),
-            subTxt: "Que quieres hacer hoy?",
+            subTxt: "¿Qué quieres hacer hoy?",
             animation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
                     parent: widget.animationController,

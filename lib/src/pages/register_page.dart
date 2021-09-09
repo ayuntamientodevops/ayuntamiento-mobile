@@ -379,6 +379,7 @@ class _RegisterPageState extends State<RegisterPage> {
           tipoDoc: _value,
           password: _passwordController.text),
     );
+    Navigator.pushReplacement(context, navegarFadeIn(context, LoginPage()));
   }
 
   void mostrarSnackbar(String mensaje, Color color) {

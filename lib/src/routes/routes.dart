@@ -11,7 +11,8 @@ import 'package:asdn/src/pages/login_page.dart';
 Map<String, WidgetBuilder> getApplicationsRoutes() {
   return <String, WidgetBuilder>{
     LoginPage.routeName: (BuildContext context) => LoginPage(),
-    MainFullViewer.routeName: (BuildContext context) => MainFullViewer(),
+    MainFullViewer.routeName: (BuildContext context) =>
+        MainFullViewer(identificationPage: "home"),
     LoadingPage.routeName: (BuildContext context) => LoadingPage(),
     RegisterPage.routeName: (BuildContext context) => RegisterPage(),
     AccesoGpsPage.routeName: (BuildContext context) => AccesoGpsPage(),
