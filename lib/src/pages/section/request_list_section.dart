@@ -1,20 +1,24 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:asdn/src/bloc/request/request_bloc.dart';
-import 'package:asdn/src/config/app_theme.dart';
-import 'package:asdn/src/services/auth_service.dart';
-import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:asdn/src/services/azure_storage_sdn.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/search_response_geolocation.dart';
 import 'package:asdn/src/pages/mapa_page.dart';
 import 'package:asdn/src/services/request_service.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:asdn/src/bloc/request/request_bloc.dart';
+import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/services/auth_service.dart';
+import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
+import 'package:path/path.dart' as p;
 
 class RequestListSection extends StatefulWidget {
   const RequestListSection(
@@ -65,33 +69,33 @@ class _RequestListSectionState extends State<RequestListSection>
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                typeService(),
-                inputDetails(),
-                inputLocation(),
-                loadEvidencia(context),
-                this.images.length > 0
-                    ? _boxPicture(context: context)
-                    : Container(),
-                (isSubmit && this.images.length == 0)
-                    ? Container(
-                        child: Text(
-                          'Debe seleccionar al menos una foto',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-                btnCargarEvidencia(),
-                loading ? CircularProgressIndicatorWidget() : Container(),
-              ],
-            ),
+      child: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              typeService(),
+              inputDetails(),
+              inputLocation(),
+              loadEvidencia(context),
+              this.images.length > 0
+                  ? _boxPicture(context: context)
+                  : Container(),
+              (isSubmit && this.images.length == 0)
+                  ? Container(
+                      child: Text(
+                        'Debe seleccionar al menos una foto',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    )
+                  : Container(),
+              btnCargarEvidencia(),
+              loading ? CircularProgressIndicatorWidget() : Container(),
+            ],
           ),
         ),
+      ),
     );
   }
 
@@ -101,78 +105,7 @@ class _RequestListSectionState extends State<RequestListSection>
       width: 290,
       alignment: Alignment.centerRight,
       child: ElevatedButton(
-        onPressed: canPressRegisterBtn
-            ? () async {
-                FocusScope.of(context).unfocus();
-                setState(() {
-                  isSubmit = true;
-                });
-
-                if ((formKey.currentState.validate() == false) ||
-                    (this.images.length == 0) ||
-                    (location == null)) return;
-
-                formKey.currentState.save();
-
-                Map<String, dynamic> data = {
-                  "Description": _detail.text,
-                  "UserRequested": authenticationService.getUserLogged().id,
-                  "Latitude": location.geometry.location.lat,
-                  "Longitude": location.geometry.location.lng,
-                  "RequestType": _valueTypeRequest,
-                  "Sector": location.formattedAddress,
-                  "ReferenceAddress": _direction.text
-                };
-
-                setState(() {
-                  loading = true;
-                  canPressRegisterBtn = false;
-                });
-
-                List<String> imageSt = [];
-                int i = 1;
-                for (File image in images) {
-                  String imageName =
-                      authenticationService.getUserLogged().id.toString() +
-                          '-$i' +
-                          DateTime.now().toIso8601String();
-                  TaskSnapshot addImg = await ref
-                      .child("images/" +
-                          authenticationService.getUserLogged().id.toString() +
-                          "/$imageName")
-                      .putFile(image);
-
-                  if (addImg.state == TaskState.success) {
-                    final String downloadUrl =
-                        await addImg.ref.getDownloadURL();
-                    imageSt.add(downloadUrl);
-                  }
-                  i++;
-                }
-
-                bool resp = await requestService.requestinsert(data, imageSt);
-
-                setState(() {
-                  loading = false;
-                });
-
-                if (resp) {
-                  SchedulerBinding.instance.addPostFrameCallback((_) {
-                    requestBloc.add(RequestLoad(load: false));
-                    this.resetForm();
-                    this.mostrarSnackbar(context,
-                        "Solicitud Creada correctamente", Colors.green);
-                  });
-                } else {
-                  setState(() {
-                    loading = false;
-                    canPressRegisterBtn = true;
-                  });
-                  this.mostrarSnackbar(
-                      context, "Error al crear su solicitud", Colors.red);
-                }
-              }
-            : null,
+        onPressed: canPressRegisterBtn ? crearIncidencia : null,
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -184,11 +117,14 @@ class _RequestListSectionState extends State<RequestListSection>
           alignment: Alignment.center,
           height: 50.0,
           decoration: new BoxDecoration(
-              borderRadius: BorderRadius.circular(80.0),
-              gradient: new LinearGradient(colors: [
+            borderRadius: BorderRadius.circular(80.0),
+            gradient: new LinearGradient(
+              colors: [
                 Color.fromARGB(255, 255, 136, 34),
                 Color.fromARGB(255, 255, 177, 41)
-              ])),
+              ],
+            ),
+          ),
           padding: const EdgeInsets.all(0),
           child: Text(
             "CREAR INCIDENCIA",
@@ -605,6 +541,73 @@ class _RequestListSectionState extends State<RequestListSection>
         ],
       ),
     );
+  }
+
+  void crearIncidencia() async {
+    FocusScope.of(context).unfocus();
+    setState(() {
+      isSubmit = true;
+    });
+
+    if ((formKey.currentState.validate() == false) ||
+        (this.images.length == 0) ||
+        (location == null)) return;
+
+    formKey.currentState.save();
+
+    Map<String, dynamic> data = {
+      "Description": _detail.text,
+      "UserRequested": authenticationService.getUserLogged().id,
+      "Latitude": location.geometry.location.lat,
+      "Longitude": location.geometry.location.lng,
+      "RequestType": _valueTypeRequest,
+      "Sector": location.formattedAddress,
+      "ReferenceAddress": _direction.text
+    };
+
+    setState(() {
+      loading = true;
+      canPressRegisterBtn = false;
+    });
+
+    List<String> imageSt = [];
+    int i = 1;
+    final azureStorageSdn = AzureStorageSdn();
+
+    for (File image in images) {
+      String imageName = authenticationService.getUserLogged().id.toString() +
+          '-$i' +
+          DateTime.now().toIso8601String();
+
+      String ext = p.extension(image.path);
+      String url = authenticationService.getUserLogged().id.toString() +
+          "/$imageName$ext";
+      azureStorageSdn.uploadImageToAzure(context, image, url);
+
+      imageSt.add(dotenv.env['ACCOUNTNAME'] + url);
+      i++;
+    }
+
+    bool resp = await requestService.requestinsert(data, imageSt);
+
+    setState(() {
+      loading = false;
+    });
+
+    if (resp) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        requestBloc.add(RequestLoad(load: false));
+        this.resetForm();
+        this.mostrarSnackbar(
+            context, "Solicitud Creada correctamente", Colors.green);
+      });
+    } else {
+      setState(() {
+        loading = false;
+        canPressRegisterBtn = true;
+      });
+      this.mostrarSnackbar(context, "Error al crear su solicitud", Colors.red);
+    }
   }
 
   @override
