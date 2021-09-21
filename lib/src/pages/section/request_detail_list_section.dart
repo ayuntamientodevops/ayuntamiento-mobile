@@ -8,6 +8,8 @@ import 'package:asdn/src/share_prefs/preferences_storage.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:asdn/src/services/request_service.dart';
+// ignore: unused_import
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 import '../request_details.dart';
@@ -227,7 +229,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                             Color.fromARGB(255, 255, 177, 41)
                           ])),
                       padding: const EdgeInsets.all(0),
-                    /*  child: Text(
+                      /*  child: Text(
                         "ID: #" + request.reclamacionId,
                         textAlign: TextAlign.center,
                         style: TextStyle(
