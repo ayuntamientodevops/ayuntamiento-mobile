@@ -128,7 +128,7 @@ class ItemsView extends StatelessWidget {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 32, left: 8, right: 8, bottom: 35),
+                          top: 0, left: 8, right: 8, bottom: 35),
                       child: Container(
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[

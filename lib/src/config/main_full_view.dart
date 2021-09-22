@@ -208,8 +208,8 @@ class _MainFullViewerState extends State<MainFullViewer>
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      left: 6,
-                      right: 6,
+                      left: 26,
+                      right: 26,
                       top: 26 - 8.0 * topBarOpacity,
                       bottom: 23 - 8.0 * topBarOpacity),
                   child: Row(
