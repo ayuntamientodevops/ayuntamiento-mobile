@@ -18,7 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await initializeDateFormatting('es_PR', null);
-  await dotenv.load(fileName: ".env.sample");
+  await dotenv.load(fileName: "config.conf");
   final prefs = new PreferenceStorage();
   await prefs.initPrefs();
 
