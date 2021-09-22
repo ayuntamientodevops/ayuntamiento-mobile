@@ -31,11 +31,11 @@ class Background extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 60,
-            left: 28,
+            top: 70,
+            left: 20,
             child: Image.asset(
                 "assets/logo_paqueno.png",
-                width: size.width * 0.45
+                width: size.width * 0.40
             ),
           ),
          /* Positioned(
