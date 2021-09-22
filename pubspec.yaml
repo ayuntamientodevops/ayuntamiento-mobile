@@ -97,7 +97,7 @@ flutter:
     - assets/ic_launcher.png
     - assets/login/
     - assets/news/
-    - .env.sample
+    - config.conf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
