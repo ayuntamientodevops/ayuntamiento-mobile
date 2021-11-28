@@ -48,5 +48,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Permiso de ubicacion?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Permiso de camara</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permisio para galeria de fotos</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Permiso para grabar audio</string>
 </dict>
 </plist>
