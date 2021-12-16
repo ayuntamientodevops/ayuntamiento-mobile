@@ -10,7 +10,7 @@ import 'src/bloc/map/map_bloc.dart';
 import 'src/bloc/register/register_bloc.dart';
 import 'src/bloc/search/search_bloc.dart';
 import 'src/helpers/helpers.dart';
-import 'src/pages/loading_page.dart';
+import 'src/pages/login_page.dart';
 import 'src/services/auth_service.dart';
 import 'src/share_prefs/preferences_storage.dart';
 
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         theme: Constants.lighTheme(context),
         debugShowCheckedModeBanner: false,
         title: Constants.appName,
-        initialRoute: LoadingPage.routeName,
+        initialRoute: LoginPage.routeName,
         routes: getApplicationsRoutes(),
       ),
     );
