@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:asdn/src/services/azure_storage_sdn.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -47,7 +46,6 @@ class _RequestListSectionState extends State<RequestListSection>
   bool isSubmit = false;
   bool canPressRegisterBtn = true;
   bool loading = false;
-  Reference ref = FirebaseStorage.instance.ref();
   RequestBloc requestBloc;
   final RequestService requestService = RequestService();
   final AuthenticationService authenticationService = AuthenticationService();
