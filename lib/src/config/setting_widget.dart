@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'app_theme.dart';
+import 'main_full_view.dart';
 
 class SettingWidget extends StatelessWidget {
   final AuthenticationService authenticationService = AuthenticationService();
@@ -42,7 +43,7 @@ class SettingWidget extends StatelessWidget {
                                     snapshot.data.lastName),
                             style: TextStyle(
                                 fontSize: 15.0,
-                                color: Colors.white,
+                                color: AppTheme.white,
                                 letterSpacing: 0.5,
                                 fontWeight: FontWeight.w400),
                           ),
@@ -51,7 +52,7 @@ class SettingWidget extends StatelessWidget {
                             snapshot.data.email,
                             style: TextStyle(
                                 fontSize: 15.0,
-                                color: Colors.white60,
+                                color: AppTheme.white,
                                 letterSpacing: 0.5,
                                 fontWeight: FontWeight.normal),
                           ),
@@ -76,6 +77,51 @@ class SettingWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, ResetPassword.routeName);
                 }),*/
+            _createDrawerItem(
+                icon: Icons.home,
+                text: 'Inicio',
+                color: AppTheme.dark_grey,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainFullViewer(
+                              identificationPage: "home")));
+                }),
+            _createDrawerItem(
+                icon: Icons.book_outlined,
+                text: 'Facturas',
+                color: AppTheme.dark_grey,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainFullViewer(
+                              identificationPage: "invoice")));
+                }),
+            _createDrawerItem(
+                icon: Icons.format_list_numbered,
+                text: 'Incidencias',
+                color: AppTheme.dark_grey,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainFullViewer(
+                              identificationPage: "request")));
+                }),
+
+            Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Divider()
+                  ),
+
+                  Expanded(
+                      child: Divider()
+                  ),
+                ]
+            ),
             _createDrawerItem(
                 icon: Icons.logout,
                 text: 'Cerrar Sesión',
