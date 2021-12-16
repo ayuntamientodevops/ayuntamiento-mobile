@@ -128,7 +128,7 @@ class ItemsView extends StatelessWidget {
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          top: 0, left: 8, right: 8, bottom: 35),
+                          top:  38, left: 8, right: 8, bottom: 22),
                       child: Container(
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
@@ -154,7 +154,7 @@ class ItemsView extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              top: 54, left: 16, right: 16, bottom: 8),
+                              top: 54, left: 10, right: 10, bottom: 8),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +173,7 @@ class ItemsView extends StatelessWidget {
                               Expanded(
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.only(top: 8, bottom: 8),
+                                      const EdgeInsets.only(top: 10, bottom: 8),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -184,7 +184,7 @@ class ItemsView extends StatelessWidget {
                                         style: TextStyle(
                                           fontFamily: AppTheme.fontName,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 10,
+                                          fontSize: 13,
                                           letterSpacing: 0.2,
                                           color: AppTheme.white,
                                         ),

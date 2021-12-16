@@ -46,7 +46,7 @@ class _MainFullViewerState extends State<MainFullViewer>
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
-    print(widget.identificationPage);
+   // print(widget.identificationPage);
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     //chequear login page para resolver el load animation del header
@@ -63,6 +63,9 @@ class _MainFullViewerState extends State<MainFullViewer>
     } else if (widget.identificationPage == "report") {
       tabIconsList[0].isSelected = false;
       tabBody = SectionsRequestScreen(animationController: animationController);
+    } else if (widget.identificationPage == "request") {
+      tabIconsList[3].isSelected = true;
+      tabBody = SectionsRequestDetailSacreen(animationController: animationController);
     }
     super.initState();
 
