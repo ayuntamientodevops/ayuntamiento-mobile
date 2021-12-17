@@ -142,7 +142,7 @@ class _RequestListSectionState extends State<RequestListSection>
         children: [
           Row(
             children: [
-              Text('Cargar Evidencia',
+              Text('Cargar evidencia',
                   style: TextStyle(
                       fontSize: 15,
                       color: Constants.orangeDark,
@@ -400,6 +400,7 @@ class _RequestListSectionState extends State<RequestListSection>
           }
           List<dynamic> data = [];
           data.add({
+            "icon":"https://sci.asdn.gob.do/assets/images/icon_appmobile/selected.png",
             "TipoReclamacionId": "0",
             "Descripcion": "Seleccione un tipo de servicio",
             "Activo": "1"
@@ -413,6 +414,7 @@ class _RequestListSectionState extends State<RequestListSection>
 
           return DropdownButtonFormField<String>(
             decoration: InputDecoration(
+
               enabledBorder: UnderlineInputBorder(
                 borderSide:
                     BorderSide(color: Constants.orangeDark.withOpacity(0.5)),
@@ -430,8 +432,17 @@ class _RequestListSectionState extends State<RequestListSection>
             items: data
                 .map<DropdownMenuItem<String>>(
                     (value) => new DropdownMenuItem<String>(
+
                           value: value["TipoReclamacionId"],
-                          child: new Text(value["Descripcion"]),
+                          child: Row(
+                            children: [
+                              Image.network(value["icon"].toString()),
+                              SizedBox(width: 10),
+                              Text(
+                                 value["Descripcion"],
+                              ),
+                            ],
+                          ),//new Text(value["Descripcion"]),
                         ))
                 .toList(),
           );
@@ -445,7 +456,7 @@ class _RequestListSectionState extends State<RequestListSection>
         children: <Widget>[
           Row(
             children: [
-              Text('Ubicacion',
+              Text('Ubicación',
                   style: TextStyle(
                       fontSize: 15,
                       color: Constants.orangeDark,
@@ -488,7 +499,7 @@ class _RequestListSectionState extends State<RequestListSection>
           (isSubmit && location == null)
               ? Container(
                   child: Text(
-                    'Debe seleccionar una ubicacion',
+                    'Debe seleccionar una ubicación',
                     style: TextStyle(color: Colors.red),
                   ),
                 )
@@ -499,7 +510,7 @@ class _RequestListSectionState extends State<RequestListSection>
             children: [
               Row(
                 children: [
-                  Text('Direccion de Referencia',
+                  Text('Dirección de referencia',
                       style: TextStyle(
                           fontSize: 15,
                           color: Constants.orangeDark,
@@ -513,7 +524,7 @@ class _RequestListSectionState extends State<RequestListSection>
                 controller: _direction,
                 validator: (String direccion) {
                   if (direccion.length <= 0) {
-                    return "Debe colocar una direccion de referencia";
+                    return "Debe colocar una dirección de referencia";
                   }
                   return null;
                 },
