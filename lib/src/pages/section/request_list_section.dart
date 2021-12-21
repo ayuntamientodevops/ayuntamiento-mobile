@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:asdn/src/services/azure_storage_sdn.dart';
+import 'package:asdn/src/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -163,8 +164,7 @@ class _RequestListSectionState extends State<RequestListSection>
                     onPressed: () {
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          this.mostrarSnackbar(context,
-                              "Ha superado el limite de fotos", AppTheme.redText);
+                          showAlertDialog(context, "Ha superado el limite de fotos", false);
                         });
                         return;
                       }
@@ -183,8 +183,7 @@ class _RequestListSectionState extends State<RequestListSection>
                     onPressed: () {
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          this.mostrarSnackbar(context,
-                              "Ha superado el limite de fotos", AppTheme.redText);
+                          showAlertDialog(context, "Ha superado el limite de fotos", false);
                         });
 
                         return;
@@ -372,22 +371,6 @@ class _RequestListSectionState extends State<RequestListSection>
         ],
       ),
     );
-  }
-
-  void mostrarSnackbar(BuildContext context, String mensaje, Color color) {
-    if (mounted) {
-      final snackbar = SnackBar(
-        content: Text(mensaje),
-        duration: Duration(milliseconds: 2500),
-        backgroundColor: color,
-      );
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    }
-    // var currentScaffold = globalScaffoldKey.currentState;
-    // currentScaffold
-    //     .hideCurrentSnackBar(); // If there is a snackbar visible, hide it before the new one is shown.
-    // currentScaffold.showSnackBar(SnackBar(content: Text(mensaje)));
   }
 
   Widget _dropdownSolicitud() {
@@ -607,15 +590,14 @@ class _RequestListSectionState extends State<RequestListSection>
       SchedulerBinding.instance.addPostFrameCallback((_) {
         requestBloc.add(RequestLoad(load: false));
         this.resetForm();
-        this.mostrarSnackbar(
-            context, "Solicitud Creada correctamente", Colors.green);
+        showAlertDialog(context, "Solicitud creada correctamente", true);
       });
     } else {
       setState(() {
         loading = false;
         canPressRegisterBtn = true;
       });
-      this.mostrarSnackbar(context, "Error al crear su solicitud", AppTheme.redText);
+      showAlertDialog(context, "Error al crear su solicitud", false);
     }
   }
 

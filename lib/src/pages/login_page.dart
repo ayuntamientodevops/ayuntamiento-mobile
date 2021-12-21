@@ -4,6 +4,7 @@ import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/pages/change_password_page.dart';
 import 'package:asdn/src/pages/register_page.dart';
+import 'package:asdn/src/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -57,10 +58,23 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushNamedAndRemoveUntil(
               context, MainFullViewer.routeName, (route) => false);
         });
+      } else if (state.loading) {
+        return Center(
+          child: CircularProgressIndicator(
+              valueColor:
+              new AlwaysStoppedAnimation<Color>(
+                  AppTheme.nearlyDarkOrange),
+              backgroundColor: AppTheme.white),
+        );
+      } else if (state.isErrorAuth && clickLogin) {
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) {
+          showAlertDialog(context,state.errorLogin,false);
+        });
       }
     }, builder: (context, state) {
       Size size = MediaQuery.of(context).size;
-      return Scaffold(
+      return Scaffold(key: scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
             child: state.authenticated == false
@@ -78,11 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                                 icon: Icon(AntDesign.user,
                                     color: Constants.orangeDark),
                                 obscureText: false,
-                                keyboardType: TextInputType.text,
                                 labelText: "No. Documento",
                                 inputFormatters: [
-                                  FilteringTextInputFormatter
-                                      .singleLineFormatter
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 validator: (String user) {
                                   if (user.length <= 0) {
@@ -173,25 +185,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                        valueColor:
-                                            new AlwaysStoppedAnimation<Color>(
-                                                AppTheme.nearlyDarkOrange),
-                                        backgroundColor: AppTheme.white),
-                                  );
-                                } else if (state.isErrorAuth && clickLogin) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    mostrarSnackbar(state.errorLogin);
-                                  });
-                                }
-                                return Container();
-                              },
-                            ),
                           ],
                         ),
                       ),
@@ -250,16 +243,7 @@ class _LoginPageState extends State<LoginPage> {
 
     authBloc.add(LoginButtonPressed(
         user: _usernameController.text, password: _passwordController.text));
-  }
 
-  void mostrarSnackbar(String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 1000),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   @override
