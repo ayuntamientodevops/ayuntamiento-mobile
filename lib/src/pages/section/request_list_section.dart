@@ -84,7 +84,7 @@ class _RequestListSectionState extends State<RequestListSection>
                   ? Container(
                       child: Text(
                         'Debe seleccionar al menos una foto',
-                        style: TextStyle(color: Colors.red),
+                        style: TextStyle(color: AppTheme.redText),
                       ),
                     )
                   : Container(),
@@ -164,7 +164,7 @@ class _RequestListSectionState extends State<RequestListSection>
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           this.mostrarSnackbar(context,
-                              "Ha superado el limite de fotos", Colors.red);
+                              "Ha superado el limite de fotos", AppTheme.redText);
                         });
                         return;
                       }
@@ -184,7 +184,7 @@ class _RequestListSectionState extends State<RequestListSection>
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           this.mostrarSnackbar(context,
-                              "Ha superado el limite de fotos", Colors.red);
+                              "Ha superado el limite de fotos", AppTheme.redText);
                         });
 
                         return;
@@ -500,7 +500,7 @@ class _RequestListSectionState extends State<RequestListSection>
               ? Container(
                   child: Text(
                     'Debe seleccionar una ubicación',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: AppTheme.redText),
                   ),
                 )
               : Container(),
@@ -615,7 +615,7 @@ class _RequestListSectionState extends State<RequestListSection>
         loading = false;
         canPressRegisterBtn = true;
       });
-      this.mostrarSnackbar(context, "Error al crear su solicitud", Colors.red);
+      this.mostrarSnackbar(context, "Error al crear su solicitud", AppTheme.redText);
     }
   }
 

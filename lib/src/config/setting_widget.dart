@@ -125,7 +125,7 @@ class SettingWidget extends StatelessWidget {
             _createDrawerItem(
                 icon: Icons.logout,
                 text: 'Cerrar Sesión',
-                color: Colors.red,
+                color: AppTheme.redText,
                 onTap: () {
                   BlocProvider.of<AuthBloc>(context).add(LoggedOut());
                 }),

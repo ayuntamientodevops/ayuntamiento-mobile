@@ -66,6 +66,9 @@ class _MainFullViewerState extends State<MainFullViewer>
     } else if (widget.identificationPage == "request") {
       tabIconsList[3].isSelected = true;
       tabBody = SectionsRequestDetailSacreen(animationController: animationController);
+    } else if (widget.identificationPage == "CreateRequest") {
+      tabIconsList[3].isSelected = true;
+      tabBody = SectionsRequestScreen(animationController: animationController);
     }
     super.initState();
 

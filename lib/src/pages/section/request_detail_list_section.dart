@@ -209,7 +209,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                         ],
                       ),
                       child: ListTile(
-                          title: Text(request.descripcion,
+                          title: Text(request.tipoReclamacion,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -229,14 +229,14 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                             Color.fromARGB(255, 255, 177, 41)
                           ])),
                       padding: const EdgeInsets.all(0),
-                      /*  child: Text(
+                        child: Text(
                         "ID: #" + request.reclamacionId,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppTheme.white,
                             fontSize: 16),
-                      ),*/
+                      ),
                     ),
                   ),
                 ],

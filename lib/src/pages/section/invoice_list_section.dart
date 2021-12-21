@@ -79,7 +79,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     shape:
-                        Border(right: BorderSide(color: Colors.grey, width: 5)),
+                        Border(right: BorderSide(color: AppTheme.grey, width: 5)),
                     elevation: 5,
                     child: ListTile(
                       leading: Icon(
@@ -220,7 +220,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                       padding: const EdgeInsets.only(top: 25.0),
                                       child: Container(
                                         height: 1.0,
-                                        color: Colors.grey,
+                                        color: AppTheme.grey,
                                       ),
                                     ),
                                     Padding(
@@ -244,7 +244,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 padding: const EdgeInsets.only(top: 15.0),
                                 child: Container(
                                   height: 1.0,
-                                  color: Colors.grey,
+                                  color: AppTheme.grey,
                                 ),
                               ),
                               Container(
@@ -287,7 +287,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               Text(
                 firstTitle,
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: AppTheme.grey,
                 ),
               ),
               Padding(
@@ -310,7 +310,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               Text(
                 secondTitle,
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: AppTheme.grey,
                 ),
               ),
               Padding(
