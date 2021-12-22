@@ -80,7 +80,7 @@ class SettingWidget extends StatelessWidget {
             _createDrawerItem(
                 icon: Icons.home,
                 text: 'Inicio',
-                color: AppTheme.dark_grey,
+                color: AppTheme.grey,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -91,7 +91,7 @@ class SettingWidget extends StatelessWidget {
             _createDrawerItem(
                 icon: Icons.book_outlined,
                 text: 'Facturas',
-                color: AppTheme.dark_grey,
+                color: AppTheme.grey,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -102,7 +102,7 @@ class SettingWidget extends StatelessWidget {
             _createDrawerItem(
                 icon: Icons.format_list_numbered,
                 text: 'Incidencias',
-                color: AppTheme.dark_grey,
+                color: AppTheme.grey,
                 onTap: () {
                   Navigator.push(
                       context,

@@ -164,7 +164,7 @@ class _RequestListSectionState extends State<RequestListSection>
                     onPressed: () {
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showAlertDialog(context, "Ha superado el limite de fotos", false);
+                          showAlertDialog(context, "Ha superado el limite de imagenes permitido.", false);
                         });
                         return;
                       }
@@ -183,7 +183,7 @@ class _RequestListSectionState extends State<RequestListSection>
                     onPressed: () {
                       if (images.length >= 4) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showAlertDialog(context, "Ha superado el limite de fotos", false);
+                          showAlertDialog(context, "Ha superado el limite de imagenes permitido.", false);
                         });
 
                         return;
@@ -225,7 +225,7 @@ class _RequestListSectionState extends State<RequestListSection>
             controller: _detail,
             validator: (String detail) {
               if (detail.length <= 0) {
-                return "Debe colocar el detalle de la solicutud";
+                return "Debe colocar el detalle de la solicitud";
               }
               return null;
             },
@@ -526,7 +526,7 @@ class _RequestListSectionState extends State<RequestListSection>
                       ),
                     ),
                     labelStyle: TextStyle(color: Colors.white60),
-                    hintText: "Escribir una direccion de referencia"),
+                    hintText: "Escribir una dirección de referencia"),
               )
             ],
           ),
@@ -590,14 +590,14 @@ class _RequestListSectionState extends State<RequestListSection>
       SchedulerBinding.instance.addPostFrameCallback((_) {
         requestBloc.add(RequestLoad(load: false));
         this.resetForm();
-        showAlertDialog(context, "Solicitud creada correctamente", true);
+        showAlertDialog(context, "El incidente fue creado correctamente.", true);
       });
     } else {
       setState(() {
         loading = false;
         canPressRegisterBtn = true;
       });
-      showAlertDialog(context, "Error al crear su solicitud", false);
+      showAlertDialog(context, "Error al crear su solicitud.", false);
     }
   }
 
