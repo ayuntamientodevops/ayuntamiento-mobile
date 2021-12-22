@@ -64,6 +64,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
       ),
     );
 
+/*
     listViews.add(
       TitleView(
         titleTxt: 'Segmentos',
@@ -73,7 +74,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
                 Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
       ),
-    );
+    );*/
 
     listViews.add(
       HomeSectionTwo(
@@ -85,6 +86,8 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         mainScreenAnimationController: widget.animationController,
       ),
     );
+
+/*
     listViews.add(
       TitleView(
         titleTxt: 'Noticias',
@@ -95,6 +98,7 @@ class _SectionsHomeScreenState extends State<SectionsHomeScreen>
         animationController: widget.animationController,
       ),
     );
+*/
 
     listViews.add(
       HomeSectionThree(

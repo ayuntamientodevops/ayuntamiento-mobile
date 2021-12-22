@@ -287,7 +287,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                                 color: AppTheme.nearlyDarkOrange,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13)),
+                                fontSize: 16)),
                       ]),
                     ),
                   ),

@@ -20,7 +20,7 @@ class HomeSectionOne extends StatelessWidget {
                 0.0, 30 * (1.0 - animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 0, bottom: 24),
+                  left: 24, right: 24, top: 0, bottom: 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: AppTheme.white,

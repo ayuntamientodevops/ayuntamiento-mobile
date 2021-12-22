@@ -4,6 +4,8 @@ import 'package:asdn/src/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'src/bloc/auth/auth_bloc.dart';
 import 'src/bloc/map/map_bloc.dart';
@@ -17,6 +19,7 @@ import 'src/share_prefs/preferences_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter();
   await initializeDateFormatting('es_PR', null);
   await dotenv.load(fileName: "config.conf");
   final prefs = new PreferenceStorage();
