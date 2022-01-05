@@ -28,7 +28,7 @@ class _SectionsRequestDetailSacreenState
     const int count = 9;
     listViews.add(
       TitleView(
-        titleTxt: 'Tus Solicitudes',
+        titleTxt: 'Tus solicitudes',
         /*subTxt: "Lista de incidentes registrados.",*/
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController,

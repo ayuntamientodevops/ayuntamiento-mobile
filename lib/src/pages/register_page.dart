@@ -3,6 +3,7 @@ import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/documentstypes.dart';
 import 'package:asdn/src/services/auth_service.dart';
+import 'package:asdn/src/utils/functions.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _password2Controller = TextEditingController();
-
+  bool clickLogin = false;
   RegisterBloc registerBloc;
-  bool canPressRegisterBtn = true;
 
   @override
   void initState() {
@@ -52,18 +52,27 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocListener<RegisterBloc, RegisterState>(
-      listener: (context, state) {
-        if (state.registrado) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            mostrarSnackbar("Registrado Correctamente", Colors.green);
-            this.resetForm();
-          });
-          setState(() {
-            canPressRegisterBtn = false;
-          });
-        }
+        listener: (context, state) {
+        if (state.loading) {
+              if (state.errorRegistro != "") {
+                WidgetsBinding.instance
+                    .addPostFrameCallback((_) {
+                  showAlertDialog(context,state.errorRegistro,false);
+                });
+              }else{
+                if(state.registrado){
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, LoginPage.routeName, (route) => false);
+                }else{
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) {
+                    showAlertDialog(context,"Esta cuenta ya existe en nuestra base de datos.",false);
+                  });
+                }
+              }
+            }
       },
-      child: Scaffold(
+     child: Scaffold(
         key: scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
@@ -223,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         margin:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         child: ElevatedButton(
-                          onPressed: canPressRegisterBtn ? _onSubmit : null,
+                          onPressed: _onSubmit,
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(0)),
@@ -252,21 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                       ),
-                      BlocBuilder<RegisterBloc, RegisterState>(
-                          builder: (context, state) {
-                        if (state.loading) {
-                          return CircularProgressIndicator(
-                              valueColor: new AlwaysStoppedAnimation<Color>(
-                                  Constants.orangeDark),
-                              backgroundColor: Colors.white);
-                        } else if (state.errorRegistro != "") {
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) async {
-                            mostrarSnackbar(state.errorRegistro, Colors.red);
-                          });
-                        }
-                        return Container();
-                      }),
+
                     ],
                   ),
                 ),
@@ -292,7 +287,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                                 color: AppTheme.nearlyDarkOrange,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13)),
+                                fontSize: 16)),
                       ]),
                     ),
                   ),
@@ -301,18 +296,18 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-      ),
+     ),
     );
   }
 
   Widget documenttype() {
     return Container(
       padding: EdgeInsets.all(15),
-      child: _dropdownSolicitud(),
+      child: _dropdownDocument(),
     );
   }
 
-  Widget _dropdownSolicitud() {
+  Widget _dropdownDocument() {
     AuthenticationService requestService = AuthenticationService();
     return FutureBuilder<DocumentsTypes>(
         future: requestService.documenttype(),
@@ -379,32 +374,10 @@ class _RegisterPageState extends State<RegisterPage> {
           tipoDoc: _value,
           password: _passwordController.text),
     );
-    Navigator.pushReplacement(context, navegarFadeIn(context, LoginPage()));
-  }
-
-  void mostrarSnackbar(String mensaje, Color color) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 5000),
-      backgroundColor: color,
-    );
-
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
-  void resetForm() {
-    _nameController.clear();
-    _lastnameController.clear();
-    _documentNumberController.clear();
-    _phoneNumberController.clear();
-    _emailController.clear();
-    _passwordController.clear();
-    _password2Controller.clear();
     setState(() {
-      _value = "0";
-      canPressRegisterBtn = true;
+      clickLogin = true;
     });
+
   }
 
   @override

@@ -5,13 +5,13 @@ class AppTheme {
   static const Color nearlyWhite = Color(0xFFFAFAFA);
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF2F3F8);
-  static const Color nearlyDarkOrange = Color.fromARGB(255, 57, 93, 132);
+  static const Color nearlyDarkOrange = Color.fromARGB(255, 57, 93, 148);
 
   static const Color nearlyOrgane = Color.fromARGB(255, 54, 77, 102);
   static const Color nearlyBlack = Color(0xFF213333);
   static const Color grey = Color(0xFF3A5160);
-  static const Color dark_grey = Color(0xFF313A44);
-
+  static const Color dark_grey = Color(0xFFF55C14);
+  static const Color nearlyBlue = Color(0xFF00B6F0);
   static const Color darkText = Color(0xFF253840);
   static const Color darkerText = Color(0xFF17262A);
   static const Color lightText = Color(0xFF4A6572);
@@ -19,6 +19,8 @@ class AppTheme {
   static const Color dismissibleBackground = Color(0xFF364A54);
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'Roboto';
+  static const Color redText = Color(0xFFF11326);
+  static const Color orange = Color(0xFFFF9136);
 
   static const TextTheme textTheme = TextTheme(
     headline4: display1,

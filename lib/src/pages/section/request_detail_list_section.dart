@@ -36,6 +36,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
   bool isLoading = true;
   RequestBloc requestBloc;
   PreferenceStorage preferenceStorage;
+  TextEditingController editingController = TextEditingController();
 
   @override
   void initState() {
@@ -48,7 +49,30 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
     requestBloc = RequestBloc();
     _loadItems(load: false);
   }
+  void filterSearchResults(String query) {
 
+    List<Request> listData = List<Request>();
+
+    if(query != ""){
+      _loadItems(load: false);
+        var result = _items.indexWhere((element) => element.helpDeskId.contains(query));
+        if (result >= 0) {
+        listData.add(_items[result]);
+
+    if (mounted) {
+      setState(() {
+        _items.clear();
+        _items.addAll(listData);
+      });
+    }
+    return;
+    }else{
+      _items.clear();
+    }
+    }else{
+      _loadItems(load: false);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -62,18 +86,44 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
         height: MediaQuery.of(context).size.height * 0.65,
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: TextField(
+                onChanged: (value) {
+                filterSearchResults(value);
+                },
+                controller: editingController,
+                cursorColor: AppTheme.nearlyDarkOrange,
+                decoration: InputDecoration(
+                    labelText: "Buscar ID",
+                    hintText: "",
+                    hintStyle: TextStyle(color: AppTheme.nearlyDarkOrange ),
+                    prefixIcon: Icon(Icons.search, color: AppTheme.nearlyDarkOrange),
+                    enabledBorder: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                    borderSide:  BorderSide(color: AppTheme.nearlyDarkOrange ),
+
+                  ),
+                    focusedBorder: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                    borderSide:  BorderSide(color: AppTheme.nearlyDarkOrange ),
+
+                  ),
+                ),
+              ),
+            ),
             _items.length == 0
                 ? Container(
                     margin: EdgeInsets.only(top: 200),
                     alignment: Alignment.center,
                     child: Text(
-                      'No existe ninguna solicitud pendiente',
+                      'No se encontraron solicitudes.',
                       style: TextStyle(fontSize: 15),
                     ),
                   )
                 : new Expanded(
                     child: ListView.builder(
-                      padding: const EdgeInsets.only(top: 13),
+                      padding: const EdgeInsets.only(top: 3),
                       shrinkWrap: true,
                       physics: AlwaysScrollableScrollPhysics(),
                       itemCount: _items.length,
@@ -106,12 +156,14 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
       AuthenticationService auth = AuthenticationService();
       final User user = auth.getUserLogged();
       var items = await requestService.getRequest(idUsuario: user.id);
+      print(items);
       if (items['OK']) {
         requestBloc.add(RequestLoad(load: true, requests: items['data']));
         setState(() {
           _items = items['data'];
           isLoading = false;
         });
+
         _refreshIndicatorKey.currentState?.show();
       } else {
         setState(() {
@@ -174,14 +226,14 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
             semanticContainer: true,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(15.0),
             ),
-            elevation: 2,
+            elevation: 22,
             child: Container(
               width: double.infinity,
               child: Stack(
                 children: <Widget>[
-                  Center(
+                Center(
                     child: FadeInImage.assetNetwork(
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
@@ -209,7 +261,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                         ],
                       ),
                       child: ListTile(
-                          title: Text(request.descripcion,
+                          title: Text(request.tipoReclamacion,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -229,14 +281,14 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                             Color.fromARGB(255, 255, 177, 41)
                           ])),
                       padding: const EdgeInsets.all(0),
-                      /*  child: Text(
-                        "ID: #" + request.reclamacionId,
+                        child: Text(
+                        "ID: #" + request.helpDeskId,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppTheme.white,
                             fontSize: 16),
-                      ),*/
+                      ),
                     ),
                   ),
                 ],

@@ -4,6 +4,7 @@ import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/pages/change_password_page.dart';
 import 'package:asdn/src/pages/register_page.dart';
+import 'package:asdn/src/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:asdn/src/widgets/input_widget.dart';
 import 'package:asdn/src/bloc/auth/auth_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   static final routeName = '/login';
@@ -34,11 +37,13 @@ class _LoginPageState extends State<LoginPage> {
   bool isRequest = false;
   final focus = FocusNode();
   final bool isLoginRequest = false;
+  bool isChecked = false;
+  Box box1;
 
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
-
+    createOpenBox();
     if (authBloc.state.authenticated) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.pushNamedAndRemoveUntil(
@@ -47,6 +52,24 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     super.initState();
+  }
+  void createOpenBox()async{
+    box1 = await Hive.openBox('logindata');
+    getdata();
+  }
+  void getdata() async{
+    if(box1.get('user') != null){
+      _usernameController.text = box1.get('user');
+      isChecked = true;
+      setState(() {
+      });
+    }
+    if(box1.get('pass') != null){
+      _passwordController.text = box1.get('pass');
+      isChecked = true;
+      setState(() {
+      });
+    }
   }
 
   @override
@@ -57,10 +80,23 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushNamedAndRemoveUntil(
               context, MainFullViewer.routeName, (route) => false);
         });
+      } else if (state.loading) {
+        return Center(
+          child: CircularProgressIndicator(
+              valueColor:
+              new AlwaysStoppedAnimation<Color>(
+                  AppTheme.nearlyDarkOrange),
+              backgroundColor: AppTheme.white),
+        );
+      } else if (state.isErrorAuth && clickLogin) {
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) {
+          showAlertDialog(context,state.errorLogin,false);
+        });
       }
     }, builder: (context, state) {
       Size size = MediaQuery.of(context).size;
-      return Scaffold(
+      return Scaffold(key: scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
             child: state.authenticated == false
@@ -78,11 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                                 icon: Icon(AntDesign.user,
                                     color: Constants.orangeDark),
                                 obscureText: false,
-                                keyboardType: TextInputType.text,
                                 labelText: "No. Documento",
                                 inputFormatters: [
-                                  FilteringTextInputFormatter
-                                      .singleLineFormatter
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
                                 validator: (String user) {
                                   if (user.length <= 0) {
@@ -130,17 +164,43 @@ class _LoginPageState extends State<LoginPage> {
                                   "¿Olvidaste la contraseña?",
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: AppTheme.nearlyDarkOrange),
+                                      color: AppTheme.nearlyOrgane),
                                 ),
                               ),
                             ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end ,
+                              children: [
+                                Checkbox(
+                                  value: isChecked,
+                                  onChanged: (value){
+                                    isChecked = !isChecked;
+                                    setState(() {
+
+                                    });
+                                  },
+                                ),
+                                Text("Recordar",
+                                    style: TextStyle(
+                                        color: AppTheme.nearlyOrgane,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 13)),
+                              ],
+                            ),    ),
                             SizedBox(height: size.height * 0.05),
                             Container(
                               alignment: Alignment.centerRight,
                               margin: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 10),
                               child: ElevatedButton(
-                                onPressed: () => _onSubmit(),
+                                onPressed: () {
+                                  _onSubmit();
+                                   login();
+                                },
                                 style: ButtonStyle(
                                   padding:
                                       MaterialStateProperty.all<EdgeInsets>(
@@ -173,25 +233,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            BlocBuilder<AuthBloc, AuthState>(
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                        valueColor:
-                                            new AlwaysStoppedAnimation<Color>(
-                                                AppTheme.nearlyDarkOrange),
-                                        backgroundColor: AppTheme.white),
-                                  );
-                                } else if (state.isErrorAuth && clickLogin) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    mostrarSnackbar(state.errorLogin);
-                                  });
-                                }
-                                return Container();
-                              },
-                            ),
                           ],
                         ),
                       ),
@@ -220,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                       color: AppTheme.nearlyDarkOrange,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 17)),
+                                      fontSize: 16)),
                             ]),
                           ),
                         ),
@@ -250,16 +291,7 @@ class _LoginPageState extends State<LoginPage> {
 
     authBloc.add(LoginButtonPressed(
         user: _usernameController.text, password: _passwordController.text));
-  }
 
-  void mostrarSnackbar(String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 1000),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   @override
@@ -268,7 +300,13 @@ class _LoginPageState extends State<LoginPage> {
       super.setState(fn);
     }
   }
+  void login(){
 
+    if(isChecked){
+      box1.put('user', _usernameController.value.text);
+      box1.put('pass', _passwordController.value.text);
+    }
+  }
   @override
   void dispose() {
     super.dispose();
