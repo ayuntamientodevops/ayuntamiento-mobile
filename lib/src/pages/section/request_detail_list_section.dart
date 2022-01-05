@@ -55,7 +55,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
 
     if(query != ""){
       _loadItems(load: false);
-        var result = _items.indexWhere((element) => element.reclamacionId.contains(query));
+        var result = _items.indexWhere((element) => element.helpDeskId.contains(query));
         if (result >= 0) {
         listData.add(_items[result]);
 
@@ -156,12 +156,14 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
       AuthenticationService auth = AuthenticationService();
       final User user = auth.getUserLogged();
       var items = await requestService.getRequest(idUsuario: user.id);
+      print(items);
       if (items['OK']) {
         requestBloc.add(RequestLoad(load: true, requests: items['data']));
         setState(() {
           _items = items['data'];
           isLoading = false;
         });
+
         _refreshIndicatorKey.currentState?.show();
       } else {
         setState(() {
@@ -231,7 +233,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
               width: double.infinity,
               child: Stack(
                 children: <Widget>[
-                  Center(
+                Center(
                     child: FadeInImage.assetNetwork(
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
@@ -280,7 +282,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
                           ])),
                       padding: const EdgeInsets.all(0),
                         child: Text(
-                        "ID: #" + request.reclamacionId,
+                        "ID: #" + request.helpDeskId,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,

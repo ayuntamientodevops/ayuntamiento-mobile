@@ -12,6 +12,7 @@ String requestToJson(List<Request> data) =>
 
 class Request {
   String reclamacionId;
+  String helpDeskId;
   String descripcion;
   String fechaSolicitud;
   String fechaAsignacion;
@@ -26,6 +27,7 @@ class Request {
 
   Request(
       {this.reclamacionId,
+      this.helpDeskId,
       this.descripcion,
       this.fechaSolicitud,
       this.fechaAsignacion,
@@ -45,6 +47,7 @@ class Request {
     }
     return Request(
         reclamacionId: json["ReclamacionId"],
+        helpDeskId: json["HelpDeskId"],
         descripcion: json["Descripcion"],
         // fechaSolicitud: DateTime.parse(json["FechaSolicitud"]),
         fechaSolicitud: json["FechaSolicitud"],
@@ -60,6 +63,7 @@ class Request {
 
   Map<String, dynamic> toJson() => {
         "ReclamacionId": reclamacionId,
+        "HelpDeskId": helpDeskId,
         "Descripcion": descripcion,
         "FechaSolicitud": fechaSolicitud,
         "TipoReclamacion": tipoReclamacion,
@@ -72,6 +76,7 @@ class Request {
 
   static Map<String, dynamic> toMap(Request request) => {
         "ReclamacionId": request.reclamacionId,
+        "HelpDeskId": request.helpDeskId,
         "Descripcion": request.descripcion,
         "FechaSolicitud": request.fechaSolicitud,
         "TipoReclamacion": request.tipoReclamacion,

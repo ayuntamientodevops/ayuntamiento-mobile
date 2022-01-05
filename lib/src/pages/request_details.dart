@@ -404,7 +404,7 @@ class _RequestDetailsState extends State<RequestDetails>  with TickerProviderSta
                     height: 80,
                     child: Center(
                       child: Text(
-                        '#5453',
+                        '#' + args.helpDeskId,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
