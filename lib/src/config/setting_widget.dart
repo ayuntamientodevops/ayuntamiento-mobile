@@ -36,6 +36,7 @@ class SettingWidget extends StatelessWidget {
                             backgroundImage:
                                 AssetImage("assets/home/profile.png"),
                           ),
+                          SizedBox(height: 5),
                           Text(
                             toBeginningOfSentenceCase(snapshot.data.firstName) +
                                 ' ' +
@@ -48,13 +49,18 @@ class SettingWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w400),
                           ),
                           SizedBox(height: 3),
-                          Text(
-                            snapshot.data.email,
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                color: AppTheme.white,
-                                letterSpacing: 0.5,
-                                fontWeight: FontWeight.normal),
+                          GestureDetector(
+                            onTap: () =>  Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainFullViewer(
+                                        identificationPage: "profile"))),
+                            child: Text(
+                              "Editar",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppTheme.white),
+                            ),
                           ),
                         ],
                       );

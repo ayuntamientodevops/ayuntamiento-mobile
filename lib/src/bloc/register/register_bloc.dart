@@ -18,8 +18,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterEvent event,
   ) async* {
     if (event is RegisterButtonPressed) {
-      yield state.copyWith(loading: true);
-
       final resp = await authService.register(
           name: event.name,
           lastname: event.lastname,

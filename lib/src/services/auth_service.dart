@@ -1,6 +1,7 @@
-import 'dart:convert' show base64Encode, json, jsonEncode, utf8;
+import 'dart:convert' show base64Encode, json, jsonDecode, jsonEncode, utf8;
 import 'dart:io';
 
+import 'package:asdn/src/models/Profile.dart';
 import 'package:asdn/src/models/documentstypes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -146,7 +147,43 @@ class AuthenticationService {
       return null;
     }
   }
+  Future<Profile> userProfile(id) async {
 
+    try {
+      final resp = await this._dio.get(
+        _baseUrl + "/RequestUsersWebServer/userprofile/id/" + id,
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader: basicAuth,
+            "X-API-KEY": dotenv.env['X-API-KEY']
+          },
+          followRedirects: false,
+          validateStatus: (status) {
+            return status < 600;
+          },
+        ),
+      );
+
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if (resp.data['status']) {
+          Map<String, dynamic> data;
+          final jwt = preferenceStorage.getValue(key: "currentUser");
+          Profile userPro;
+          if (jwt != null) {
+            data = json.decode(jwt);
+            userPro = Profile.fromJson(data);
+          }
+
+          return userPro;
+        }
+      }
+      return null;
+    } on DioError catch (e) {
+      print(e.error);
+      return null;
+    }
+  }
   Future<User> currentUser() async {
     return this.getUserLogged();
   }
