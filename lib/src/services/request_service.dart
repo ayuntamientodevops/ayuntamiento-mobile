@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:asdn/src/helpers/helpers.dart';
 import 'package:asdn/src/models/Invoices.dart';
+import 'package:asdn/src/models/Profile.dart';
 import 'package:asdn/src/models/Request.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:dio/dio.dart';
@@ -264,5 +265,34 @@ class RequestService {
       return invoices;
     }
     return null;
+  }
+
+ Future<bool> saveprofile(
+      Map<String, dynamic> data) async {
+  
+    try {
+      var formData = Profile.fromJson(data);
+      print(formData);
+      final resp = await _dio.post(_baseUrl + '/RequestWebServer/saveprofile',
+          data: formData,
+          options: Options(
+              headers: {
+                HttpHeaders.contentTypeHeader: "application/json",
+                HttpHeaders.authorizationHeader: basicAuth,
+                "X-API-KEY": dotenv.env['X-API-KEY']
+              },
+              followRedirects: false,
+              validateStatus: (status) {
+                return status < 600;
+              }));
+
+      if (resp.data['status']) {
+        return true;
+      }
+      return true;
+    } on Exception catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

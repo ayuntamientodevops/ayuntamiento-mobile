@@ -46,33 +46,27 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     registerBloc = BlocProvider.of<RegisterBloc>(context);
     super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocListener<RegisterBloc, RegisterState>(
-        listener: (context, state) {
-        if (state.loading) {
-              if (state.errorRegistro != "") {
-                WidgetsBinding.instance
-                    .addPostFrameCallback((_) {
-                  showAlertDialog(context,state.errorRegistro,false);
-                });
-              }else{
-                if(state.registrado){
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, LoginPage.routeName, (route) => false);
-                }else{
-                  WidgetsBinding.instance
-                      .addPostFrameCallback((_) {
-                    showAlertDialog(context,"Esta cuenta ya existe en nuestra base de datos.",false);
-                  });
-                }
-              }
-            }
-      },
-     child: Scaffold(
+     return BlocConsumer<RegisterBloc, RegisterState>(listener: (context, state) {
+
+         if (!state.registrado) {
+           WidgetsBinding.instance
+               .addPostFrameCallback((_) {
+             showAlertDialog(context,state.errorRegistro,false);
+           });
+         }else{
+           if(state.registrado){
+             Navigator.pushNamedAndRemoveUntil(
+                 context, LoginPage.routeName, (route) => false);
+           }
+         }
+          }, builder: (context, state) {
+     return Scaffold(
         key: scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
@@ -130,7 +124,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           icon: Icon(FontAwesome5.id_card,
                               color: Constants.orangeDark),
                           obscureText: false,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           labelText:
                               "No. documento (Ejemplo: Cedula, RNC, etc...)",
                           validator: (String doc) {
@@ -156,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             if (phone.length <= 0) {
                               return "Ingrese el teléfono ";
                             } else if (phone.length != 10) {
-                              return "Ingrese un teléfono  correcto";
+                              return "Ingrese un teléfono correcto";
                             }
                             return null;
                           },
@@ -296,8 +293,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-     ),
-    );
+     );
+     });
   }
 
   Widget documenttype() {

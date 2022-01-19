@@ -38,6 +38,20 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          leading: BackButton(
+            color: Colors.black,
+            onPressed: () {
+              BlocProvider.of<AuthBloc>(context).add(LoggedOut());
+
+              Navigator.pushNamedAndRemoveUntil(
+                  context, LoginPage.routeName, (route) => true);
+            },
+          ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
       key: _scaffoldKey,
         body: Background(
         child: SingleChildScrollView(
@@ -52,8 +66,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          "Por favor cambie su contraseña temporal",
-                          style: TextStyle(fontSize: 13),
+                          "Por favor cambie su contraseña temporal.",
+                          style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -160,10 +174,10 @@ class _ResetPasswordState extends State<ResetPassword> {
       setState(() {
         isLoading = false;
       });
-      mostrarSnackbar(resp['mensaje']);
-      Future.delayed(const Duration(milliseconds: 3000), () {
-        Navigator.pushReplacement(context, navegarFadeIn(context, LoginPage()));
-      });
+      BlocProvider.of<AuthBloc>(context).add(LoggedOut());
+      Navigator.pushNamedAndRemoveUntil(
+          context, LoginPage.routeName, (route) => false);
+
     } else {
       setState(() {
         isRequest = false;

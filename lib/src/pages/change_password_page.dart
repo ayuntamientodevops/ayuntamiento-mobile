@@ -1,3 +1,4 @@
+import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/config/background.dart';
 import 'package:asdn/src/helpers/helpers.dart';
@@ -7,6 +8,7 @@ import 'package:asdn/src/widgets/hide_keyboard.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:asdn/src/widgets/input_widget.dart';
 
@@ -38,6 +40,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     Size size = MediaQuery.of(context).size;
     return HideKeyboard(
       child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            BlocProvider.of<AuthBloc>(context).add(LoggedOut());
+
+            Navigator.pushNamedAndRemoveUntil(
+                context, LoginPage.routeName, (route) => true);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
         key: _scaffoldKey,
         body: Background(
           child: SingleChildScrollView(
@@ -50,14 +66,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     children: [
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(15.0),
                           child: Text(
-                            "La instrucciones de recuperación de contraseña se enviarán al correo electrónico.",
-                            style: TextStyle(fontSize: 13),
+                            "Para cambiar su contraseña favor comunicarce con el departamento de tecnología marcando: (809) 331-7171 ext: 2229.",
+                            style: TextStyle(fontSize: 19),textAlign: TextAlign.center,
                           ),
                         ),
                       ),
-                      Container(
+                    /*  Container(
                         alignment: Alignment.center,
                         child: InputWidget(
                           controller: _emailController,
@@ -160,7 +176,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             ]),
                           ),
                         ),
-                      ),
+                      ),*/
                       isLoading
                           ? CircularProgressIndicatorWidget()
                           : Container(),
