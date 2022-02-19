@@ -21,6 +21,7 @@ class AppTheme {
   static const String fontName = 'Roboto';
   static const Color redText = Color(0xFFF11326);
   static const Color orange = Color(0xFFFF9136);
+  static const Color greenApp = Color.fromARGB(255, 54,177, 102);
 
   static const TextTheme textTheme = TextTheme(
     headline4: display1,

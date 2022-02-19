@@ -4,6 +4,7 @@ import 'package:asdn/src/bloc/auth/auth_bloc.dart';
 import 'package:asdn/src/config/setting_widget.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/models/user.dart';
+import 'package:asdn/src/pages/card_invoice.dart';
 import 'package:asdn/src/pages/edit_profile_page.dar.dart';
 import 'package:asdn/src/pages/login_page.dart';
 import 'package:asdn/src/pages/reset_password.dart';
@@ -73,6 +74,9 @@ class _MainFullViewerState extends State<MainFullViewer>
     }else if (widget.identificationPage == "profile") {
       tabIconsList[3].isSelected = true;
       tabBody = EditProfileScreen(animationController: animationController);
+    }else if (widget.identificationPage == "card") {
+      tabIconsList[2].isSelected = true;
+      tabBody = CardInvoiceScreen(animationController: animationController);
     }
     super.initState();
 
