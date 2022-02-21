@@ -5,6 +5,7 @@ import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/request_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceListSection extends StatefulWidget {
   static final routeName = '/invoce';
@@ -152,7 +153,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: Stack(
+               child: Stack(
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -269,11 +270,24 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
                                 ),
-                              ),
-                              if(this.statusInvoice == "COBRO")
-                                buttonCollect()
-                              else if (this.statusInvoice == "COBRADA")
-                                buttonVoid()
+                              ),new InkWell(
+                                  onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainFullViewer(
+                                            identificationPage: "card")));
+
+                                   setInvoiceData(invoice.total, invoice.number);                                  },
+                                   child: Column(children: [
+                                     if(this.statusInvoice == "COBRO")
+                                       buttonCollect()
+                                   else if (this.statusInvoice == "COBRADA")
+                                       buttonCollect()//buttonVoid()
+
+                                   ],
+                                   )
+                                )
                             ],
                           ),
                         ),
@@ -288,6 +302,13 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
       ),
     );
   }
+
+Future<String> setInvoiceData(double amount, String invoiceNum) async {
+
+ final prefs = await SharedPreferences.getInstance();
+ await prefs.setDouble('amount', amount);
+ await prefs.setString('invoiceNum', invoiceNum);
+}
 Widget buttonCollect()
 {
   return  Container(
@@ -295,13 +316,7 @@ Widget buttonCollect()
     margin: EdgeInsets.symmetric(
         horizontal: 15, vertical: 10),
     child: ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MainFullViewer(
-                    identificationPage: "card")));
-      },
+
       style: ButtonStyle(
         padding:
         MaterialStateProperty.all<EdgeInsets>(
@@ -328,7 +343,7 @@ Widget buttonCollect()
           "PAGAR",
           textAlign: TextAlign.center,
           style:
-          TextStyle(fontWeight: FontWeight.bold),
+          TextStyle(fontWeight: FontWeight.bold,color: AppTheme.white),
         ),
       ),
     ),
@@ -342,8 +357,6 @@ Widget buttonVoid()
       margin: EdgeInsets.symmetric(
           horizontal: 15, vertical: 10),
       child: ElevatedButton(
-        onPressed: () {
-        },
         style: ButtonStyle(
           padding:
           MaterialStateProperty.all<EdgeInsets>(
@@ -370,7 +383,7 @@ Widget buttonVoid()
             "ANULAR",
             textAlign: TextAlign.center,
             style:
-            TextStyle(fontWeight: FontWeight.bold),
+            TextStyle(fontWeight: FontWeight.bold,color: AppTheme.white),
           ),
         ),
       ),

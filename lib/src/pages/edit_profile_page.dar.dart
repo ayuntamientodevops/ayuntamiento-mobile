@@ -427,7 +427,7 @@ class _EditProfileScreenState
   Widget btnSave() {
     return Container(
       margin: EdgeInsets.only(bottom: 50),
-      width: 290,
+      width:  double.infinity,
       alignment: Alignment.centerRight,
       child: ElevatedButton(
         onPressed: canPressRegisterBtn ? saveUserProfile : null,

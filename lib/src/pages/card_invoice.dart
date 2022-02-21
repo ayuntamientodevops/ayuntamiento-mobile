@@ -1,10 +1,24 @@
 
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/models/Card.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
+import 'package:asdn/src/services/auth_service.dart';
+import 'package:asdn/src/services/carnet_service.dart';
+import 'package:asdn/src/utils/functions.dart';
+import 'package:dart_ipify/dart_ipify.dart';
+import 'package:dio/dio.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_card/awesome_card.dart';
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class CardInvoiceScreen extends StatefulWidget {
   const CardInvoiceScreen({Key key, this.animationController})
       : super(key: key);
@@ -26,6 +40,20 @@ class _CardInvoiceScreenState
   final _cardController = TextEditingController();
   final _expireController = TextEditingController();
   final _cvvController = TextEditingController();
+  final _nameCardController = TextEditingController();
+  double amount = 0.0;
+  String clientIp = '12.0.0.1';
+  String currency = '214';
+  String environment = 'ECommerce';
+  String idempotencyKey = '';
+  String invoiceNumber = '';
+  String merchantId = '349000000';
+  String terminalId = '58585858';
+  String referenceNumber = '20200506162757';
+  int tax = 0;
+  int tip = 0;
+  String token = '98e894';
+
   String cardNumber = '';
   String cardHolderName = '';
   String expiryDate = '';
@@ -33,8 +61,10 @@ class _CardInvoiceScreenState
   bool showBack = false;
 
   FocusNode _focusNode;
-  TextEditingController cardNumberCtrl = TextEditingController();
-  TextEditingController expiryFieldCtrl = TextEditingController();
+  bool canPressRegisterBtn = true;
+  final CardService cardService = CardService();
+  final AuthenticationService authenticationService = AuthenticationService();
+
 
   @override
   void initState() {
@@ -59,13 +89,19 @@ class _CardInvoiceScreenState
       appBar: AppBar(
         title: Text("Tarjeta"),
       ),
-      body: SingleChildScrollView(
+      body: Container(
+      height: MediaQuery.of(context).size.height * 0.922,
+      margin: const EdgeInsets.only(bottom: 80),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Form(
+        key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: 40,
+              height: 20,
             ),
             CreditCard(
               cardNumber: cardNumber,
@@ -74,13 +110,13 @@ class _CardInvoiceScreenState
               cvv: cvv,
               bankName: 'Registro Tarjeta',
               showBackSide: showBack,
-              frontBackground: CardBackgrounds.black,
-              backBackground: CardBackgrounds.white,
-              showShadow: true,
-              // mask: getCardTypeMask(cardType: CardType.americanExpress),
+              frontBackground: CardBackgrounds.custom(0xF9A98749),
+              backBackground: CardBackgrounds.custom(0xFFFF9136),
+              showShadow: false,
+              mask: getCardTypeMask(cardType: CardType.americanExpress),
             ),
             SizedBox(
-              height: 40,
+              height: 20,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -91,9 +127,10 @@ class _CardInvoiceScreenState
                     horizontal: 20,
                   ),
                   child: TextFormField(
-                    controller: cardNumberCtrl,
+                    controller: _cardController,
                     decoration: InputDecoration(hintText: 'No. Tarjeta'),
                     maxLength: 16,
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       final newCardNumber = value.trim();
                       var newStr = '';
@@ -116,9 +153,10 @@ class _CardInvoiceScreenState
                     horizontal: 20,
                   ),
                   child: TextFormField(
-                    controller: expiryFieldCtrl,
-                    decoration: InputDecoration(hintText: 'Fecha Expiracion'),
+                    controller: _expireController,
+                    decoration: InputDecoration(hintText: 'Exp.'),
                     maxLength: 5,
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       var newDateValue = value.trim();
                       final isPressingBackspace =
@@ -133,30 +171,34 @@ class _CardInvoiceScreenState
                             newDateValue.substring(2);
                       }
                       setState(() {
-                        expiryFieldCtrl.text = newDateValue;
-                        expiryFieldCtrl.selection = TextSelection.fromPosition(
+                        _expireController.text = newDateValue;
+                        _expireController.selection = TextSelection.fromPosition(
                             TextPosition(offset: newDateValue.length));
                         expiryDate = newDateValue;
                       });
                     },
                   ),
                 ),
-         /*       Container(
+                Container(
                   margin: EdgeInsets.symmetric(
                     horizontal: 20,
                   ),
                   child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Card Holder Name'),
+                    controller: _nameCardController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(hintText: 'Nombre'),
                     onChanged: (value) {
                       setState(() {
                         cardHolderName = value;
                       });
                     },
                   ),
-                ),*/
+                ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _cvvController,
                     decoration: InputDecoration(hintText: 'CVV'),
                     maxLength: 3,
                     onChanged: (value) {
@@ -167,11 +209,114 @@ class _CardInvoiceScreenState
                     focusNode: _focusNode,
                   ),
                 ),
+                btnSave()
               ],
-            )
+            ),
           ],
+        ),
+        ),
+      ),
+      )
+    );
+  }
+
+  Widget btnSave() {
+    return Container(
+      margin: EdgeInsets.only(left: 10,right: 10),
+      alignment: Alignment.centerRight,
+      child: ElevatedButton(
+        onPressed: canPressRegisterBtn ? runProcces : null,
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(80.0),
+                  side: BorderSide(color: AppTheme.white))),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          height: 50.0,
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(80.0),
+            gradient: new LinearGradient(
+              colors: [
+                Color.fromARGB(255, 255, 136, 34),
+                Color.fromARGB(255, 255, 177, 41)
+              ],
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            "PROCESAR PAGO",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
   }
+  String encryptInvoiceNumer(String invoice){
+    final key = encrypt.Key.fromUtf8("my32lengthsupersecretnooneknows1");
+    final iv = encrypt.IV.fromLength(16);
+
+    final encrypter =  encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+    final encrypted = encrypter.encrypt(invoice, iv: iv);
+    //final decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+    return encrypted.base64;
+  }
+  void runProcces() async {
+    final prefs = await SharedPreferences.getInstance();
+    clientIp = await Ipify.ipv4();
+    FocusScope.of(context).unfocus();
+    if (!formKey.currentState.validate()) return;
+    formKey.currentState.save();
+    idempotencyKey = await cardService.getIdempotencyKey();
+    amount = prefs.getDouble('amount');
+    invoiceNumber = prefs.getString('invoiceNum');
+    _cardController.text= '4594130000003243';
+    token = encryptInvoiceNumer(invoiceNumber);
+
+    Map<String, dynamic> data = {
+      "amount"        : amount,
+      "card-number"   : _cardController.text,
+      "client-ip"     : clientIp,
+      "currency"      : currency,
+      "cvv"           : _cvvController.text,
+      "environment"   : environment,
+      "expiration-date" : _expireController.text,
+      "idempotency-key": idempotencyKey,
+      "invoice-number" : invoiceNumber,
+      "merchant-id"   : merchantId,
+      "terminal-id"   : terminalId,
+      "reference-number" : referenceNumber,
+      "tax"           : tax,
+      "tip"           : tip,
+      "token"         : token
+    };
+
+    setState(() {
+      canPressRegisterBtn = false;
+    });
+
+    Response resp = await cardService.sendDataCarnet(data);
+    final code = await cardService.getMessageCode(resp.data["response-code"]);
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        canPressRegisterBtn = true;
+      });
+
+    });
+    showAlertDialog(context,code['descripcion'], true);
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 }
+
