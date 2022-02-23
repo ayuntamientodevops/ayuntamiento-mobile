@@ -299,17 +299,34 @@ class _CardInvoiceScreenState
     setState(() {
       canPressRegisterBtn = false;
     });
-
+  if(_cardController.text == "" || _expireController.text == "" || _cvvController.text == "" || _nameCardController.text == ""){
+    showAlertDialog(context,"Para completar el pago debe llenar todos los campos", false);
+    setState(() {
+      canPressRegisterBtn = true;
+    });
+  }else{
     Response resp = await cardService.sendDataCarnet(data);
     final code = await cardService.getMessageCode(resp.data["response-code"]);
-
+    if(code['codigo'] == "00"){
     SchedulerBinding.instance.addPostFrameCallback((_) {
+
       setState(() {
         canPressRegisterBtn = true;
-      });
+        _expireController.clear();
+        _cardController.clear();
+        _cvvController.clear();
+        _nameCardController.clear();
+          });
+        });
 
-    });
-    showAlertDialog(context,code['descripcion'], true);
+        showAlertDialog(context,code['descripcion'] +' - codigo: '+ resp.data["approval-code"], true, ifCard: true);
+        }else{
+          setState(() {
+           canPressRegisterBtn = true;
+        });
+        showAlertDialog(context,code['descripcion'] +' - codigo: '+ resp.data["approval-code"], false, ifCard: false);
+      }
+    }
   }
 
   @override

@@ -210,7 +210,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
+                                padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                 child: Text(
                                   "${invoice.description}",
                                   style: TextStyle(
@@ -220,7 +220,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
+                                padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                 child: Column(
                                   children: <Widget>[
                                     ticketDetailsWidget(
@@ -229,7 +229,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         'Fecha',
                                         "$dateFormat"),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
+                                      padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                       child: Container(
                                         height: 1.0,
                                         color: AppTheme.grey,
@@ -278,13 +278,11 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         builder: (context) => MainFullViewer(
                                             identificationPage: "card")));
 
-                                   setInvoiceData(invoice.total, invoice.number);                                  },
+                                   setInvoiceData(invoice.total, invoice.number);
+                                   },
                                    child: Column(children: [
                                      if(this.statusInvoice == "COBRO")
-                                       buttonCollect()
-                                   else if (this.statusInvoice == "COBRADA")
-                                       buttonCollect()//buttonVoid()
-
+                                         buttonCollect()
                                    ],
                                    )
                                 )

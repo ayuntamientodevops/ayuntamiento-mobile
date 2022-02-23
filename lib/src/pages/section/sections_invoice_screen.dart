@@ -57,13 +57,13 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.922,
-      padding: const EdgeInsets.only(top: 160),
+      height: MediaQuery.of(context).size.height * 0.882,
+      padding: const EdgeInsets.only(top: 155),
       child: FutureBuilder<bool>(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           return ListView.builder(
-            padding: const EdgeInsets.only(top: 13),
+            padding: const EdgeInsets.only(top: 3),
             itemCount: listViews.length,
             itemBuilder: (BuildContext context, int index) {
               widget.animationController.forward();
