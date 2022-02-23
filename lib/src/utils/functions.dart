@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -19,12 +20,12 @@ Future<bool> connectionValidate() async {
   }
 }
 
-void showAlertDialog(context,String text, bool isSuccess) {
+void showAlertDialog(context,String text, bool isSuccess,{ifCard = false}) {
 
   var alertStyle = AlertStyle(
     animationType: AnimationType.fromTop,
     isCloseButton: false,
-    isOverlayTapDismiss: true,
+    isOverlayTapDismiss: (ifCard)? false : true,
     descStyle: TextStyle(fontWeight: FontWeight.w300),
     descTextAlign: TextAlign.center,
     animationDuration: Duration(milliseconds: 400),
@@ -51,7 +52,17 @@ void showAlertDialog(context,String text, bool isSuccess) {
         child: Text("CERRAR",
           style: TextStyle(color: AppTheme.white, fontSize: 20),
         ),
-        onPressed: () => Navigator.pop(context),
+        onPressed: (){
+          if(ifCard){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MainFullViewer(
+                        identificationPage: "invoice")));
+          }else{
+            Navigator.pop(context);
+          }
+  },
         color: (isSuccess)? Colors.green : AppTheme.redText,
         radius: BorderRadius.circular(0.0),
       ),

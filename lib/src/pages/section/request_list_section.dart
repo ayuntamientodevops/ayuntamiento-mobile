@@ -537,7 +537,9 @@ class _RequestListSectionState extends State<RequestListSection>
 
   void crearIncidencia() async {
     FocusScope.of(context).unfocus();
-    setState(() {
+    setState((
+
+        ) {
       isSubmit = true;
     });
 

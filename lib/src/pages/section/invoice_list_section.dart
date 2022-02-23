@@ -1,9 +1,11 @@
 import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/models/Invoices.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/request_service.dart';
 import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceListSection extends StatefulWidget {
   static final routeName = '/invoce';
@@ -24,6 +26,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
 
   final RequestService requestService = RequestService();
   final AuthenticationService authenticationService = AuthenticationService();
+  String statusInvoice;
 
   @override
   void initState() {
@@ -64,7 +67,6 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
         }
 
         Invoices invoices = snapshot.data ?? null;
-
         return Container(
           child: SingleChildScrollView(
             physics: ScrollPhysics(),
@@ -72,7 +74,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(
+                Container(
                   width: double.infinity,
                   height: 80,
                   child: Card(
@@ -110,7 +112,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                         },
                       )
                     : Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0.0),
                         child: Center(
                           child: Text(
                             'No existe ninguna factura',
@@ -130,10 +132,20 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
     String dateFormat =
         invoice.date.toString().replaceAll("12:00:00 a. m.", "");
 
-    return GestureDetector(
+    this.statusInvoice = invoice.status.replaceAll("PEND. ","");
+    Color colorsText;
+
+    if(this.statusInvoice == "COBRO")
+        colorsText = AppTheme.redText;
+      else if(this.statusInvoice == "COBRADA")
+        colorsText = AppTheme.greenApp;
+      else
+        colorsText = AppTheme.nearlyBlue;
+
+      return GestureDetector(
       child: Column(
         children: [
-          SizedBox(
+          Container(
             width: 400,
             height: 280,
             child: Card(
@@ -141,7 +153,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: Stack(
+               child: Stack(
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -172,12 +184,12 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                       borderRadius: BorderRadius.circular(30.0),
                                       border: Border.all(
                                           width: 2.0,
-                                          color: AppTheme.nearlyDarkOrange),
+                                          color: colorsText),
                                     ),
                                     child: Center(
                                       child: Text(
-                                        'ESTADO: ' + invoice.status,
-                                        style: TextStyle(color: AppTheme.grey),
+                                        invoice.status,
+                                        style: TextStyle(color: colorsText),
                                       ),
                                     ),
                                   ),
@@ -198,7 +210,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 20.0),
+                                padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                 child: Text(
                                   "${invoice.description}",
                                   style: TextStyle(
@@ -208,7 +220,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 25.0),
+                                padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                 child: Column(
                                   children: <Widget>[
                                     ticketDetailsWidget(
@@ -217,7 +229,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         'Fecha',
                                         "$dateFormat"),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 25.0),
+                                      padding: (this.statusInvoice == "COBRO")? const EdgeInsets.only(top: 10.0): const EdgeInsets.only(top: 18.0),
                                       child: Container(
                                         height: 1.0,
                                         color: AppTheme.grey,
@@ -225,14 +237,14 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 12.0, right: 40.0),
+                                          top: 5.0, right: 40.0),
                                       child: Center(
                                         child: Text(
                                           "Detalle: " +
                                               invoice.detail[0].tax.description,
                                           style: TextStyle(
                                             color: AppTheme.grey,
-                                            fontSize: 12.0,
+                                            fontSize: 13.0,
                                           ),
                                         ),
                                       ),
@@ -241,7 +253,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 15.0),
+                                padding: const EdgeInsets.only(top: 5.0),
                                 child: Container(
                                   height: 1.0,
                                   color: AppTheme.grey,
@@ -258,7 +270,22 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
                                 ),
-                              )
+                              ),new InkWell(
+                                  onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainFullViewer(
+                                            identificationPage: "card")));
+
+                                   setInvoiceData(invoice.total, invoice.number);
+                                   },
+                                   child: Column(children: [
+                                     if(this.statusInvoice == "COBRO")
+                                         buttonCollect()
+                                   ],
+                                   )
+                                )
                             ],
                           ),
                         ),
@@ -274,6 +301,92 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
     );
   }
 
+Future<String> setInvoiceData(double amount, String invoiceNum) async {
+
+ final prefs = await SharedPreferences.getInstance();
+ await prefs.setDouble('amount', amount);
+ await prefs.setString('invoiceNum', invoiceNum);
+}
+Widget buttonCollect()
+{
+  return  Container(
+    alignment: Alignment.centerRight,
+    margin: EdgeInsets.symmetric(
+        horizontal: 15, vertical: 10),
+    child: ElevatedButton(
+
+      style: ButtonStyle(
+        padding:
+        MaterialStateProperty.all<EdgeInsets>(
+            EdgeInsets.all(0)),
+        shape: MaterialStateProperty.all<
+            RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(80.0),
+                side: BorderSide(
+                    color: AppTheme.white))),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        height: 50.0,
+        decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(80.0),
+            gradient: new LinearGradient(colors: [
+              Color.fromARGB(255, 255, 136, 34),
+              Color.fromARGB(255, 255, 177, 41)
+            ])),
+        padding: const EdgeInsets.all(0),
+        child: Text(
+          "PAGAR",
+          textAlign: TextAlign.center,
+          style:
+          TextStyle(fontWeight: FontWeight.bold,color: AppTheme.white),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buttonVoid()
+  {
+    return  Container(
+      alignment: Alignment.centerRight,
+      margin: EdgeInsets.symmetric(
+          horizontal: 15, vertical: 10),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          padding:
+          MaterialStateProperty.all<EdgeInsets>(
+              EdgeInsets.all(0)),
+          shape: MaterialStateProperty.all<
+              RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(80.0),
+                  side: BorderSide(
+                      color: AppTheme.white))),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          height: 50.0,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.circular(80.0),
+              gradient: new LinearGradient(colors: [
+                Color.fromARGB(255, 15, 143, 174),
+                Color.fromARGB(255, 13, 140, 194)
+              ])),
+          padding: const EdgeInsets.all(0),
+          child: Text(
+            "ANULAR",
+            textAlign: TextAlign.center,
+            style:
+            TextStyle(fontWeight: FontWeight.bold,color: AppTheme.white),
+          ),
+        ),
+      ),
+    );
+  }
   Widget ticketDetailsWidget(String firstTitle, String firstDesc,
       String secondTitle, String secondDesc) {
     return Row(
