@@ -1,9 +1,5 @@
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:asdn/src/config/app_theme.dart';
-import 'package:asdn/src/models/Card.dart';
 import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/carnet_service.dart';
@@ -54,10 +50,10 @@ class _CardInvoiceScreenState
   int tip = 0;
   String token = '98e894';
 
-  String cardNumber = '';
-  String cardHolderName = '';
-  String expiryDate = '';
-  String cvv = '';
+  String cardNumber = '4594 1300 0000 3243';
+  String cardHolderName = 'Jose Garcia';
+  String expiryDate = '03/24';
+  String cvv = '432';
   bool showBack = false;
 
   FocusNode _focusNode;
@@ -69,7 +65,12 @@ class _CardInvoiceScreenState
   @override
   void initState() {
     super.initState();
+    this._getValueFromPreferences();
     _focusNode = FocusNode();
+    _cardController.text= '4594130000003243';
+    _expireController.text = '03/24';
+    _nameCardController.text = 'Jose Garcia';
+    _cvvController.text = '432';
     _focusNode.addListener(() {
       setState(() {
         _focusNode.hasFocus ? showBack = true : showBack = false;
@@ -78,16 +79,12 @@ class _CardInvoiceScreenState
   }
 
   @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tarjeta"),
+        title: Text("Factura No.: " + invoiceNumber),
+        backgroundColor: AppTheme.nearlyDarkOrange,
       ),
       body: Container(
       height: MediaQuery.of(context).size.height * 0.922,
@@ -108,10 +105,10 @@ class _CardInvoiceScreenState
               cardExpiry: expiryDate,
               cardHolderName: cardHolderName,
               cvv: cvv,
-              bankName: 'Registro Tarjeta',
+              bankName: '',
               showBackSide: showBack,
-              frontBackground: CardBackgrounds.custom(0xF9A98749),
-              backBackground: CardBackgrounds.custom(0xFFFF9136),
+              frontBackground: CardBackgrounds.custom(0xFF17262A),
+              backBackground: CardBackgrounds.custom(0xFF17262A),
               showShadow: false,
               mask: getCardTypeMask(cardType: CardType.americanExpress),
             ),
@@ -247,7 +244,7 @@ class _CardInvoiceScreenState
           ),
           padding: const EdgeInsets.all(0),
           child: Text(
-            "PROCESAR PAGO",
+            "PROCESAR PAGO RD\$ " + amount.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -266,16 +263,20 @@ class _CardInvoiceScreenState
 
     return encrypted.base64;
   }
-  void runProcces() async {
+  _getValueFromPreferences() async{
     final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      amount = prefs.getDouble("amount");
+      invoiceNumber = prefs.getString("invoiceNum");
+    });
+  }
+  void runProcces() async {
     clientIp = await Ipify.ipv4();
     FocusScope.of(context).unfocus();
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
     idempotencyKey = await cardService.getIdempotencyKey();
-    amount = prefs.getDouble('amount');
-    invoiceNumber = prefs.getString('invoiceNum');
-    _cardController.text= '4594130000003243';
+
     token = encryptInvoiceNumer(invoiceNumber);
 
     Map<String, dynamic> data = {
@@ -328,7 +329,11 @@ class _CardInvoiceScreenState
       }
     }
   }
-
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
   @override
   void setState(fn) {
     if (mounted) {
