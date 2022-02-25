@@ -43,8 +43,8 @@ class _CardInvoiceScreenState
   String environment = 'ECommerce';
   String idempotencyKey = '';
   String invoiceNumber = '';
-  String merchantId = '349000000';
-  String terminalId = '58585858';
+  String merchantId = '';
+  String terminalId = '';
   String referenceNumber = '20200506162757';
   int tax = 0;
   int tip = 0;
@@ -55,7 +55,7 @@ class _CardInvoiceScreenState
   String expiryDate = '03/24';
   String cvv = '432';
   bool showBack = false;
-
+  String _baseUrlCarnet = '';
   FocusNode _focusNode;
   bool canPressRegisterBtn = true;
   final CardService cardService = CardService();
@@ -66,6 +66,7 @@ class _CardInvoiceScreenState
   void initState() {
     super.initState();
     this._getValueFromPreferences();
+    this._getConfigCarnet();
     _focusNode = FocusNode();
     _cardController.text= '4594130000003243';
     _expireController.text = '03/24';
@@ -270,12 +271,22 @@ class _CardInvoiceScreenState
       invoiceNumber = prefs.getString("invoiceNum");
     });
   }
+  _getConfigCarnet() async{
+    final url = await cardService.getConfigCarnet("urlCarnet");
+    final merchant = await cardService.getConfigCarnet("merchantId");
+    final terminal = await cardService.getConfigCarnet("terminalId");
+
+    _baseUrlCarnet = url['description'].toString();
+    merchantId = merchant['description'].toString();
+    terminalId = terminal['description'].toString();
+  }
+
   void runProcces() async {
     clientIp = await Ipify.ipv4();
     FocusScope.of(context).unfocus();
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
-    idempotencyKey = await cardService.getIdempotencyKey();
+    idempotencyKey = await cardService.getIdempotencyKey(_baseUrlCarnet);
 
     token = encryptInvoiceNumer(invoiceNumber);
 
@@ -306,7 +317,7 @@ class _CardInvoiceScreenState
       canPressRegisterBtn = true;
     });
   }else{
-    Response resp = await cardService.sendDataCarnet(data);
+    Response resp = await cardService.sendDataCarnet(data,_baseUrlCarnet);
     final code = await cardService.getMessageCode(resp.data["response-code"]);
     if(code['codigo'] == "00"){
     SchedulerBinding.instance.addPostFrameCallback((_) {

@@ -7,18 +7,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CardService {
   final _dio = new Dio();
-  final String _baseUrlCarnet = dotenv.env['BASE_URL_CARNET'];
+
   final String _baseUrl = dotenv.env['BASE_URL'];
   String basicAuth = 'Basic ' +
-      base64Encode(
-          utf8.encode(dotenv.env['USERNAME'] + ':' + dotenv.env['PASSWORD']));
+      base64Encode(utf8.encode(dotenv.env['USERNAME'] + ':' + dotenv.env['PASSWORD']));
   PreferenceStorage preferenceStorage = PreferenceStorage();
 
-  Future<String> getIdempotencyKey() async {
+
+  Future<String> getIdempotencyKey(String urlCarnet) async {
 
   final resp = await this._dio.post(
-    _baseUrlCarnet + "/api/payment/idenpotency-keys",
-    options: Options(
+       urlCarnet + "/api/payment/idenpotency-keys",
+      options: Options(
       headers: {HttpHeaders.contentTypeHeader: "application/json"},
       followRedirects: false,
       validateStatus: (status) {
@@ -56,7 +56,7 @@ class CardService {
         card.addAll(params);
       }
 
-     final resp = await this._dio.post(
+      final resp = await this._dio.post(
        _baseUrl + "/CarnetWebServer/insertlogcard",
        options: Options(
          headers: {
@@ -77,10 +77,10 @@ class CardService {
     }
     return null;
   }
-  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard) async {
+  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet) async {
 
     final resp = await this._dio.post(
-      _baseUrlCarnet + "/api/payment/transactions/sales",
+      urlCarnet + "/api/payment/transactions/sales",
       options: Options(
         headers: {
           HttpHeaders.contentTypeHeader: "application/json"
@@ -92,6 +92,7 @@ class CardService {
       ),
       data: dataCard,
     );
+
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
       this.sendDataLogCard(dataCard);
       return resp;
@@ -115,6 +116,23 @@ class CardService {
         ),
       );
        return  resp.data['data'];
+  }
 
+  Future<Map<String, dynamic>> getConfigCarnet(String id) async {
+    final resp = await this._dio.get(
+      _baseUrl + "/CarnetWebServer/getconfigcarnet/id/" + id,
+      options: Options(
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: basicAuth,
+          "X-API-KEY": dotenv.env['X-API-KEY']
+        },
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 600;
+        },
+      ),
+    );
+    return resp.data['data'];
   }
 }
