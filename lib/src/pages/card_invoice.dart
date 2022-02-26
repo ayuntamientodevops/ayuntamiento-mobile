@@ -4,6 +4,7 @@ import 'package:asdn/src/models/tabIcon_data.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/carnet_service.dart';
 import 'package:asdn/src/utils/functions.dart';
+import 'package:asdn/src/widgets/circular_indicatiors_widget.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -38,26 +39,27 @@ class _CardInvoiceScreenState
   final _cvvController = TextEditingController();
   final _nameCardController = TextEditingController();
   double amount = 0.0;
-  String clientIp = '12.0.0.1';
+  String clientIp = '';
   String currency = '214';
   String environment = 'ECommerce';
   String idempotencyKey = '';
   String invoiceNumber = '';
   String merchantId = '';
   String terminalId = '';
-  String referenceNumber = '20200506162757';
+  String referenceNumber = '';
   int tax = 0;
   int tip = 0;
-  String token = '98e894';
+  String token = '';
 
-  String cardNumber = '4594 1300 0000 3243';
-  String cardHolderName = 'Jose Garcia';
-  String expiryDate = '03/24';
-  String cvv = '432';
+  String cardNumber = '';
+  String cardHolderName = '';
+  String expiryDate = '';
+  String cvv = '';
   bool showBack = false;
   String _baseUrlCarnet = '';
   FocusNode _focusNode;
   bool canPressRegisterBtn = true;
+  bool loading = false;
   final CardService cardService = CardService();
   final AuthenticationService authenticationService = AuthenticationService();
 
@@ -66,12 +68,11 @@ class _CardInvoiceScreenState
   void initState() {
     super.initState();
     this._getValueFromPreferences();
-    this._getConfigCarnet();
     _focusNode = FocusNode();
-    _cardController.text= '4594130000003243';
+   /* _cardController.text= '4594130000003243';
     _expireController.text = '03/24';
     _nameCardController.text = 'Jose Garcia';
-    _cvvController.text = '432';
+    _cvvController.text = '432';*/
     _focusNode.addListener(() {
       setState(() {
         _focusNode.hasFocus ? showBack = true : showBack = false;
@@ -207,7 +208,8 @@ class _CardInvoiceScreenState
                     focusNode: _focusNode,
                   ),
                 ),
-                btnSave()
+                loading ? Center(child: CircularProgressIndicatorWidget()) : Container(),
+                btnSave(),
               ],
             ),
           ],
@@ -266,19 +268,11 @@ class _CardInvoiceScreenState
   }
   _getValueFromPreferences() async{
     final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       amount = prefs.getDouble("amount");
       invoiceNumber = prefs.getString("invoiceNum");
     });
-  }
-  _getConfigCarnet() async{
-    final url = await cardService.getConfigCarnet("urlCarnet");
-    final merchant = await cardService.getConfigCarnet("merchantId");
-    final terminal = await cardService.getConfigCarnet("terminalId");
-
-    _baseUrlCarnet = url['description'].toString();
-    merchantId = merchant['description'].toString();
-    terminalId = terminal['description'].toString();
   }
 
   void runProcces() async {
@@ -286,9 +280,16 @@ class _CardInvoiceScreenState
     FocusScope.of(context).unfocus();
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
-    idempotencyKey = await cardService.getIdempotencyKey(_baseUrlCarnet);
+    final url = await cardService.getConfigCarnet("urlCarnet");
+    final merchant = await cardService.getConfigCarnet("merchantId");
+    final terminal = await cardService.getConfigCarnet("terminalId");
 
+    _baseUrlCarnet = url['description'].toString();
+    merchantId = merchant['description'].toString();
+    terminalId = terminal['description'].toString();
     token = encryptInvoiceNumer(invoiceNumber);
+    referenceNumber = invoiceNumber;
+    idempotencyKey = await cardService.getIdempotencyKey(_baseUrlCarnet);
 
     Map<String, dynamic> data = {
       "amount"        : amount,
@@ -297,7 +298,7 @@ class _CardInvoiceScreenState
       "currency"      : currency,
       "cvv"           : _cvvController.text,
       "environment"   : environment,
-      "expiration-date" : _expireController.text,
+      "expiration-date": _expireController.text,
       "idempotency-key": idempotencyKey,
       "invoice-number" : invoiceNumber,
       "merchant-id"   : merchantId,
@@ -309,31 +310,38 @@ class _CardInvoiceScreenState
     };
 
     setState(() {
+      loading = true;
       canPressRegisterBtn = false;
     });
+
   if(_cardController.text == "" || _expireController.text == "" || _cvvController.text == "" || _nameCardController.text == ""){
     showAlertDialog(context,"Para completar el pago debe llenar todos los campos", false);
     setState(() {
+      loading = false;
       canPressRegisterBtn = true;
     });
   }else{
-    Response resp = await cardService.sendDataCarnet(data,_baseUrlCarnet);
+
+    Response resp = await cardService.sendDataCarnet(data, _baseUrlCarnet, _nameCardController.text);
+
     final code = await cardService.getMessageCode(resp.data["response-code"]);
     if(code['codigo'] == "00"){
     SchedulerBinding.instance.addPostFrameCallback((_) {
 
       setState(() {
+        loading = false;
         canPressRegisterBtn = true;
         _expireController.clear();
         _cardController.clear();
         _cvvController.clear();
         _nameCardController.clear();
           });
-        });
+      });
 
         showAlertDialog(context,code['descripcion'] +' - codigo: '+ resp.data["approval-code"], true, ifCard: true);
         }else{
           setState(() {
+            loading = false;
            canPressRegisterBtn = true;
         });
         showAlertDialog(context,code['descripcion'] +' - codigo: '+ resp.data["approval-code"], false, ifCard: false);

@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:asdn/src/share_prefs/preferences_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 class CardService {
   final _dio = new Dio();
-
+  final String _baseUrlInvoces = dotenv.env['BASE_URL_INVOICE'];
   final String _baseUrl = dotenv.env['BASE_URL'];
   String basicAuth = 'Basic ' +
       base64Encode(utf8.encode(dotenv.env['USERNAME'] + ':' + dotenv.env['PASSWORD']));
@@ -43,12 +43,12 @@ class CardService {
     }
     return hideNum.join("");
   }
-  Future<Response> sendDataLogCard(Map<String, dynamic> card) async{
+  Future<Response> sendDataLogCard(Map<String, dynamic> card, String cardHolder) async{
     final currentUser = preferenceStorage.getValue(key: "currentUser");
     final id_user = json.decode(currentUser);
 
     Map<String, String> params = {
-      "user_name": "name",
+      "user_name": cardHolder,
       "user_created": id_user["id"]
     };
       for(var i =0; i < card.length; i++) {
@@ -77,7 +77,7 @@ class CardService {
     }
     return null;
   }
-  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet) async {
+  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet, String cardHolder) async {
 
     final resp = await this._dio.post(
       urlCarnet + "/api/payment/transactions/sales",
@@ -94,7 +94,8 @@ class CardService {
     );
 
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
-      this.sendDataLogCard(dataCard);
+      this.sendDataLogCard(dataCard, cardHolder);
+      this.savePayments(dataCard);
       return resp;
     }
     return null;
@@ -134,5 +135,56 @@ class CardService {
       ),
     );
     return resp.data['data'];
+  }
+
+  Future<String> getTokenSigem() async {
+    Map<String, String> params = {
+      "username": dotenv.env['USERNAME_INVOICE'],
+      "password": dotenv.env['PASSWORD_INVOICE'],
+    };
+    final resp = await this._dio.post(
+      _baseUrlInvoces + "/api/Account/login",
+      options: Options(
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 600;
+        },
+      ),
+      data: jsonEncode(params),
+    );
+    if (resp.statusCode >= 200 && resp.statusCode < 250) {
+      return resp.data['token'];
+    }
+    return null;
+  }
+  void savePayments(Map<String, dynamic> dataCard) async {
+    final token = await this.getTokenSigem();
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+
+    Map params = {
+      "invoiceId": dataCard['invoice-number'],
+      "date": formattedDate,
+      "amount": dataCard['amount'],
+      "paymentMethod": "TAR"
+    };
+
+    String bearerAuth = 'Bearer ' + token;
+    await this._dio.post(
+      _baseUrlInvoces + "/api/Payments/",
+      options: Options(
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: bearerAuth,
+        },
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 600;
+        },
+      ),
+      data: jsonEncode(params)
+    );
   }
 }
