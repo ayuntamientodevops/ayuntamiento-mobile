@@ -199,7 +199,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          "No. Factura: " + invoice.number,
+                                          "No. Factura: " + invoice.id,
                                           style: TextStyle(
                                               color: AppTheme.grey,
                                               fontWeight: FontWeight.bold),
@@ -278,7 +278,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
                                         builder: (context) => MainFullViewer(
                                             identificationPage: "card")));
 
-                                   setInvoiceData(invoice.total, invoice.number);
+                                   setInvoiceData(invoice.total, invoice.id);
                                    },
                                    child: Column(children: [
                                      if(this.statusInvoice == "COBRO")
