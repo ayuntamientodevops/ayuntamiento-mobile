@@ -43,14 +43,19 @@ class CardService {
     }
     return hideNum.join("");
   }
-  Future<Response> sendDataLogCard(Map<String, dynamic> card, String cardHolder) async{
+  Future<Response> sendDataLogCard(Map<String, dynamic> card, String cardHolder,String messageCode,
+      String approval) async{
+
     final currentUser = preferenceStorage.getValue(key: "currentUser");
     final id_user = json.decode(currentUser);
 
     Map<String, String> params = {
-      "user_name": cardHolder,
-      "user_created": id_user["id"]
+      "user_name"    : cardHolder,
+      "user_created" : id_user["id"],
+      "message_code" : messageCode,
+      "approval_code": approval
     };
+
       for(var i =0; i < card.length; i++) {
         card["card-number"] = cardHide(card["card-number"]);
         card.addAll(params);
@@ -94,8 +99,16 @@ class CardService {
     );
 
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
-      this.sendDataLogCard(dataCard, cardHolder);
-      this.savePayments(dataCard);
+      String messageCode = '';
+      String approval  = '';
+      if(resp.data["approval-code"] != null){
+        messageCode = resp.data["response-code"];
+        approval = resp.data["approval-code"];
+      }else{
+        messageCode = resp.data["internal-response-code"];
+      }
+      this.sendDataLogCard(dataCard, cardHolder, messageCode, approval);
+
       return resp;
     }
     return null;
@@ -116,7 +129,12 @@ class CardService {
           },
         ),
       );
-       return  resp.data['data'];
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if((resp.data['status'] == true)){
+        return resp.data['data'];
+        }
+      }
+      return null;
   }
 
   Future<Map<String, dynamic>> getConfigCarnet(String id) async {
