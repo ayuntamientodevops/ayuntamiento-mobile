@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:asdn/src/models/HistoryPayment.dart';
 import 'package:asdn/src/share_prefs/preferences_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -204,5 +205,41 @@ class CardService {
       ),
       data: jsonEncode(params)
     );
+  }
+
+  Future<Map<String, dynamic>> getPaymentHistory({String userId}) async {
+    try {
+    List<HistoryPayment> historyPayment;
+    final resp = await this._dio.get(
+      _baseUrl + "/CarnetWebServer/getpaymenthistory/id/" + userId,
+      options: Options(
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: basicAuth,
+          "X-API-KEY": dotenv.env['X-API-KEY']
+        },
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 600;
+        },
+      ),
+    );
+
+    if (resp.statusCode >= 200 && resp.statusCode < 250) {
+
+      if (resp.data['data'].length > 0) {
+        for (var item in resp.data['data']) {print(item);
+          historyPayment.add(HistoryPayment.fromJson(item));
+        }
+
+      }
+      return {"OK": true, "data": historyPayment};
+    }
+
+    return {"OK": false, "mensaje": "No existe ninguna solicitud pendiente"};
+  } on DioError  catch (e) {
+  print(e.error);
+  return {"OK": false, "mensaje": "Error obtener las solictudes"};
+  }
   }
 }

@@ -156,7 +156,7 @@ class _RequestDetailListSectionState extends State<RequestDetailListSection>
       AuthenticationService auth = AuthenticationService();
       final User user = auth.getUserLogged();
       var items = await requestService.getRequest(idUsuario: user.id);
-      print(items);
+
       if (items['OK']) {
         requestBloc.add(RequestLoad(load: true, requests: items['data']));
         setState(() {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:asdn/src/models/HistoryPayment.dart';
 import 'package:asdn/src/models/Request.dart';
 import 'package:asdn/src/share_prefs/preferences_storage.dart';
 import 'package:bloc/bloc.dart';
@@ -29,6 +30,31 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
       }
 
       yield state.copyWith(requestload: event.load);
+    }
+  }
+}
+
+class HistoryPaymentBloc extends Bloc<HistoryPaymentEvent, HistoryPaymentState> {
+  PreferenceStorage preferenceStorage = PreferenceStorage();
+  HistoryPaymentBloc() : super(HistoryPaymentState(paymentHistoryload: false));
+
+  @override
+  Stream<HistoryPaymentState> mapEventToState(
+      HistoryPaymentEvent event,
+      ) async* {
+    if (event is HistoryPaymentLoad) {
+      if (event.load) {
+        await preferenceStorage.setValue(
+            key: "historyPayment", value: HistoryPayment.encode(event.historyPayments));
+
+        await preferenceStorage.setValue(
+            key: "historyPaymentLoad", value: event.load.toString());
+      } else {
+        preferenceStorage.deleteValue(key: "historyPayment");
+        preferenceStorage.deleteValue(key: "historyPaymentLoad");
+      }
+
+      yield state.copyWith(paymentHistoryload: event.load);
     }
   }
 }
