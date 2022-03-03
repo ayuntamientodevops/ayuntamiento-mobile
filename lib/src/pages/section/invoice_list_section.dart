@@ -75,7 +75,7 @@ class _InvoiceListSectionState extends State<InvoiceListSection>
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  width: double.infinity,
+                  width: 400,
                   height: 80,
                   child: Card(
                     semanticContainer: true,
