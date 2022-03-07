@@ -7,6 +7,7 @@ import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/pages/card_invoice.dart';
 import 'package:asdn/src/pages/edit_profile_page.dar.dart';
 import 'package:asdn/src/pages/login_page.dart';
+import 'package:asdn/src/pages/payment_history.dart';
 import 'package:asdn/src/pages/reset_password.dart';
 import 'package:asdn/src/pages/section/sections_invoice_screen.dart';
 import 'package:asdn/src/pages/section/sections_request_detail_screen.dart';
@@ -75,8 +76,11 @@ class _MainFullViewerState extends State<MainFullViewer>
       tabIconsList[3].isSelected = true;
       tabBody = EditProfileScreen(animationController: animationController);
     }else if (widget.identificationPage == "card") {
-      tabIconsList[2].isSelected = true;
+      tabIconsList[0].isSelected = false;
       tabBody = CardInvoiceScreen(animationController: animationController);
+    }else if (widget.identificationPage == "paymnetHistory") {
+      tabIconsList[0].isSelected = false;
+      tabBody = PaymentHistoryScreen(animationController: animationController);
     }
     super.initState();
 

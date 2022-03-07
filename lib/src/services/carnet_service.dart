@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:asdn/src/models/HistoryPayment.dart';
 import 'package:asdn/src/share_prefs/preferences_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -43,14 +44,19 @@ class CardService {
     }
     return hideNum.join("");
   }
-  Future<Response> sendDataLogCard(Map<String, dynamic> card, String cardHolder) async{
+  Future<Response> sendDataLogCard(Map<String, dynamic> card, String cardHolder,String messageCode,
+      String approval) async{
+
     final currentUser = preferenceStorage.getValue(key: "currentUser");
     final id_user = json.decode(currentUser);
 
     Map<String, String> params = {
-      "user_name": cardHolder,
-      "user_created": id_user["id"]
+      "user_name"    : cardHolder,
+      "user_created" : id_user["id"],
+      "message_code" : messageCode,
+      "approval_code": approval
     };
+
       for(var i =0; i < card.length; i++) {
         card["card-number"] = cardHide(card["card-number"]);
         card.addAll(params);
@@ -94,8 +100,16 @@ class CardService {
     );
 
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
-      this.sendDataLogCard(dataCard, cardHolder);
-      this.savePayments(dataCard);
+      String messageCode = '';
+      String approval  = '';
+      if(resp.data["approval-code"] != null){
+        messageCode = resp.data["response-code"];
+        approval = resp.data["approval-code"];
+      }else{
+        messageCode = resp.data["internal-response-code"];
+      }
+      this.sendDataLogCard(dataCard, cardHolder, messageCode, approval);
+
       return resp;
     }
     return null;
@@ -116,7 +130,12 @@ class CardService {
           },
         ),
       );
-       return  resp.data['data'];
+      if (resp.statusCode >= 200 && resp.statusCode < 250) {
+        if((resp.data['status'] == true)){
+        return resp.data['data'];
+        }
+      }
+      return null;
   }
 
   Future<Map<String, dynamic>> getConfigCarnet(String id) async {
@@ -186,5 +205,41 @@ class CardService {
       ),
       data: jsonEncode(params)
     );
+  }
+
+  Future<Map<String, dynamic>> getPaymentHistory({String userId}) async {
+    try {
+    List<HistoryPayment> historyPayment;
+    final resp = await this._dio.get(
+      _baseUrl + "/CarnetWebServer/getpaymenthistory/id/" + userId,
+      options: Options(
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.authorizationHeader: basicAuth,
+          "X-API-KEY": dotenv.env['X-API-KEY']
+        },
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 600;
+        },
+      ),
+    );
+
+    if (resp.statusCode >= 200 && resp.statusCode < 250) {
+
+      if (resp.data['data'].length > 0) {
+        for (var item in resp.data['data']) {print(item);
+          historyPayment.add(HistoryPayment.fromJson(item));
+        }
+
+      }
+      return {"OK": true, "data": historyPayment};
+    }
+
+    return {"OK": false, "mensaje": "No existe ninguna solicitud pendiente"};
+  } on DioError  catch (e) {
+  print(e.error);
+  return {"OK": false, "mensaje": "Error obtener las solictudes"};
+  }
   }
 }

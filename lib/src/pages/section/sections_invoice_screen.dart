@@ -1,3 +1,5 @@
+import 'package:asdn/src/config/app_theme.dart';
+import 'package:asdn/src/config/main_full_view.dart';
 import 'package:asdn/src/ui_view/title_view.dart';
 import 'package:flutter/material.dart';
 import 'invoice_list_section.dart';
@@ -36,7 +38,34 @@ class _SectionsInvoiceScreenState extends State<SectionsInvoiceScreen>
         animationController: widget.animationController,
       ),
     );
-
+    listViews.add(
+        new InkWell(
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MainFullViewer(
+                        identificationPage: "paymnetHistory")));
+          },
+      child: Container(
+        width: 150.0,
+        height: 25.0,
+        margin: const EdgeInsets.only(left: 212.0,right: 12, bottom: 15.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(0.0),
+          border: Border.all(
+              width: 2.0,
+              color: AppTheme.nearlyDarkOrange),
+        ),
+        child: Center(
+          child: Text(
+            "HISTORICO DE PAGOS",
+            style: TextStyle(color: AppTheme.nearlyDarkOrange),
+          ),
+        ),
+      ),
+        ),
+    );
     listViews.add(
       InvoiceListSection(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
