@@ -276,6 +276,7 @@ class _CardInvoiceScreenState
   }
 
   void runProcces() async {
+
     clientIp = await Ipify.ipv4();
     FocusScope.of(context).unfocus();
     if (!formKey.currentState.validate()) return;
@@ -322,58 +323,65 @@ class _CardInvoiceScreenState
     });
   }else{
 
-    Response resp = await cardService.sendDataCarnet(data, _baseUrlCarnet, _nameCardController.text);
+    Response resp = await cardService.sendDataCarnet(data, _baseUrlCarnet);
     String message_code = '';
     String desc = '';
 
-    if(resp.data["approval-code"] != null){
+    if(resp.data["response-code"] != null){
+
+      final code = await cardService.getMessageCode(resp.data["response-code"]);
       message_code = resp.data["response-code"];
-      desc = resp.data['response-code-desc'];
-    }else{
-      message_code = resp.data["internal-response-code"];
-      desc = resp.data['response-code-desc'];
-    }
+      if(code != null){
+      if(code['codigo'] == "00"){
+        //cardService.savePayments(data);
 
-    final code = await cardService.getMessageCode(message_code);
+        message_code = code['codigo'];
+        desc = code['descripcion'];
+        cardService.sendDataLogCard(data, _nameCardController.text, message_code, resp.data["approval-code"]);
+        SchedulerBinding.instance.addPostFrameCallback((_) {
 
- if(code != null){
-    if(code['codigo'] == "00"){
-      cardService.savePayments(data);
-
-      message_code = code['codigo'];
-      desc = code['descripcion'];
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-
-      setState(() {
-        loading = false;
-        canPressRegisterBtn = true;
-        _expireController.clear();
-        _cardController.clear();
-        _cvvController.clear();
-        _nameCardController.clear();
+          setState(() {
+            loading = false;
+            canPressRegisterBtn = true;
+            _expireController.clear();
+            _cardController.clear();
+            _cvvController.clear();
+            _nameCardController.clear();
           });
-      });
-        showAlertDialog(context,desc +' - codigo: '+ message_code, true, ifCard: true);
-    }else{
-      message_code = code['codigo'];
-      desc = code['descripcion'];
+        });
+        showAlertDialog(context,desc +' - codigo: '+ resp.data["approval-code"], true, ifCard: true);
+      }else{
+        message_code = code['codigo'];
+        desc = code['descripcion'];
 
-      setState(() {
-           loading = false;
-           canPressRegisterBtn = true;
+        cardService.sendDataLogCard(data,_nameCardController.text, message_code, '');
+        setState(() {
+          loading = false;
+          canPressRegisterBtn = true;
         });
         showAlertDialog(context, desc +' - codigo: '+ message_code, false, ifCard: false);
       }
+
+      }else{
+        cardService.sendDataLogCard(data,_nameCardController.text, message_code, '');
+        setState(() {
+          loading = false;
+          canPressRegisterBtn = true;
+        });
+        showAlertDialog(context, "No existe un mensaje para el codigo "+ resp.data["response-code"] , false, ifCard: false);
+      }
     }else{
-      setState(() {
-        loading = false;
-        canPressRegisterBtn = true;
-      });
-      showAlertDialog(context, 'Error con la tarjeta', false, ifCard: false);
+      message_code = resp.data["internal-response-code"];
+          cardService.sendDataLogCard(data,_nameCardController.text, resp.data["internal-response-code"], '');
+          setState(() {
+            loading = false;
+            canPressRegisterBtn = true;
+          });
+          showAlertDialog(context, resp.data['response-code-desc'], false, ifCard: false);
     }
    }
   }
+
   @override
   void dispose() {
     _focusNode.dispose();

@@ -83,7 +83,7 @@ class CardService {
     }
     return null;
   }
-  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet, String cardHolder) async {
+  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet) async {
 
     final resp = await this._dio.post(
       urlCarnet + "/api/payment/transactions/sales",
@@ -100,15 +100,6 @@ class CardService {
     );
 
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
-      String messageCode = '';
-      String approval  = '';
-      if(resp.data["approval-code"] != null){
-        messageCode = resp.data["response-code"];
-        approval = resp.data["approval-code"];
-      }else{
-        messageCode = resp.data["internal-response-code"];
-      }
-      this.sendDataLogCard(dataCard, cardHolder, messageCode, approval);
 
       return resp;
     }
