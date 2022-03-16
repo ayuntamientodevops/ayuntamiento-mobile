@@ -44,8 +44,8 @@ class _CardInvoiceScreenState
   String environment = 'ECommerce';
   String idempotencyKey = '';
   String invoiceNumber = '';
-  String merchantId = '349000000';
-  String terminalId = '58585858';
+  String merchantId = '349118692';
+  String terminalId = '10311722';
   String referenceNumber = '';
   int tax = 0;
   int tip = 0;
@@ -326,7 +326,7 @@ class _CardInvoiceScreenState
       message_code = resp.data["response-code"];
       if(code != null){
       if(code['codigo'] == "00"){
-        //cardService.savePayments(data);
+        cardService.savePayments(data);
 
         message_code = code['codigo'];
         desc = code['descripcion'];
