@@ -60,7 +60,7 @@ class HistoryPayment {
   factory HistoryPayment.fromJson(Map<String, dynamic> json) => HistoryPayment(
       id: json["id"],
       userName: json["user_name"],
-      card: json["card"],
+      card: json["card_number"],
       expire: json["expire"],
       cvv: json["cvv"],
       amount : json["amount"],
@@ -128,15 +128,15 @@ class HistoryPayment {
     "dateCreated"     : historyPayment.dateCreated,
     "userCreated"     : historyPayment.userCreated
   };
-  static String encode(List<HistoryPayment> requests) => json.encode(
-    requests
-        .map<Map<String, dynamic>>((request) => HistoryPayment.toMap(request))
+  static String encode(List<HistoryPayment> paymentHistory) => json.encode(
+    paymentHistory
+        .map<Map<String, dynamic>>((paymentHistory) => HistoryPayment.toMap(paymentHistory))
         .toList(),
   );
-  static List<HistoryPayment> decode(String requests) {
+  static List<HistoryPayment> decode(String paymentHistory) {
     List<HistoryPayment> list = [];
-    final req = json.decode(requests);
-    for (var item in req) {
+    final hp = json.decode(paymentHistory);
+    for (var item in hp) {
       final r = HistoryPayment.fromJson(item);
       if (r != null) {
         list.add(r);

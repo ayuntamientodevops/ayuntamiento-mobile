@@ -45,12 +45,12 @@ class HistoryPaymentBloc extends Bloc<HistoryPaymentEvent, HistoryPaymentState> 
     if (event is HistoryPaymentLoad) {
       if (event.load) {
         await preferenceStorage.setValue(
-            key: "historyPayment", value: HistoryPayment.encode(event.historyPayments));
+            key: "paHistory", value: HistoryPayment.encode(event.paHistory));
 
         await preferenceStorage.setValue(
             key: "historyPaymentLoad", value: event.load.toString());
       } else {
-        preferenceStorage.deleteValue(key: "historyPayment");
+        preferenceStorage.deleteValue(key: "paHistory");
         preferenceStorage.deleteValue(key: "historyPaymentLoad");
       }
 

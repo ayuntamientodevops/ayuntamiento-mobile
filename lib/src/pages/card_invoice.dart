@@ -44,8 +44,8 @@ class _CardInvoiceScreenState
   String environment = 'ECommerce';
   String idempotencyKey = '';
   String invoiceNumber = '';
-  String merchantId = '';
-  String terminalId = '';
+  String merchantId = '349118692';
+  String terminalId = '10311722';
   String referenceNumber = '';
   int tax = 0;
   int tip = 0;
@@ -56,7 +56,6 @@ class _CardInvoiceScreenState
   String expiryDate = '';
   String cvv = '';
   bool showBack = false;
-  String _baseUrlCarnet = '';
   FocusNode _focusNode;
   bool canPressRegisterBtn = true;
   bool loading = false;
@@ -281,16 +280,10 @@ class _CardInvoiceScreenState
     FocusScope.of(context).unfocus();
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
-    final url = await cardService.getConfigCarnet("urlCarnet");
-    final merchant = await cardService.getConfigCarnet("merchantId");
-    final terminal = await cardService.getConfigCarnet("terminalId");
 
-    _baseUrlCarnet = url['description'].toString();
-    merchantId = merchant['description'].toString();
-    terminalId = terminal['description'].toString();
     token = encryptInvoiceNumer(invoiceNumber);
     referenceNumber = invoiceNumber;
-    idempotencyKey = await cardService.getIdempotencyKey(_baseUrlCarnet);
+    idempotencyKey = await cardService.getIdempotencyKey();
 
     Map<String, dynamic> data = {
       "amount"        : amount,
@@ -323,17 +316,17 @@ class _CardInvoiceScreenState
     });
   }else{
 
-    Response resp = await cardService.sendDataCarnet(data, _baseUrlCarnet);
+    Response resp = await cardService.sendDataCarnet(data);
     String message_code = '';
     String desc = '';
-
+    resp.data["response-code"] = "44";
     if(resp.data["response-code"] != null){
 
       final code = await cardService.getMessageCode(resp.data["response-code"]);
       message_code = resp.data["response-code"];
       if(code != null){
       if(code['codigo'] == "00"){
-        //cardService.savePayments(data);
+        cardService.savePayments(data);
 
         message_code = code['codigo'];
         desc = code['descripcion'];

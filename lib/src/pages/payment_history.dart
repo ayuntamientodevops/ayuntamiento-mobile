@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:asdn/src/bloc/request/request_bloc.dart';
 import 'package:asdn/src/config/app_theme.dart';
 import 'package:asdn/src/models/HistoryPayment.dart';
-import 'package:asdn/src/models/Request.dart';
 import 'package:asdn/src/models/user.dart';
 import 'package:asdn/src/services/auth_service.dart';
 import 'package:asdn/src/services/carnet_service.dart';
@@ -44,7 +43,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
     carnetService = new CardService();
     _refreshIndicatorKey.currentState?.show();
     historyPaymentBloc = HistoryPaymentBloc();
-    _loadItems(load: false);
+    _loadItems(load: true);
   }
   void filterSearchResults(String query) {
 
@@ -81,10 +80,10 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
       onRefresh: () => _loadItems(load: true),
       child: Container(
         margin:  EdgeInsets.only(top: 150),
-        height: MediaQuery.of(context).size.height * 0.65,
+        height: MediaQuery.of(context).size.height * 0.75,
         child: Column(
           children: <Widget>[
-            Padding(
+        /*    Padding(
               padding: const EdgeInsets.all(13.0),
               child: TextField(
                 onChanged: (value) {
@@ -109,7 +108,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
                   ),
                 ),
               ),
-            ),
+            ),*/
             _items.length == 0
                 ? Container(
               margin: EdgeInsets.only(top: 200),
@@ -126,7 +125,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: _items.length,
                 itemBuilder: (BuildContext ctxt, int index) {
-                  print(_items[index]);
+
                   return cardWidget(historyPayment: _items[index]);
                 },
               ),
@@ -146,7 +145,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
         if (preferenceStorage.getValue(key: "historyPaymentLoad") == 'true') {
           setState(() {
             _items = HistoryPayment.decode(
-                preferenceStorage.getValue(key: "historyPayments").toString());
+                preferenceStorage.getValue(key: "paHistory").toString());
             isLoading = false;
           });
           return;
@@ -155,10 +154,10 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
 
       AuthenticationService auth = AuthenticationService();
       final User user = auth.getUserLogged();
-      final items = await carnetService.getPaymentHistory(userId: user.id);
+      final items = await carnetService.getPaymentHistory(userId: user.id,code: "00");
 
       if (items['OK']) {
-        historyPaymentBloc.add(HistoryPaymentLoad(load: true, historyPayments: items['data']));
+        historyPaymentBloc.add(HistoryPaymentLoad(load: true, paHistory: items['data']));
         setState(() {
           _items = items['data'];
           isLoading = false;
@@ -189,7 +188,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
               ),
               TextSpan(
                 style: TextStyle(color: Colors.black),
-                text: "100.0",
+                text: historyPayment.amount.toString(),
               ),
             ],
           ),
@@ -199,8 +198,8 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
   }
 
   Widget cardWidget({HistoryPayment historyPayment}) {
-    print(historyPayment.card);
-    String formattedDate = "";//DateFormat.yMMMMd('es_PR').format(DateTime.parse(historyPayment.dateCreated.toString()));
+
+    String formattedDate = DateFormat.yMMMMd('es_PR').format(DateTime.parse(historyPayment.dateCreated.toString()));
 
     return GestureDetector(
       onTap: () {
@@ -220,7 +219,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
                     child: Container( 
                       margin: const EdgeInsets.only(top: 13),
                       child: ListTile(
-                          title: Text(historyPayment.invoiceNumber,
+                          title: Text("Tarjeta: "+historyPayment.card.toString(),
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -241,7 +240,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen>
                           ])),
                       padding: const EdgeInsets.all(0),
                       child: Text(
-                        "Codigo: #" + historyPayment.approvalCode,
+                        "Codigo: #" + historyPayment.approvalCode.toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
