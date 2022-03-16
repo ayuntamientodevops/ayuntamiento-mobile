@@ -319,7 +319,7 @@ class _CardInvoiceScreenState
     Response resp = await cardService.sendDataCarnet(data);
     String message_code = '';
     String desc = '';
-    resp.data["response-code"] = "44";
+
     if(resp.data["response-code"] != null){
 
       final code = await cardService.getMessageCode(resp.data["response-code"]);
