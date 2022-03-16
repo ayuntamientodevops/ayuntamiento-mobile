@@ -13,11 +13,11 @@ class RequestState {
 
 class HistoryPaymentState {
   bool paymentHistoryload;
-  List<HistoryPayment> paymentHistory;
-  HistoryPaymentState({this.paymentHistoryload = false, this.paymentHistory});
+  List<HistoryPayment> paHistory;
+  HistoryPaymentState({this.paymentHistoryload = false, this.paHistory});
 
-  HistoryPaymentState copyWith({bool paymentHistoryload, List<HistoryPayment> paymentHistory}) =>
+  HistoryPaymentState copyWith({bool paymentHistoryload, List<HistoryPayment> paHistory}) =>
       new HistoryPaymentState(
           paymentHistoryload: paymentHistoryload ?? this.paymentHistoryload,
-          paymentHistory: paymentHistory ?? this.paymentHistory);
+          paHistory: paHistory ?? this.paHistory);
 }

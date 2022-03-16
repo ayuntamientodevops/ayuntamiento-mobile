@@ -13,8 +13,8 @@ class RequestLoad extends RequestEvent {
 }
 class HistoryPaymentLoad extends HistoryPaymentEvent {
   final bool load;
-  final List<HistoryPayment> historyPayments;
-  HistoryPaymentLoad({this.load, this.historyPayments});
+  final List<HistoryPayment> paHistory;
+  HistoryPaymentLoad({this.load, this.paHistory});
   @override
   String toString() => 'HistoryPaymentLoad';
 }

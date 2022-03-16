@@ -9,16 +9,17 @@ import 'package:intl/intl.dart';
 class CardService {
   final _dio = new Dio();
   final String _baseUrlInvoces = dotenv.env['BASE_URL_INVOICE'];
+  final String _baseUrlCarnet = dotenv.env['BASE_URL_CARNET'];
   final String _baseUrl = dotenv.env['BASE_URL'];
   String basicAuth = 'Basic ' +
       base64Encode(utf8.encode(dotenv.env['USERNAME'] + ':' + dotenv.env['PASSWORD']));
   PreferenceStorage preferenceStorage = PreferenceStorage();
 
 
-  Future<String> getIdempotencyKey(String urlCarnet) async {
+  Future<String> getIdempotencyKey() async {
 
   final resp = await this._dio.post(
-       urlCarnet + "/api/payment/idenpotency-keys",
+      _baseUrlCarnet + "/api/payment/idenpotency-keys",
       options: Options(
       headers: {HttpHeaders.contentTypeHeader: "application/json"},
       followRedirects: false,
@@ -83,10 +84,10 @@ class CardService {
     }
     return null;
   }
-  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard, String urlCarnet) async {
+  Future<Response> sendDataCarnet(Map<String, dynamic> dataCard) async {
 
     final resp = await this._dio.post(
-      urlCarnet + "/api/payment/transactions/sales",
+      _baseUrlCarnet + "/api/payment/transactions/sales",
       options: Options(
         headers: {
           HttpHeaders.contentTypeHeader: "application/json"
@@ -127,24 +128,6 @@ class CardService {
         }
       }
       return null;
-  }
-
-  Future<Map<String, dynamic>> getConfigCarnet(String id) async {
-    final resp = await this._dio.get(
-      _baseUrl + "/CarnetWebServer/getconfigcarnet/id/" + id,
-      options: Options(
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
-          HttpHeaders.authorizationHeader: basicAuth,
-          "X-API-KEY": dotenv.env['X-API-KEY']
-        },
-        followRedirects: false,
-        validateStatus: (status) {
-          return status < 600;
-        },
-      ),
-    );
-    return resp.data['data'];
   }
 
   Future<String> getTokenSigem() async {
@@ -198,11 +181,11 @@ class CardService {
     );
   }
 
-  Future<Map<String, dynamic>> getPaymentHistory({String userId}) async {
+  Future<Map<String, dynamic>> getPaymentHistory({String userId, String code}) async {
     try {
-    List<HistoryPayment> historyPayment;
+    List<HistoryPayment> historyPayment = [];
     final resp = await this._dio.get(
-      _baseUrl + "/CarnetWebServer/getpaymenthistory/id/" + userId,
+      _baseUrl + "/CarnetWebServer/getpaymenthistory/id/" + userId+"/code/"+code,
       options: Options(
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
@@ -219,11 +202,11 @@ class CardService {
     if (resp.statusCode >= 200 && resp.statusCode < 250) {
 
       if (resp.data['data'].length > 0) {
-        for (var item in resp.data['data']) {print(item);
+        for (var item in resp.data['data']) {
           historyPayment.add(HistoryPayment.fromJson(item));
         }
-
       }
+
       return {"OK": true, "data": historyPayment};
     }
 
