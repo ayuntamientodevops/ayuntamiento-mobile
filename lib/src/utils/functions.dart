@@ -9,7 +9,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 Future<bool> connectionValidate() async {
   try {
-    final result = await InternetAddress.lookup('webapi.asdn.gob.do');
+    final result = await InternetAddress.lookup('webapi.appasdn.site');
 
     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
       return true;
