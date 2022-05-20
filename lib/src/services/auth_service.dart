@@ -223,7 +223,6 @@ class AuthenticationService {
       };
 
       final resp = await this._dio.post(
-          // https://webapi.asdn.gob.do/RequestUsersWebServer/passreset
           _baseUrl + "/RequestUsersWebServer/passreset",
           options: Options(
             headers: {
